@@ -16,27 +16,30 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
+#include <hdf5.h>
 
 /* HMC parameters read from input file */
 typedef struct input_hmc_grid {
     double betaF, betaA;
-    int nMD, n_traj, nOMP;
+    int nMD, n_traj, nOMP, ObsInterval;
     double trajL;
-    input_record_t read[7];
+    input_record_t read[8];
 } input_hmc_grid;
 
-#define init_input_hmc_grid(varname)                                                   \
-    {                                                                                  \
-        .betaF = 5.0, .betaA = 0.0, .nMD = 10, .n_traj = 4, .nOMP = 1, .trajL = 1.0, \
-        .read = {                                                                      \
-            { "betaF", "betaF = %lf", DOUBLE_T, &(varname).betaF },                   \
-            { "betaA", "betaA = %lf", DOUBLE_T, &(varname).betaA },                   \
-            { "nMD",   "nMD = %d",   INT_T,    &(varname).nMD },                      \
-            { "n_traj","n_traj = %d",INT_T,    &(varname).n_traj },                   \
-            { "trajL", "trajL = %lf",DOUBLE_T, &(varname).trajL },                    \
-            { "nOMP",  "nOMP = %d",  INT_T,    &(varname).nOMP },                     \
-            { NULL, NULL, INT_T, NULL }                                                \
-        }                                                                              \
+#define init_input_hmc_grid(varname)                                                        \
+    {                                                                                       \
+        .betaF = 5.0, .betaA = 0.0, .nMD = 10, .n_traj = 4, .nOMP = 1, .ObsInterval = 1, \
+        .trajL = 1.0,                                                                       \
+        .read = {                                                                           \
+            { "betaF",       "betaF = %lf",       DOUBLE_T, &(varname).betaF },            \
+            { "betaA",       "betaA = %lf",       DOUBLE_T, &(varname).betaA },            \
+            { "nMD",         "nMD = %d",          INT_T,    &(varname).nMD },              \
+            { "n_traj",      "n_traj = %d",       INT_T,    &(varname).n_traj },           \
+            { "trajL",       "trajL = %lf",       DOUBLE_T, &(varname).trajL },            \
+            { "nOMP",        "nOMP = %d",         INT_T,    &(varname).nOMP },             \
+            { "ObsInterval", "ObsInterval = %d",  INT_T,    &(varname).ObsInterval },      \
+            { NULL, NULL, INT_T, NULL }                                                     \
+        }                                                                                   \
     }
 
 static input_hmc_grid hmc_par = init_input_hmc_grid(hmc_par);
@@ -119,6 +122,7 @@ int main(int argc, char *argv[])
 
         lprintf("HMC", 0, "Trajectory %d  plaq = %.10e\n", traj, avr_plaquette());
 
+        if (traj % hmc_par.ObsInterval == 0) {
         gettimeofday(&start, 0);
 
 #if total_n_glue_op > 0
@@ -126,13 +130,47 @@ int main(int argc, char *argv[])
             one_point_gb[i] = 0.;
         }
         measure_1pt_glueballs(flow.pg_v->nblkstart, flow.pg_v->nblkend, &(flow.pg_v->APEsmear), one_point_gb);
-        for (int j = 0; j < n_active_slices; j++) {
-            lprintf("step", 0, "%d ", zerocoord[0] + j);
-            for (int i = 0; i < total_n_glue_op * nblocking; i++) {
-                lprintf("step", 0, " (%.10e +I*(%.10e)) ", creal(one_point_gb[i]), cimag(one_point_gb[i]));
+        int n_op = total_n_glue_op * nblocking;
+        double **real = (double **)malloc(n_op * sizeof(double *));
+        double **imag = (double **)malloc(n_op * sizeof(double *));
+        for (int op = 0; op < n_op; op++) {
+            real[op] = (double *)malloc(n_active_slices * sizeof(double));
+            imag[op] = (double *)malloc(n_active_slices * sizeof(double));
+            for (int t = 0; t < n_active_slices; t++) {
+                real[op][t] = creal(one_point_gb[t * n_op + op]);
+                imag[op][t] = cimag(one_point_gb[t * n_op + op]);
             }
-            lprintf("step", 0, "\n");
         }
+        for (int op = 0; op < n_op; op++)
+            for (int t = 0; t < n_active_slices; t++)
+                lprintf("RES", 0, "traj=%d op=%d t=%d  %.10e  %.10e\n",
+                        traj, op, zerocoord[0] + t, real[op][t], imag[op][t]);
+
+        char h5name[64];
+        snprintf(h5name, sizeof(h5name), "glueballs.%d.h5", traj);
+        hid_t fid = H5Fcreate(h5name, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        hsize_t h5dims[1] = { (hsize_t)n_active_slices };
+        hid_t space = H5Screate_simple(1, h5dims, NULL);
+        for (int op = 0; op < n_op; op++) {
+            char grp_name[16];
+            snprintf(grp_name, sizeof(grp_name), "%d", op);
+            hid_t grp = H5Gcreate2(fid, grp_name, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+            hid_t dset_re = H5Dcreate2(grp, "real", H5T_NATIVE_DOUBLE, space,
+                                        H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+            H5Dwrite(dset_re, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, real[op]);
+            H5Dclose(dset_re);
+            hid_t dset_im = H5Dcreate2(grp, "imag", H5T_NATIVE_DOUBLE, space,
+                                        H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+            H5Dwrite(dset_im, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, imag[op]);
+            H5Dclose(dset_im);
+            H5Gclose(grp);
+        }
+        H5Sclose(space);
+        H5Fclose(fid);
+
+        for (int op = 0; op < n_op; op++) { free(real[op]); free(imag[op]); }
+        free(real);
+        free(imag);
 #endif
 
 #if total_n_tor_op > 0
@@ -150,6 +188,7 @@ int main(int argc, char *argv[])
         lprintf("MAIN", 0, "Glueballs & Torellons 1pt traj %d: generated in [%ld sec %ld usec]\n",
                 traj, etime.tv_sec, etime.tv_usec);
         lprintf("MAIN", 0, "Plaquette %1.18e\n", avr_plaquette());
+        } /* ObsInterval */
 
         if (strcmp(flow.wf->make, "true") == 0) {
             static suNg_field *Vwf = NULL;

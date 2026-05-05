@@ -20,23 +20,25 @@
 /* HMC parameters read from input file */
 typedef struct input_hmc_grid {
     double betaF, betaA;
-    int nMD, n_traj, nOMP;
+    int nMD, n_traj, nOMP, ObsInterval;
     double trajL;
-    input_record_t read[7];
+    input_record_t read[8];
 } input_hmc_grid;
 
-#define init_input_hmc_grid(varname)                                                   \
-    {                                                                                  \
-        .betaF = 5.0, .betaA = 0.0, .nMD = 10, .n_traj = 4, .nOMP = 1, .trajL = 1.0, \
-        .read = {                                                                      \
-            { "betaF", "betaF = %lf", DOUBLE_T, &(varname).betaF },                   \
-            { "betaA", "betaA = %lf", DOUBLE_T, &(varname).betaA },                   \
-            { "nMD",   "nMD = %d",   INT_T,    &(varname).nMD },                      \
-            { "n_traj","n_traj = %d",INT_T,    &(varname).n_traj },                   \
-            { "trajL", "trajL = %lf",DOUBLE_T, &(varname).trajL },                    \
-            { "nOMP",  "nOMP = %d",  INT_T,    &(varname).nOMP },                     \
-            { NULL, NULL, INT_T, NULL }                                                \
-        }                                                                              \
+#define init_input_hmc_grid(varname)                                                        \
+    {                                                                                       \
+        .betaF = 5.0, .betaA = 0.0, .nMD = 10, .n_traj = 4, .nOMP = 1, .ObsInterval = 1, \
+        .trajL = 1.0,                                                                       \
+        .read = {                                                                           \
+            { "betaF",       "betaF = %lf",       DOUBLE_T, &(varname).betaF },            \
+            { "betaA",       "betaA = %lf",       DOUBLE_T, &(varname).betaA },            \
+            { "nMD",         "nMD = %d",          INT_T,    &(varname).nMD },              \
+            { "n_traj",      "n_traj = %d",       INT_T,    &(varname).n_traj },           \
+            { "trajL",       "trajL = %lf",       DOUBLE_T, &(varname).trajL },            \
+            { "nOMP",        "nOMP = %d",         INT_T,    &(varname).nOMP },             \
+            { "ObsInterval", "ObsInterval = %d",  INT_T,    &(varname).ObsInterval },      \
+            { NULL, NULL, INT_T, NULL }                                                     \
+        }                                                                                   \
     }
 
 static input_hmc_grid hmc_par = init_input_hmc_grid(hmc_par);
@@ -119,6 +121,7 @@ int main(int argc, char *argv[])
 
         lprintf("HMC", 0, "Trajectory %d  plaq = %.10e\n", traj, avr_plaquette());
 
+        if (traj % hmc_par.ObsInterval == 0) {
         gettimeofday(&start, 0);
 
 #if total_n_glue_op > 0
@@ -150,6 +153,7 @@ int main(int argc, char *argv[])
         lprintf("MAIN", 0, "Glueballs & Torellons 1pt traj %d: generated in [%ld sec %ld usec]\n",
                 traj, etime.tv_sec, etime.tv_usec);
         lprintf("MAIN", 0, "Plaquette %1.18e\n", avr_plaquette());
+        } /* ObsInterval */
 
         if (strcmp(flow.wf->make, "true") == 0) {
             static suNg_field *Vwf = NULL;
