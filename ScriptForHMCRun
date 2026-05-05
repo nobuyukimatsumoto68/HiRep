@@ -1,0 +1,1 @@
+mpirun -np 1 PureGauge/hmc_grid_claude -i PureGauge/input_hmc_grid 2>&1 | tee PureGauge/out_hmc_grid3
