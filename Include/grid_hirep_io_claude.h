@@ -9,8 +9,8 @@
 extern "C" {
 #endif
 
-void grid_init(int *argc, char ***argv);
-void grid_finalize(void);
+void grid_init(int NP_T, int NP_X, int NP_Y, int NP_Z,
+               int Nt,   int Nx,   int Ny,   int Nz);
 void grid_read_config(const char* filename,
                       double*     out,
                       int Nc, int Nt, int Nx, int Ny, int Nz);

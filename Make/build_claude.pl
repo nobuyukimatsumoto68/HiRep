@@ -158,7 +158,16 @@ my @libs = ("libhrobservables.a", "libhr.a", "libhrobservables.a"); #order is im
     print "  libs = @link_libs \$GRIDLIBS\n";
     print "  LINK = \$CXX\n";
 
-    print "build PureGauge_grid: phony $exe_io $exe_hmc\n";
+    # hmc_glueballs_grid_claude
+    my @c_sources_hmcgb = ("$topdir/hmc_glueballs_grid_claude.c",
+                           "$topdir/suN_utils.c");
+    my @c_objs_hmcgb = obj_rules("${topdir}/hmc_glueballs_grid_claude_obj", @c_sources_hmcgb);
+    my $exe_hmcgb = "$topdir/hmc_glueballs_grid_claude";
+    print "build $exe_hmcgb: link @c_objs_hmcgb $grid_hmc_obj | @dep_libs\n";
+    print "  libs = @link_libs \$GRIDLIBS\n";
+    print "  LINK = \$CXX\n";
+
+    print "build PureGauge_grid: phony $exe_io $exe_hmc $exe_hmcgb\n";
 }
 
 ###############################################################################

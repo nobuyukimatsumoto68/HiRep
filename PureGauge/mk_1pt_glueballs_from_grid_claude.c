@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
     struct timeval start, end, etime; /* //for measurment timing */
 
     setup_process(&argc, &argv);
-    grid_init(&argc, &argv);
+    grid_init(NP_T, NP_X, NP_Y, NP_Z, GLB_T, GLB_X, GLB_Y, GLB_Z);
 
     setup_gauge_fields();
 
@@ -169,7 +169,6 @@ int main(int argc, char *argv[]) {
     afree(polyf);
 
     /* close communications */
-    grid_finalize();
     finalize_process();
 
     return 0;
