@@ -3,12 +3,28 @@
 #include "grid_hirep_hmc_claude.h"
 #include <stdlib.h>
 
-/* Parameters — replace with input_file parsing as needed */
-static double betaF  = 5.0;
-static double betaA  = 0.0;
-static int    n_traj = 4;
-static int    nMD    = 8;
-static double trajL  = 1.0;
+typedef struct input_hmc_grid {
+    double betaF, betaA;
+    int nMD, n_traj, nOMP;
+    double trajL;
+    input_record_t read[7];
+} input_hmc_grid;
+
+#define init_input_hmc_grid(varname)                                                    \
+    {                                                                                   \
+        .betaF = 5.0, .betaA = 0.0, .nMD = 8, .n_traj = 4, .nOMP = 1, .trajL = 1.0,  \
+        .read = {                                                                       \
+            { "betaF", "betaF = %lf", DOUBLE_T, &(varname).betaF },                    \
+            { "betaA", "betaA = %lf", DOUBLE_T, &(varname).betaA },                    \
+            { "nMD",   "nMD = %d",   INT_T,    &(varname).nMD },                       \
+            { "n_traj","n_traj = %d",INT_T,    &(varname).n_traj },                    \
+            { "trajL", "trajL = %lf",DOUBLE_T, &(varname).trajL },                     \
+            { "nOMP",  "nOMP = %d",  INT_T,    &(varname).nOMP },                      \
+            { NULL, NULL, INT_T, NULL }                                                 \
+        }                                                                               \
+    }
+
+static input_hmc_grid hmc_par = init_input_hmc_grid(hmc_par);
 
 /*
  * Copy the full global gauge field from the Grid out[] buffer into HiRep's
@@ -48,6 +64,7 @@ int main(int argc, char *argv[])
 {
     setup_process(&argc, &argv);
     setup_gauge_fields();
+    read_input(hmc_par.read, get_input_filename());
 
     int buf_len = GLB_T * GLB_X * GLB_Y * GLB_Z * 4 * 2 * NG * NG;
     double *out = malloc(buf_len * sizeof(double));
@@ -55,15 +72,17 @@ int main(int argc, char *argv[])
     struct HmcState *S = grid_hmc_init(
         NP_T, NP_X, NP_Y, NP_Z,
         GLB_T, GLB_X, GLB_Y, GLB_Z,
-        betaF, betaA, nMD, trajL);
+        hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.nOMP);
 
-    // for (int traj = 0; traj < n_traj; traj++) {
-    int traj=0;
-    lprintf("HMC", 0, "Starting trajectory %d\n", traj);
-    grid_hmc_step(S, out);
-    copy_to_ugauge(out);
-    lprintf("HMC", 0, "Trajectory %d done  plaquette = %.10f\n", traj, avr_plaquette());
-    // }
+    lprintf("MAIN", 0, "betaF=%.4f betaA=%.4f nMD=%d trajL=%.4f n_traj=%d nOMP=%d\n",
+            hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.n_traj, hmc_par.nOMP);
+
+    for (int traj = 0; traj < hmc_par.n_traj; traj++) {
+        lprintf("HMC", 0, "Starting trajectory %d\n", traj);
+        grid_hmc_step(S, out);
+        copy_to_ugauge(out);
+        lprintf("HMC", 0, "Trajectory %d done  plaquette = %.10f\n", traj, avr_plaquette());
+    }
 
     grid_hmc_finalize(S);
 

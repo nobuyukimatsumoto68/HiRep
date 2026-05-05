@@ -6,18 +6,19 @@ extern "C" {
 struct HmcState; /* opaque — C caller only stores and passes the pointer */
 
 /*
- * grid_hmc_init — initialize Grid, build HMC state (cold start).
+ * grid_hmc_init — initialize Grid, build HMC state (hot start).
  *   NP_{T,X,Y,Z}  : MPI process grid (must match HiRep's NP_*)
  *   N{t,x,y,z}    : global lattice extent
  *   betaF, betaA  : fundamental / adjoint Wilson coupling
  *   n_mdSteps     : leapfrog steps per trajectory
  *   trajL         : MD trajectory length
+ *   n_omp         : OpenMP threads per MPI rank (passed as --threads to Grid_init)
  * Returns an opaque pointer to be passed to grid_hmc_step / grid_hmc_finalize.
  */
 struct HmcState* grid_hmc_init(int NP_T, int NP_X, int NP_Y, int NP_Z,
                                int Nt,   int Nx,   int Ny,   int Nz,
                                double betaF, double betaA,
-                               int n_mdSteps, double trajL);
+                               int n_mdSteps, double trajL, int n_omp);
 
 /*
  * grid_hmc_step — run one HMC trajectory (MD + Metropolis), then write U

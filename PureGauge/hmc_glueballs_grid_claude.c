@@ -20,20 +20,21 @@
 /* HMC parameters read from input file */
 typedef struct input_hmc_grid {
     double betaF, betaA;
-    int nMD, n_traj;
+    int nMD, n_traj, nOMP;
     double trajL;
-    input_record_t read[6];
+    input_record_t read[7];
 } input_hmc_grid;
 
 #define init_input_hmc_grid(varname)                                                   \
     {                                                                                  \
-        .betaF = 5.0, .betaA = 0.0, .nMD = 10, .n_traj = 4, .trajL = 1.0,            \
+        .betaF = 5.0, .betaA = 0.0, .nMD = 10, .n_traj = 4, .nOMP = 1, .trajL = 1.0, \
         .read = {                                                                      \
             { "betaF", "betaF = %lf", DOUBLE_T, &(varname).betaF },                   \
             { "betaA", "betaA = %lf", DOUBLE_T, &(varname).betaA },                   \
             { "nMD",   "nMD = %d",   INT_T,    &(varname).nMD },                      \
             { "n_traj","n_traj = %d",INT_T,    &(varname).n_traj },                   \
             { "trajL", "trajL = %lf",DOUBLE_T, &(varname).trajL },                    \
+            { "nOMP",  "nOMP = %d",  INT_T,    &(varname).nOMP },                     \
             { NULL, NULL, INT_T, NULL }                                                \
         }                                                                              \
     }
@@ -102,10 +103,10 @@ int main(int argc, char *argv[])
     struct HmcState *S = grid_hmc_init(
         NP_T, NP_X, NP_Y, NP_Z,
         GLB_T, GLB_X, GLB_Y, GLB_Z,
-        hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL);
+        hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.nOMP);
 
-    lprintf("MAIN", 0, "betaF=%.4f betaA=%.4f nMD=%d trajL=%.4f n_traj=%d\n",
-            hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.n_traj);
+    lprintf("MAIN", 0, "betaF=%.4f betaA=%.4f nMD=%d trajL=%.4f n_traj=%d nOMP=%d\n",
+            hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.n_traj, hmc_par.nOMP);
 
     for (int traj = 0; traj < hmc_par.n_traj; traj++) {
         lprintf("HMC", 0, "Starting trajectory %d\n", traj);
