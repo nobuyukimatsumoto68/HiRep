@@ -1,0 +1,1 @@
+time mpirun -np 2 ./hmc_glueballs_grid_hdf5_claude -i input_hmc_glueballs_grid 2>&1 | tee hmc_glueballs_grid_hdf5_claude.log

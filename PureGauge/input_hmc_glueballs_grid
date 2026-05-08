@@ -1,0 +1,33 @@
+GLB_T = 32
+GLB_X = 16
+GLB_Y = 16
+GLB_Z = 16
+NP_T = 2
+NP_X = 1
+NP_Y = 1
+NP_Z = 1
+
+N_REP = 1
+
+rlx_level = 1
+rlx_seed  = 12345
+
+betaF = 2.4
+betaA = 0.0
+nMD = 10
+trajL = 1.0
+n_traj = 10
+nOMP = 2
+ObsInterval = 5
+
+nblkstart = 0
+nblkend = 0
+APEsmear = 0.33
+
+WF:make = false
+WF:tmax = 2.0
+WF:nmeas = 10
+WF:eps = 0.02
+WF:delta = 0.0001
+
+polyakov:make = false
