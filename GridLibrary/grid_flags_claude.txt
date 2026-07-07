@@ -1,6 +1,0 @@
-# Grid flags captured Tue Jul  7 06:24:17 PM EDT 2026 from /mnt/baracuda_14/hirep_workspace/build/grid-config
-# git:     Nc: 2
-CXX      = g++ -std=c++17
-CXXFLAGS = -I/mnt/hdd_barracuda/opt//openmpi_cuda/include -mavx -mf16c -I/include -O3 -std=c++17 -I/usr/local/include -I/mnt/hdd_barracuda/opt/openmpi_cuda/include/ -I/mnt/hdd_barracuda/opt/myhdfstuff/hdf5-2.1.0/include/ -fopenmp -fno-strict-aliasing -I/mnt/baracuda_14/hirep_workspace//build/include
-LDFLAGS  = -L/mnt/hdd_barracuda/opt//openmpi_cuda/lib -Wl,-rpath -Wl,/mnt/hdd_barracuda/opt//openmpi_cuda/lib -Wl,--enable-new-dtags -L/lib -L/usr/local/lib -L/opt/openssl/lib -L/mnt/hdd_barracuda/opt/openmpi_cuda/lib/ -L/mnt/hdd_barracuda/opt/myhdfstuff/hdf5-2.1.0/lib/ -lhdf5 -lhdf5_cpp -L/mnt/baracuda_14/hirep_workspace//build/lib
-LIBS     = -lmpi_cxx -lmpi -Wl,-rpath -Wl,/mnt/hdd_barracuda/opt//openmpi_cuda/lib -Wl,--enable-new-dtags -lhdf5_cpp -lz -lcrypto -llime -lfftw3f -lfftw3 -lmpfr -lgmp -lstdc++ -lm -lz -lhdf5 -lGrid
