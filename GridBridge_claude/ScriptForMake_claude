@@ -1,0 +1,3 @@
+cp Make/MkFlags_claude.ini Make/MkFlags.ini
+cp Make/build_claude.pl Make/build.pl
+Make/nj PureGauge_grid

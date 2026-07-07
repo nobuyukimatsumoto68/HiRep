@@ -2,17 +2,21 @@
 #include "libhr.h"
 #include "grid_hirep_hmc_claude.h"
 #include <stdlib.h>
+#include <assert.h>
+#include <math.h>
 
 typedef struct input_hmc_grid {
     double betaF, betaA;
     int nMD, n_traj, nOMP;
     double trajL;
-    input_record_t read[7];
+    int coldStart, NoMetropolisUntilRoutine;
+    input_record_t read[9];
 } input_hmc_grid;
 
 #define init_input_hmc_grid(varname)                                                    \
     {                                                                                   \
         .betaF = 5.0, .betaA = 0.0, .nMD = 8, .n_traj = 4, .nOMP = 1, .trajL = 1.0,  \
+        .coldStart = 0, .NoMetropolisUntilRoutine = 10,                                \
         .read = {                                                                       \
             { "betaF", "betaF = %lf", DOUBLE_T, &(varname).betaF },                    \
             { "betaA", "betaA = %lf", DOUBLE_T, &(varname).betaA },                    \
@@ -20,6 +24,8 @@ typedef struct input_hmc_grid {
             { "n_traj","n_traj = %d",INT_T,    &(varname).n_traj },                    \
             { "trajL", "trajL = %lf",DOUBLE_T, &(varname).trajL },                     \
             { "nOMP",  "nOMP = %d",  INT_T,    &(varname).nOMP },                      \
+            { "coldStart", "coldStart = %d", INT_T, &(varname).coldStart },            \
+            { "NoMetropolisUntilRoutine", "NoMetropolisUntilRoutine = %d", INT_T, &(varname).NoMetropolisUntilRoutine }, \
             { NULL, NULL, INT_T, NULL }                                                 \
         }                                                                               \
     }
@@ -72,16 +78,24 @@ int main(int argc, char *argv[])
     struct HmcState *S = grid_hmc_init(
         NP_T, NP_X, NP_Y, NP_Z,
         GLB_T, GLB_X, GLB_Y, GLB_Z,
-        hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.nOMP);
+        hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.nOMP,
+        hmc_par.coldStart);
 
-    lprintf("MAIN", 0, "betaF=%.4f betaA=%.4f nMD=%d trajL=%.4f n_traj=%d nOMP=%d\n",
-            hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.n_traj, hmc_par.nOMP);
+    lprintf("MAIN", 0, "betaF=%.4f betaA=%.4f nMD=%d trajL=%.4f n_traj=%d nOMP=%d coldStart=%d NoMetropolisUntilRoutine=%d\n",
+            hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.n_traj, hmc_par.nOMP,
+            hmc_par.coldStart, hmc_par.NoMetropolisUntilRoutine);
 
     for (int traj = 0; traj < hmc_par.n_traj; traj++) {
-        lprintf("HMC", 0, "Starting trajectory %d\n", traj);
-        grid_hmc_step(S, out);
+        int metropolis = (traj >= hmc_par.NoMetropolisUntilRoutine) ? 1 : 0;
+        lprintf("HMC", 0, "Starting trajectory %d (metropolis=%d)\n", traj, metropolis);
+        grid_hmc_step(S, out, metropolis);
         copy_to_ugauge(out);
-        lprintf("HMC", 0, "Trajectory %d done  plaquette = %.10f\n", traj, avr_plaquette());
+        double p_hirep = avr_plaquette();
+        double p_grid = grid_hmc_plaquette(S);
+        lprintf("HMC", 0, "Trajectory %d done  plaquette = %.10f (Grid %.10f)\n", traj, p_hirep, p_grid);
+        // Assert the gauge-field transfer is correct: HiRep u_gauge plaquette must equal
+        // Grid's own. (Requires NDEBUG unset in MkFlags, else assert is compiled out.)
+        assert(fabs(p_hirep - p_grid) < 1e-6);
     }
 
     grid_hmc_finalize(S);

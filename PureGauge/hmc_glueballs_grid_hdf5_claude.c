@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
+#include <assert.h>
+#include <math.h>
 #include <hdf5.h>
 
 /* HMC parameters read from input file */
@@ -23,13 +25,14 @@ typedef struct input_hmc_grid {
     double betaF, betaA;
     int nMD, n_traj, nOMP, ObsInterval;
     double trajL;
-    input_record_t read[8];
+    int coldStart, NoMetropolisUntilRoutine;
+    input_record_t read[10];
 } input_hmc_grid;
 
 #define init_input_hmc_grid(varname)                                                        \
     {                                                                                       \
         .betaF = 5.0, .betaA = 0.0, .nMD = 10, .n_traj = 4, .nOMP = 1, .ObsInterval = 1, \
-        .trajL = 1.0,                                                                       \
+        .trajL = 1.0, .coldStart = 0, .NoMetropolisUntilRoutine = 10,                       \
         .read = {                                                                           \
             { "betaF",       "betaF = %lf",       DOUBLE_T, &(varname).betaF },            \
             { "betaA",       "betaA = %lf",       DOUBLE_T, &(varname).betaA },            \
@@ -38,6 +41,8 @@ typedef struct input_hmc_grid {
             { "trajL",       "trajL = %lf",       DOUBLE_T, &(varname).trajL },            \
             { "nOMP",        "nOMP = %d",         INT_T,    &(varname).nOMP },             \
             { "ObsInterval", "ObsInterval = %d",  INT_T,    &(varname).ObsInterval },      \
+            { "coldStart",   "coldStart = %d",    INT_T,    &(varname).coldStart },         \
+            { "NoMetropolisUntilRoutine", "NoMetropolisUntilRoutine = %d", INT_T, &(varname).NoMetropolisUntilRoutine }, \
             { NULL, NULL, INT_T, NULL }                                                     \
         }                                                                                   \
     }
@@ -106,21 +111,27 @@ int main(int argc, char *argv[])
     struct HmcState *S = grid_hmc_init(
         NP_T, NP_X, NP_Y, NP_Z,
         GLB_T, GLB_X, GLB_Y, GLB_Z,
-        hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.nOMP);
+        hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.nOMP,
+        hmc_par.coldStart);
 
-    lprintf("MAIN", 0, "betaF=%.4f betaA=%.4f nMD=%d trajL=%.4f n_traj=%d nOMP=%d\n",
-            hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.n_traj, hmc_par.nOMP);
+    lprintf("MAIN", 0, "betaF=%.4f betaA=%.4f nMD=%d trajL=%.4f n_traj=%d nOMP=%d coldStart=%d NoMetropolisUntilRoutine=%d ObsInterval=%d\n",
+            hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.n_traj, hmc_par.nOMP,
+            hmc_par.coldStart, hmc_par.NoMetropolisUntilRoutine, hmc_par.ObsInterval);
 
     for (int traj = 0; traj < hmc_par.n_traj; traj++) {
-        lprintf("HMC", 0, "Starting trajectory %d\n", traj);
+        int metropolis = (traj >= hmc_par.NoMetropolisUntilRoutine) ? 1 : 0;
+        lprintf("HMC", 0, "Starting trajectory %d (metropolis=%d)\n", traj, metropolis);
 
-        grid_hmc_step(S, buf);
+        grid_hmc_step(S, buf, metropolis);
         copy_to_ugauge(buf);
         start_sendrecv_suNg_field(u_gauge);
         complete_sendrecv_suNg_field(u_gauge);
         apply_BCs_on_fundamental_gauge_field();
 
-        lprintf("HMC", 0, "Trajectory %d  plaq = %.10e\n", traj, avr_plaquette());
+        double p_hirep = avr_plaquette();
+        double p_grid = grid_hmc_plaquette(S);
+        lprintf("HMC", 0, "Trajectory %d  plaq = %.10e (Grid %.10e)\n", traj, p_hirep, p_grid);
+        assert(fabs(p_hirep - p_grid) < 1e-6);
 
         if (traj % hmc_par.ObsInterval == 0) {
         gettimeofday(&start, 0);

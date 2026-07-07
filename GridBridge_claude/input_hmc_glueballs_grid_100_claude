@@ -1,0 +1,35 @@
+GLB_T = 32
+GLB_X = 8
+GLB_Y = 8
+GLB_Z = 8
+NP_T = 4
+NP_X = 1
+NP_Y = 1
+NP_Z = 1
+
+N_REP = 1
+
+rlx_level = 1
+rlx_seed  = 12345
+
+betaF = 2.4
+betaA = 0.0
+nMD = 16
+trajL = 1.0
+n_traj = 100
+nOMP = 1
+ObsInterval = 10
+coldStart = 0
+NoMetropolisUntilRoutine = 10
+
+nblkstart = 0
+nblkend = 0
+APEsmear = 0.33
+
+WF:make = false
+WF:tmax = 2.0
+WF:nmeas = 10
+WF:eps = 0.02
+WF:delta = 0.0001
+
+polyakov:make = false

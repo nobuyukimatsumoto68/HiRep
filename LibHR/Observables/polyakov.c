@@ -336,15 +336,9 @@ void polyakov() {
             sCOORD[mu] = np[mu] - 1;
             {
                 sCID = proc_id(sCOORD);
-#ifndef NDEBUG
-                if (mpiret != MPI_SUCCESS) {
-                    char mesg[MPI_MAX_ERROR_STRING];
-                    int mesglen;
-                    MPI_Error_string(mpiret, mesg, &mesglen);
-                    lprintf("MPI", 0, "ERROR: %s\n", mesg);
-                    error(1, 1, "polyakov.c", "Cannot retrieve source CID");
-                }
-#endif /* NDEBUG */
+                /* proc_id() is a local geometry lookup, not an MPI call, so there is no
+                 * mpiret to check here. Removed a leftover #ifndef NDEBUG block that tested
+                 * an undeclared `mpiret` (broke the build once NDEBUG was unset). */
             }
             MPI_Status status;
             {
