@@ -1,6 +1,7 @@
 #include <Grid/Grid.h>
 #include <memory>
 #include <sstream>
+#include <cstdio>   // std::remove for checkpoint pruning
 using namespace Grid;
 
 typedef PeriodicGimplR Gimpl;
@@ -108,6 +109,7 @@ struct HmcState {
     std::unique_ptr<HMC_t>                      HMC;
     double                                      last_plaq = 0.0;  // Grid avg plaquette of last readout
     int                                         metropolis_flag = -1;  // -1 = HMC not built yet
+    int                                         last_ckpoint = -1;  // last saved checkpoint index (-1 = none)
 };
 
 // (Re)build the one-trajectory HMC with the given Metropolis on/off. Cheap: HMC only stores
@@ -266,6 +268,41 @@ extern "C"
 double grid_hmc_plaquette(HmcState* S)
 {
     return S->last_plaq;
+}
+
+// Save the current gauge + RNG state as Grid NERSC checkpoints ckpoint_lat.<traj> and
+// ckpoint_rng.<traj> (64-bit / IEEE64BIG for restart fidelity; RNG is exact). Then prune the
+// PREVIOUS checkpoint pair (rank 0 only), so only the latest survives. Save-before-delete keeps
+// a valid checkpoint on disk at all times.
+extern "C"
+void grid_hmc_save_checkpoint(HmcState* S, int traj)
+{
+    std::string lat = "ckpoint_lat." + std::to_string(traj);
+    std::string rng = "ckpoint_rng." + std::to_string(traj);
+    int tworow = 0;
+    int precision32 = 0;   // 0 -> 64-bit gauge (IEEE64BIG)
+    NerscIO::writeRNGState(*(S->sRNG), *(S->pRNG), rng);
+    NerscIO::writeConfiguration<GaugeStatistics<Gimpl>>(*(S->U), lat, tworow, precision32);
+    if (S->last_ckpoint >= 0 && S->UGrid->IsBoss()) {
+        std::string plat = "ckpoint_lat." + std::to_string(S->last_ckpoint);
+        std::string prng = "ckpoint_rng." + std::to_string(S->last_ckpoint);
+        std::remove(plat.c_str());
+        std::remove(prng.c_str());
+    }
+    S->last_ckpoint = traj;
+}
+
+// Restore gauge + RNG from ckpoint_lat.<traj> / ckpoint_rng.<traj> into S (CheckpointStart).
+// Sets last_ckpoint = traj so the first subsequent save prunes this resume checkpoint.
+extern "C"
+void grid_hmc_load_checkpoint(HmcState* S, int traj)
+{
+    std::string lat = "ckpoint_lat." + std::to_string(traj);
+    std::string rng = "ckpoint_rng." + std::to_string(traj);
+    FieldMetaData header;
+    NerscIO::readRNGState(*(S->sRNG), *(S->pRNG), header, rng);
+    NerscIO::readConfiguration<GaugeStatistics<Gimpl>>(*(S->U), header, lat);
+    S->last_ckpoint = traj;
 }
 
 extern "C"

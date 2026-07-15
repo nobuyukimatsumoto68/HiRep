@@ -39,6 +39,14 @@ void grid_hmc_step(struct HmcState* S, double *out, int metropolis);
 double grid_hmc_plaquette(struct HmcState* S);
 
 /*
+ * grid_hmc_save_checkpoint — write gauge+RNG to Grid NERSC checkpoints ckpoint_lat.<traj> /
+ * ckpoint_rng.<traj> (64-bit), then delete the previous pair (keep only the latest).
+ * grid_hmc_load_checkpoint — restore gauge+RNG from ckpoint_lat.<traj> / ckpoint_rng.<traj>.
+ */
+void grid_hmc_save_checkpoint(struct HmcState* S, int traj);
+void grid_hmc_load_checkpoint(struct HmcState* S, int traj);
+
+/*
  * grid_hmc_finalize — destroy HMC state and finalize Grid.
  */
 void grid_hmc_finalize(struct HmcState* S);  /* deletes S, then finalizes Grid */

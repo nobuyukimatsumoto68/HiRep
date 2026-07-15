@@ -64,3 +64,9 @@ LibHR/Utils/cinfo.h
 
 *.log
 *.o
+
+# Grid-in-HiRep run outputs (not source): HMC checkpoints, HiRep output files, hdf5 measurements
+ckpoint_lat.*
+ckpoint_rng.*
+out_*claude*
+glueballs.*.h5

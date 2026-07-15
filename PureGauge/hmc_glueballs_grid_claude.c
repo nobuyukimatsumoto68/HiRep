@@ -18,6 +18,7 @@
 #include <sys/time.h>
 #include <assert.h>
 #include <math.h>
+#include <unistd.h>
 
 /* HMC parameters read from input file */
 typedef struct input_hmc_grid {
@@ -117,9 +118,24 @@ int main(int argc, char *argv[])
             hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.n_traj, hmc_par.nOMP,
             hmc_par.coldStart, hmc_par.NoMetropolisUntilRoutine, hmc_par.ObsInterval);
 
-    for (int traj = 0; traj < hmc_par.n_traj; traj++) {
-        int metropolis = (traj >= hmc_par.NoMetropolisUntilRoutine) ? 1 : 0;
-        lprintf("HMC", 0, "Starting trajectory %d (metropolis=%d)\n", traj, metropolis);
+    /* CheckpointStart: if the env var is set, resume from ckpoint_lat.<n> / ckpoint_rng.<n>.
+     * n_traj is an ABSOLUTE stop: we run configs (start+1) .. n_traj. */
+    int start_cfg = 0;
+    const char *cks = getenv("CheckpointStart");
+    if (cks != NULL) {
+        start_cfg = atoi(cks);
+        char cklat[256], ckrng[256];
+        snprintf(cklat, sizeof(cklat), "ckpoint_lat.%d", start_cfg);
+        snprintf(ckrng, sizeof(ckrng), "ckpoint_rng.%d", start_cfg);
+        error(access(cklat, R_OK) != 0 || access(ckrng, R_OK) != 0, 1, "main",
+              "CheckpointStart: ckpoint_lat/rng.<n> not found in run dir");
+        lprintf("MAIN", 0, "CheckpointStart: resuming from checkpoint %d\n", start_cfg);
+        grid_hmc_load_checkpoint(S, start_cfg);
+    }
+
+    for (int n = start_cfg + 1; n <= hmc_par.n_traj; n++) {
+        int metropolis = ((n - 1) >= hmc_par.NoMetropolisUntilRoutine) ? 1 : 0;
+        lprintf("HMC", 0, "Starting trajectory %d (metropolis=%d)\n", n, metropolis);
 
         grid_hmc_step(S, buf, metropolis);
         copy_to_ugauge(buf);
@@ -129,10 +145,10 @@ int main(int argc, char *argv[])
 
         double p_hirep = avr_plaquette();
         double p_grid = grid_hmc_plaquette(S);
-        lprintf("HMC", 0, "Trajectory %d  plaq = %.10e (Grid %.10e)\n", traj, p_hirep, p_grid);
+        lprintf("HMC", 0, "Trajectory %d  plaq = %.10e (Grid %.10e)\n", n, p_hirep, p_grid);
         assert(fabs(p_hirep - p_grid) < 1e-6);
 
-        if (traj % hmc_par.ObsInterval == 0) {
+        if (n % hmc_par.ObsInterval == 0) {
         gettimeofday(&start, 0);
 
 #if total_n_glue_op > 0
@@ -162,7 +178,7 @@ int main(int argc, char *argv[])
         gettimeofday(&end, 0);
         timeval_subtract(&etime, &end, &start);
         lprintf("MAIN", 0, "Glueballs & Torellons 1pt traj %d: generated in [%ld sec %ld usec]\n",
-                traj, etime.tv_sec, etime.tv_usec);
+                n, etime.tv_sec, etime.tv_usec);
         lprintf("MAIN", 0, "Plaquette %1.18e\n", avr_plaquette());
         } /* ObsInterval */
 
@@ -176,7 +192,7 @@ int main(int argc, char *argv[])
             gettimeofday(&end, 0);
             timeval_subtract(&etime, &end, &start);
             lprintf("MAIN", 0, "WF Measure traj %d: generated in [%ld sec %ld usec]\n",
-                    traj, etime.tv_sec, etime.tv_usec);
+                    n, etime.tv_sec, etime.tv_usec);
         }
 
         if (strcmp(flow.poly->make, "true") == 0) {
@@ -185,8 +201,11 @@ int main(int argc, char *argv[])
             gettimeofday(&end, 0);
             timeval_subtract(&etime, &end, &start);
             lprintf("MAIN", 0, "Polyakov Measure traj %d: generated in [%ld sec %ld usec]\n",
-                    traj, etime.tv_sec, etime.tv_usec);
+                    n, etime.tv_sec, etime.tv_usec);
         }
+
+        /* Checkpoint after every trajectory: write ckpoint_{lat,rng}.n, delete the previous pair. */
+        grid_hmc_save_checkpoint(S, n);
     }
 
     grid_hmc_finalize(S);

@@ -87,7 +87,9 @@ and the plaquette thermalizes toward $\approx 0.59$.
 | `MkFlags_claude.ini` | HiRep build config: `NG=2`, `CXX=mpicxx`, `GRIDLIBS` (captured lib + grid-config flags) |
 | `build_claude.pl` | custom `PureGauge_grid` link rules (`LINK=$CXX`) |
 | `ScriptForMake_claude` | `cp MkFlags/build.pl` + `nj PureGauge_grid` |
-| `input_hmc_grid_4node_claude` | example 4-rank input |
+| `input_hmc_grid_4node_claude` | example 4-rank bare-HMC input |
+| `input_hmc_glueballs_grid_100_claude` | glueball run input (100 traj, ObsInterval=10) |
+| `checkpointer_impl_plan_claude.md` | checkpointer design/decisions |
 
 ## Design notes / gotchas
 
@@ -105,3 +107,28 @@ and the plaquette thermalizes toward $\approx 0.59$.
 - **Transfer assert:** `hmc_grid_claude.c` asserts
   `fabs(avr_plaquette() - grid_hmc_plaquette(S)) < 1e-6` after each `copy_to_ugauge`.
   Requires `NDEBUG` unset in `MkFlags_claude.ini` (it is removed here).
+
+## Checkpointing & resume (glueball driver)
+
+`hmc_glueballs_grid_claude` checkpoints the Grid HMC state every trajectory, using Grid's
+conventional NERSC naming in the run dir:
+- `ckpoint_lat.<n>` — gauge field (64-bit, IEEE64BIG)
+- `ckpoint_rng.<n>` — serial + parallel RNG (exact)
+
+Only the **latest** pair is kept: after writing `<n>`, the previous pair is deleted
+(save-before-delete, so a valid checkpoint always exists). Bridge API:
+`grid_hmc_save_checkpoint(S,n)` / `grid_hmc_load_checkpoint(S,n)` (via `NerscIO`).
+
+**Resume** with the `CheckpointStart` env var (propagated through mpirun with `-x`):
+```bash
+CheckpointStart=100 bash run_glueballs_100_claude.sh   # loads ckpoint_*.100, continues to n_traj
+```
+`n_traj` is an **absolute** stop: it runs configs `(CheckpointStart+1) .. n_traj`, so bump `n_traj`
+above the checkpoint index. Config indexing is global, so a resumed run does not re-thermalize
+(`NoMetropolisUntilRoutine` and `ObsInterval` are gated on the global config index `n`). Missing
+`ckpoint_*.<n>` gives a clean `error()` (existence-checked with `access`). Design:
+`checkpointer_impl_plan_claude.md`.
+
+Input knobs (all drivers): `coldStart` (1 cold / 0 hot), `NoMetropolisUntilRoutine` (MD-only
+thermalization trajectories before Metropolis); glueball driver also `ObsInterval` (measurement
+stride). Run-output files (`ckpoint_*`, `out_*claude*`, `glueballs.*.h5`) are gitignored.
