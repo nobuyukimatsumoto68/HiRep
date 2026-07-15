@@ -60,7 +60,8 @@ in C++, not a shell script (the no-rm-in-scripts rule is about shell scripts).
 ## Decisions (RESOLVED, implemented)
 
 1. **Env var** `CheckpointStart` (getenv), propagated through mpirun with `-x CheckpointStart`.
-2. **n_traj = ABSOLUTE stop**: run configs `(start+1) .. n_traj`.
+2. **n_traj = ADDITIVE**: run `n_traj` more configs, `(start+1) .. (start+n_traj)`. (Switched from
+   absolute -> additive 2026-07-07 so resume needs no input edit.)
 3. **Precision = 64-bit** (precision32=0, IEEE64BIG).
 4. **Delete the resumed-from checkpoint** after the first new save (keep exactly one pair).
 5. **Write location** = CWD (the run dir, `HiRep/`), Grid default naming.

@@ -119,7 +119,8 @@ int main(int argc, char *argv[])
             hmc_par.coldStart, hmc_par.NoMetropolisUntilRoutine, hmc_par.ObsInterval);
 
     /* CheckpointStart: if the env var is set, resume from ckpoint_lat.<n> / ckpoint_rng.<n>.
-     * n_traj is an ABSOLUTE stop: we run configs (start+1) .. n_traj. */
+     * n_traj is ADDITIVE: we run n_traj more configs, i.e. (start+1) .. (start+n_traj), so no
+     * input edit is needed on resume. */
     int start_cfg = 0;
     const char *cks = getenv("CheckpointStart");
     if (cks != NULL) {
@@ -133,7 +134,7 @@ int main(int argc, char *argv[])
         grid_hmc_load_checkpoint(S, start_cfg);
     }
 
-    for (int n = start_cfg + 1; n <= hmc_par.n_traj; n++) {
+    for (int n = start_cfg + 1; n <= start_cfg + hmc_par.n_traj; n++) {
         int metropolis = ((n - 1) >= hmc_par.NoMetropolisUntilRoutine) ? 1 : 0;
         lprintf("HMC", 0, "Starting trajectory %d (metropolis=%d)\n", n, metropolis);
 

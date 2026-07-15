@@ -121,10 +121,10 @@ Only the **latest** pair is kept: after writing `<n>`, the previous pair is dele
 
 **Resume** with the `CheckpointStart` env var (propagated through mpirun with `-x`):
 ```bash
-CheckpointStart=100 bash run_glueballs_100_claude.sh   # loads ckpoint_*.100, continues to n_traj
+CheckpointStart=100 bash run_glueballs_100_claude.sh   # loads ckpoint_*.100, runs 100 MORE configs -> 101..200
 ```
-`n_traj` is an **absolute** stop: it runs configs `(CheckpointStart+1) .. n_traj`, so bump `n_traj`
-above the checkpoint index. Config indexing is global, so a resumed run does not re-thermalize
+`n_traj` is **additive**: it runs `n_traj` MORE configs, i.e. `(CheckpointStart+1) .. (CheckpointStart+n_traj)`,
+so no input edit is needed on resume. Config indexing is global, so a resumed run does not re-thermalize
 (`NoMetropolisUntilRoutine` and `ObsInterval` are gated on the global config index `n`). Missing
 `ckpoint_*.<n>` gives a clean `error()` (existence-checked with `access`). Design:
 `checkpointer_impl_plan_claude.md`.
