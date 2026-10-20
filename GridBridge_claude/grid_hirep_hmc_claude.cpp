@@ -122,6 +122,9 @@ static void build_hmc(HmcState* S, bool metropolis)
     Params.NoMetropolisUntil = 0;
     Params.Trajectories      = 1;
     Params.MetropolisTest    = metropolis;
+    // Log only: HMCparameters::print_parameters prints Params.MD (default 10 steps), but the
+    // integrator uses its own Params. Copy them so Grid's log shows the real nMD / trajL.
+    Params.MD                = S->integrator->Params;
     S->HMC = std::make_unique<HMC_t>(Params, *(S->integrator),
                                      *(S->sRNG), *(S->pRNG),
                                      S->none, *(S->U));
@@ -201,6 +204,24 @@ HmcState* grid_hmc_init(int NP_T, int NP_X, int NP_Y, int NP_Z,
     // HMC is built lazily on the first grid_hmc_step, with the Metropolis flag the driver
     // passes (metropolis_flag = -1 forces the first build).
     return S;
+}
+
+// Reseed both RNGs from a string (Grid SeedUniqueString: SHA-256 of the string -> seed
+// integers, broadcast from rank 0) and redraw the start configuration, which grid_hmc_init
+// drew from the fixed-integer seed. Distinct suffixes keep the serial (Metropolis) and parallel
+// (momenta, hot start) streams from sharing a seed. The string must be identical on all ranks.
+extern "C"
+void grid_hmc_seed(HmcState* S, const char* seed, int cold_start)
+{
+    std::string base(seed);
+    S->sRNG->SeedUniqueString(base + "_serial");
+    S->pRNG->SeedUniqueString(base + "_parallel");
+
+    if (cold_start) {
+        Gimpl::ColdConfiguration(*(S->pRNG), *(S->U));   // unit links
+    } else {
+        Gimpl::HotConfiguration(*(S->pRNG), *(S->U));    // random links
+    }
 }
 
 // Runs one HMC trajectory and fills out[] with U in HiRep in-memory layout:

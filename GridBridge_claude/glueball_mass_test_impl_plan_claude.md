@@ -109,9 +109,53 @@ That is still a nontrivial exponent, but not the glueball mass.
    `collect_1pt_glueball_functions`) so `NP_T > 1` works, and binary output (HDF5, one writer).
    Files: drivers, possibly `suN_utils.c` (note the double `t1` assignment at lines 225-226).
 
-## Open questions
+## First run results (2026-10-20, `HiRep/runs_claude/small_8x16`)
 
-1. Analysis in a Jupyter notebook (Python, one plot per cell) or a Julia script?
-2. Lattice and statistics: $8^3 \times 16$ with about 2000 trajectories, or something else?
-3. Grid seed: derive from `rlx_seed`, or a separate input key?
-4. Include the torelon printing (chunk 1), which gives the cleanest first signal?
+Run: $8^3 \times 16$, 1 rank x 4 threads, 2000 trajectories in 2466 s (1.23 s/traj, of which
+0.18 s is the measurement with 3 blocking levels). `GridSeed = 20261020-131546`. Grid log now
+shows `Number of MD steps : 16`, step 0.0625. Acceptance 1892/1980 = 0.956. HiRep and Grid
+plaquettes agree on all 2000 trajectories. Output: 62.5 MB text (32000 rows x 45 ops),
+checkpoints 2.10 MB (lat) + 0.85 MB (rng).
+
+Quick look (scratch script, 1800 configs after 200 thermalization, bins of 20, jackknife,
+$m_\text{eff}(t) = \ln[C(t)/C(t+1)]$):
+
+| Channel (ops) | Best level | $C(1)/C(0)$ | $a\,m_\text{eff}$ at $t = 1, 2, 3$ |
+|---|---|---|---|
+| $A_1$, $\vert\vec P\vert = 1$ (0, 2, 3, 11, 12, 14) | 2 | 0.153 | 1.359(66), 1.335(244), 1.34(104) |
+| $A_2^{+}$, $\vec P = 0$ (5) | 2 | 0.054 | noise |
+| $T_1^{+-}$, $\vec P = 0$ (8-10) | 2 | 0.005 | noise |
+| "$A_1^{++}$", "$E^{+}$", $\vec P = 0$ (4; 6, 7) | 2 | 0.02, 0.03 | noise |
+
+**Operator content (important).** In `glueballs_op.c:1189-1205`, ops 4, 6, 7 are not
+single-trace glueball operators: each is a sum of products
+$O_{\vec P = -\hat e_i} \cdot O_{\vec P = +\hat e_i}$, i.e. **two-glueball (scattering) operators**
+projected to $A_1^{+}$ / $E^{+}$ at total $\vec P = 0$. The only single-trace $\vec P = 0$ operators
+are $A_2^{+}$ (op 5) and $T_1^{+-}$ (ops 8-10), whose glueballs are heavy, so no signal there is
+expected at these statistics. The set has no single-trace $\vec P = 0$ $A_1^{++}$ or $E^{++}$ operator.
+
+**Moving-frame check.** The lowest state in $A_1$ at $\vec p = (2\pi/L)\hat e_i$ should be the
+$0^{++}$ glueball, with lattice dispersion relation
+
+$$
+\sinh^2\left(\frac{a E}{2}\right) = \sinh^2\left(\frac{a m}{2}\right) + \sin^2\left(\frac{a p}{2}\right),
+\qquad a p = \frac{2\pi}{8}
+$$
+
+For $a m_{0^{++}} = 0.94$ to $1.0$ this gives $a E \approx 1.17$ to $1.21$. The measured plateau is
+$1.34(7)$, about $2\sigma$ above. Possible reasons: excited-state contamination at $t = 1$ (no GEVP
+yet), the small box ($L\sqrt\sigma \approx 2.1$ shifts the glueball mass), or the reference value
+(to be checked). So a nontrivial, flat exponent is seen, in the right range, in this channel.
+
+## Decisions (2026-10-20)
+
+1. Analysis: the faster option, a Python Jupyter notebook (numpy; one plot per cell).
+2. Lattice and statistics: $8^3 \times 16$, about 2000 trajectories, `NP_T = 1`.
+3. Grid seed: a string key built from date+time. Input key `GridSeed` (default `auto`): with
+   `auto`, rank 0 formats `YYYYMMDD-HHMMSS`, broadcasts it, and it is logged; an explicit string
+   reproduces a run. New bridge function `grid_hmc_seed(S, seed, cold_start)` seeds the serial and
+   parallel Grid RNGs with `SeedUniqueString(seed + "_serial")` / `(seed + "_parallel")` (SHA-256 of
+   the string, Grid `Lattice_rng.h`) and redraws the start configuration. `grid_hmc_init` stays
+   unchanged, so the other drivers keep their fixed seeds. On resume, the checkpoint RNG state wins.
+4. No torelon printing. The torelon prediction above stays as background only; the test targets
+   the glueball channels.

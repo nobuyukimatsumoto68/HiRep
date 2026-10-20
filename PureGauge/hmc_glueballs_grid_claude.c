@@ -19,6 +19,7 @@
 #include <assert.h>
 #include <math.h>
 #include <unistd.h>
+#include <time.h>
 
 /* HMC parameters read from input file */
 typedef struct input_hmc_grid {
@@ -26,13 +27,14 @@ typedef struct input_hmc_grid {
     int nMD, n_traj, nOMP, ObsInterval;
     double trajL;
     int coldStart, NoMetropolisUntilRoutine;
-    input_record_t read[10];
+    char GridSeed[256]; /* "auto" -> date+time string from rank 0; else used verbatim */
+    input_record_t read[11];
 } input_hmc_grid;
 
 #define init_input_hmc_grid(varname)                                                        \
     {                                                                                       \
         .betaF = 5.0, .betaA = 0.0, .nMD = 10, .n_traj = 4, .nOMP = 1, .ObsInterval = 1, \
-        .trajL = 1.0, .coldStart = 0, .NoMetropolisUntilRoutine = 10,                       \
+        .trajL = 1.0, .coldStart = 0, .NoMetropolisUntilRoutine = 10, .GridSeed = "auto",   \
         .read = {                                                                           \
             { "betaF",       "betaF = %lf",       DOUBLE_T, &(varname).betaF },            \
             { "betaA",       "betaA = %lf",       DOUBLE_T, &(varname).betaA },            \
@@ -43,6 +45,7 @@ typedef struct input_hmc_grid {
             { "ObsInterval", "ObsInterval = %d",  INT_T,    &(varname).ObsInterval },      \
             { "coldStart",   "coldStart = %d",    INT_T,    &(varname).coldStart },         \
             { "NoMetropolisUntilRoutine", "NoMetropolisUntilRoutine = %d", INT_T, &(varname).NoMetropolisUntilRoutine }, \
+            { "GridSeed",    "GridSeed = %s",     STRING_T, &(varname).GridSeed },         \
             { NULL, NULL, INT_T, NULL }                                                     \
         }                                                                                   \
     }
@@ -114,6 +117,21 @@ int main(int argc, char *argv[])
         hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.nOMP,
         hmc_par.coldStart);
 
+    /* Grid RNG seed string: "auto" -> date+time on rank 0, broadcast so every rank seeds Grid
+     * with the same string. An explicit GridSeed in the input reproduces a run. */
+    if (strcmp(hmc_par.GridSeed, "auto") == 0) {
+        if (PID == 0) {
+            time_t now = time(NULL);
+            strftime(hmc_par.GridSeed, sizeof(hmc_par.GridSeed), "%Y%m%d-%H%M%S", localtime(&now));
+        }
+#ifdef WITH_MPI
+        MPI_Bcast(hmc_par.GridSeed, sizeof(hmc_par.GridSeed), MPI_CHAR, 0, GLB_COMM);
+#endif
+    }
+    grid_hmc_seed(S, hmc_par.GridSeed, hmc_par.coldStart);
+    lprintf("MAIN", 0, "GridSeed = %s (serial/parallel RNG: SeedUniqueString of GridSeed_serial / GridSeed_parallel)\n",
+            hmc_par.GridSeed);
+
     lprintf("MAIN", 0, "betaF=%.4f betaA=%.4f nMD=%d trajL=%.4f n_traj=%d nOMP=%d coldStart=%d NoMetropolisUntilRoutine=%d ObsInterval=%d\n",
             hmc_par.betaF, hmc_par.betaA, hmc_par.nMD, hmc_par.trajL, hmc_par.n_traj, hmc_par.nOMP,
             hmc_par.coldStart, hmc_par.NoMetropolisUntilRoutine, hmc_par.ObsInterval);
@@ -130,7 +148,7 @@ int main(int argc, char *argv[])
         snprintf(ckrng, sizeof(ckrng), "ckpoint_rng.%d", start_cfg);
         error(access(cklat, R_OK) != 0 || access(ckrng, R_OK) != 0, 1, "main",
               "CheckpointStart: ckpoint_lat/rng.<n> not found in run dir");
-        lprintf("MAIN", 0, "CheckpointStart: resuming from checkpoint %d\n", start_cfg);
+        lprintf("MAIN", 0, "CheckpointStart: resuming from checkpoint %d (RNG state from ckpoint_rng, GridSeed not used)\n", start_cfg);
         grid_hmc_load_checkpoint(S, start_cfg);
     }
 

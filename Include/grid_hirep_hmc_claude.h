@@ -23,6 +23,17 @@ struct HmcState* grid_hmc_init(int NP_T, int NP_X, int NP_Y, int NP_Z,
                                int cold_start);
 
 /*
+ * grid_hmc_seed - reseed Grid's serial and parallel RNGs from a string and redraw the start
+ * configuration. Call right after grid_hmc_init (which seeds with fixed integers).
+ *   seed       : any string, IDENTICAL on all ranks (e.g. date+time broadcast from rank 0).
+ *                Serial RNG <- SeedUniqueString(seed + "_serial"),
+ *                parallel RNG <- SeedUniqueString(seed + "_parallel") (SHA-256 of the string).
+ *   cold_start : 1 = cold (unit links), 0 = hot (random links from the reseeded parallel RNG)
+ * A later grid_hmc_load_checkpoint overrides both the RNG state and the gauge field.
+ */
+void grid_hmc_seed(struct HmcState* S, const char* seed, int cold_start);
+
+/*
  * grid_hmc_step — run one HMC trajectory, then write U into out[] using HiRep in-memory
  * layout: T-outermost site order (t,x,y,z), 4 directions in HiRep order (T,X,Y,Z),
  * Nc×Nc complex row-major. out must be Nt*Nx*Ny*Nz * 4 * 2*Nc*Nc doubles.
