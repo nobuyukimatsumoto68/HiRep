@@ -62,7 +62,10 @@ fi
 echo "(0) OK" 2>&1 | tee -a "$LOG"
 
 echo "================ (1) derive + record Grid flags ================" 2>&1 | tee -a "$LOG"
-GRID_CXX="$("$GRIDCONFIG" --cxx)"
+# GRID_CXX="$("$GRIDCONFIG" --cxx)"
+# BRIDGE_CXX (optional) overrides grid-config's compiler, e.g. clang++ pinned with
+# --gcc-install-dir to the libstdc++ that libGrid.a was built against. Flags stay grid-config's.
+GRID_CXX="${BRIDGE_CXX:-$("$GRIDCONFIG" --cxx)}"
 GRID_CXXFLAGS="$("$GRIDCONFIG" --cxxflags)"
 GRID_LDFLAGS="$("$GRIDCONFIG" --ldflags)"
 GRID_LIBS="$("$GRIDCONFIG" --libs)"

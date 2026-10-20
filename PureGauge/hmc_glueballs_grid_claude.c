@@ -160,7 +160,10 @@ int main(int argc, char *argv[])
         for (int j = 0; j < n_active_slices; j++) {
             lprintf("step", 0, "%d ", zerocoord[0] + j);
             for (int i = 0; i < total_n_glue_op * nblocking; i++) {
-                lprintf("step", 0, " (%.10e +I*(%.10e)) ", creal(one_point_gb[i]), cimag(one_point_gb[i]));
+                // lprintf("step", 0, " (%.10e +I*(%.10e)) ", creal(one_point_gb[i]), cimag(one_point_gb[i]));
+                /* storage is [slice j][op i]: measure_1pt_glueballs advances total_n_glue_op*nblocking per slice */
+                int idx = j * total_n_glue_op * nblocking + i;
+                lprintf("step", 0, " (%.10e +I*(%.10e)) ", creal(one_point_gb[idx]), cimag(one_point_gb[idx]));
             }
             lprintf("step", 0, "\n");
         }
