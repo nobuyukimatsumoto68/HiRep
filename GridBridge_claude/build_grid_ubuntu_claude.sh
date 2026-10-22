@@ -1,5 +1,10 @@
 #!/bin/bash
 #
+# PI-MACHINE REFERENCE ONLY (Ubuntu workstation, hard-coded /mnt paths). On another machine or a
+# cluster use build_grid_example_claude.sh. Known issues kept as-is here: dir_lime is only set in
+# a commented block (so --with-lime= is empty and lime comes from system paths), `set -e` is
+# commented out, and the dependency recipes below are commented apt/source notes.
+#
 # Build upstream Grid for the Grid-in-HiRep bridge.
 #   repo: https://github.com/paboyle/Grid.git   (no fork needed)
 #

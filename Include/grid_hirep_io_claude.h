@@ -20,7 +20,7 @@ void grid_read_config(const char* filename,
 #endif
 
 // Extracts the trajectory number from a Grid checkpoint filename of the form
-// ckpoint_lat.NNNN — returns NNNN as an int.
+// ckpoint_lat.NNNN - returns NNNN as an int.
 static inline int confid_retriever(const char *cnfg_filename) {
     int confid;
     const char *dot = strrchr(cnfg_filename, '.');

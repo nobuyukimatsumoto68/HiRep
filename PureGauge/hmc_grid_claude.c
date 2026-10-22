@@ -35,7 +35,7 @@ static input_hmc_grid hmc_par = init_input_hmc_grid(hmc_par);
 /*
  * Copy the full global gauge field from the Grid out[] buffer into HiRep's
  * u_gauge.  Each MPI rank extracts its own local sites from the global array.
- * out[] layout: T-outermost (t,x,y,z), 4 dirs, NG×NG complex row-major.
+ * out[] layout: T-outermost (t,x,y,z), 4 dirs, NG x NG complex row-major.
  * COORD[0..3] = process coordinates in T,X,Y,Z.
  */
 static void copy_to_ugauge(const double *out)

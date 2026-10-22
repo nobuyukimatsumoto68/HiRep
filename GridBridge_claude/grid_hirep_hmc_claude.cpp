@@ -7,6 +7,9 @@ using namespace Grid;
 typedef PeriodicGimplR Gimpl;
 using GaugeField    = typename Gimpl::GaugeField;
 using Rep           = Representations<FundamentalRepresentation>;
+// Hybrid Monte Carlo: S. Duane, A. D. Kennedy, B. J. Pendleton, D. Roweth, Phys. Lett. B195 (1987) 216.
+// MinimumNorm2 = second-order minimum-norm (Omelyan) integrator: I. P. Omelyan, I. M. Mryglod,
+// R. Folk, Comput. Phys. Commun. 151 (2003) 272.
 using Integrator_t  = MinimumNorm2<Gimpl, NoSmearing<Gimpl>>;
 using HMC_t         = HybridMonteCarlo<Integrator_t>;
 

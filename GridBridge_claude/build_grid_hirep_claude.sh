@@ -26,16 +26,31 @@ SETUP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HIREP_ROOT="$(cd "$SETUP_DIR/.." && pwd)"
 LOG="$SETUP_DIR/build_grid_hirep_claude.log"
 
-# Point this at your real (non-symlink) Grid build --prefix dir.
-GRID_BUILD="${GRID_BUILD:-/mnt/baracuda_14/grid_mpi/build}"
+# Point this at your real (non-symlink) Grid build --prefix dir. Required: the old default pointed
+# at an Nc=4 tree on the PI's machine.
+# GRID_BUILD="${GRID_BUILD:-/mnt/baracuda_14/grid_mpi/build}"
+GRID_BUILD="${GRID_BUILD:-}"
+if [ -z "$GRID_BUILD" ]; then
+    echo "set GRID_BUILD=/path/to/grid/build (the Grid --prefix dir with grid-config, lib/libGrid.a)"
+    exit 1
+fi
 GRIDCONFIG="$GRID_BUILD/grid-config"
 GRID_LIB_SRC="$GRID_BUILD/lib/libGrid.a"
 GRID_CONFIG_H="$GRID_BUILD/include/Grid/Config.h"
 GRID_CONFIGLOG="$GRID_BUILD/configure.log"
 CAPTURE="$HIREP_ROOT/GridLibrary"
+# HiRep build config to stage. Default: the PI's machine file. On another machine copy
+# MkFlags_example_claude.ini, fill in INCLUDE and GRIDLIBS, and pass MKFLAGS=/path/to/that/file.
+MKFLAGS="${MKFLAGS:-$SETUP_DIR/MkFlags_claude.ini}"
 FLAGS_REC="$CAPTURE/grid_flags_claude.txt"
 
-export PATH=/mnt/hdd_barracuda/opt/openmpi_cuda/bin:$PATH
+# export PATH=/mnt/hdd_barracuda/opt/openmpi_cuda/bin:$PATH
+# Optional: MPI_BIN=/path/to/mpi/bin puts that MPI's mpicc/mpicxx first (on a module cluster,
+# `module load` the MPI instead and leave MPI_BIN unset).
+MPI_BIN="${MPI_BIN:-}"
+if [ -n "$MPI_BIN" ]; then
+    export PATH="$MPI_BIN":$PATH
+fi
 
 echo "================ (0) resolve Grid + guard Nc == NG ================" 2>&1 | tee "$LOG"
 echo "SETUP_DIR  : $SETUP_DIR" 2>&1 | tee -a "$LOG"
@@ -47,13 +62,24 @@ for f in "$GRIDCONFIG" "$GRID_LIB_SRC" "$GRID_CONFIG_H"; do
         exit 1
     fi
 done
-NG="$(grep -E '^NG *= *[0-9]+' "$SETUP_DIR/MkFlags_claude.ini" | grep -oE '[0-9]+' | head -1)"
-GRID_NC=""
-if [ -f "$GRID_CONFIGLOG" ]; then
-    GRID_NC="$(grep -E '^Nc' "$GRID_CONFIGLOG" | grep -oE '[0-9]+' | head -1)"
+echo "MKFLAGS    : $MKFLAGS" 2>&1 | tee -a "$LOG"
+if [ ! -f "$MKFLAGS" ]; then
+    echo "MISSING HiRep build config: $MKFLAGS" 2>&1 | tee -a "$LOG"
+    exit 1
+fi
+# NG="$(grep -E '^NG *= *[0-9]+' "$SETUP_DIR/MkFlags_claude.ini" | grep -oE '[0-9]+' | head -1)"
+NG="$(grep -E '^NG *= *[0-9]+' "$MKFLAGS" | grep -oE '[0-9]+' | head -1)"
+# Grid's Nc: from Config.h (#define Config_Nc), else from configure.log ("Nc : 2").
+GRID_NC="$(grep -E '^#define Config_Nc ' "$GRID_CONFIG_H" | grep -oE '[0-9]+' | head -1 || true)"
+if [ -z "$GRID_NC" ] && [ -f "$GRID_CONFIGLOG" ]; then
+    GRID_NC="$(grep -E '^Nc' "$GRID_CONFIGLOG" | grep -oE '[0-9]+' | head -1 || true)"
 fi
 echo "HiRep NG   : $NG" 2>&1 | tee -a "$LOG"
-echo "Grid Nc    : ${GRID_NC:-unknown (no configure.log)}" 2>&1 | tee -a "$LOG"
+echo "Grid Nc    : ${GRID_NC:-unknown}" 2>&1 | tee -a "$LOG"
+if [ -z "$GRID_NC" ]; then
+    echo "WARNING: could not determine Grid's Nc (no Config_Nc in Config.h, no configure.log);" 2>&1 | tee -a "$LOG"
+    echo "  make sure Grid was configured with --enable-Nc=$NG." 2>&1 | tee -a "$LOG"
+fi
 if [ -n "$GRID_NC" ] && [ "$GRID_NC" != "$NG" ]; then
     echo "FATAL: Grid Nc=$GRID_NC != HiRep NG=$NG. Rebuild Grid with --enable-Nc=$NG" 2>&1 | tee -a "$LOG"
     echo "  (mismatch causes readout buffer overflow -> segfault + wrong SU(Nc) physics)." 2>&1 | tee -a "$LOG"
@@ -85,20 +111,28 @@ echo "================ (2) compile Grid bridge .o ================" 2>&1 | tee -
 $GRID_CXX $GRID_CXXFLAGS \
     -c "$SETUP_DIR"/grid_hirep_hmc_claude.cpp \
     -o "$SETUP_DIR"/grid_hirep_hmc_claude.o 2>&1 | tee -a "$LOG"
+# IO bridge (NERSC checkpoint -> u_gauge) for PureGauge/mk_1pt_glueballs_from_grid_claude; the
+# PureGauge_grid target links it, so a fresh clone needs it too (GridLibrary/*.o is gitignored).
+$GRID_CXX $GRID_CXXFLAGS \
+    -c "$SETUP_DIR"/grid_hirep_io_claude.cpp \
+    -o "$SETUP_DIR"/grid_hirep_io_claude.o 2>&1 | tee -a "$LOG"
 echo "(2) OK" 2>&1 | tee -a "$LOG"
 
 echo "================ (3) capture Grid requisites into HiRep/GridLibrary ================" 2>&1 | tee -a "$LOG"
 mkdir -p "$CAPTURE"
 cp "$SETUP_DIR"/grid_hirep_hmc_claude.o "$CAPTURE"/grid_hirep_hmc_claude.o
 cp "$SETUP_DIR"/grid_hirep_hmc_claude.h "$HIREP_ROOT"/Include/grid_hirep_hmc_claude.h
+cp "$SETUP_DIR"/grid_hirep_io_claude.o "$CAPTURE"/grid_hirep_io_claude.o
+cp "$SETUP_DIR"/grid_hirep_io_claude.h "$HIREP_ROOT"/Include/grid_hirep_io_claude.h
 cp "$GRID_LIB_SRC"  "$CAPTURE"/libGrid.a
 cp "$GRID_CONFIG_H" "$CAPTURE"/Config.h
 echo "captured:" 2>&1 | tee -a "$LOG"
-ls -la --time-style=full-iso "$CAPTURE"/libGrid.a "$CAPTURE"/Config.h "$CAPTURE"/grid_hirep_hmc_claude.o 2>&1 | tee -a "$LOG"
+ls -la --time-style=full-iso "$CAPTURE"/libGrid.a "$CAPTURE"/Config.h "$CAPTURE"/grid_hirep_hmc_claude.o "$CAPTURE"/grid_hirep_io_claude.o 2>&1 | tee -a "$LOG"
 echo "(3) OK" 2>&1 | tee -a "$LOG"
 
 echo "================ (4) stage HiRep build config from this dir ================" 2>&1 | tee -a "$LOG"
-cp "$SETUP_DIR"/MkFlags_claude.ini                  "$HIREP_ROOT"/Make/MkFlags_claude.ini
+# cp "$SETUP_DIR"/MkFlags_claude.ini                  "$HIREP_ROOT"/Make/MkFlags_claude.ini
+cp "$MKFLAGS"                                        "$HIREP_ROOT"/Make/MkFlags_claude.ini
 cp "$SETUP_DIR"/build_claude.pl                    "$HIREP_ROOT"/Make/build_claude.pl
 cp "$SETUP_DIR"/ScriptForMake_claude               "$HIREP_ROOT"/ScriptForMake
 cp "$SETUP_DIR"/input_hmc_grid_4node_claude        "$HIREP_ROOT"/PureGauge/input_hmc_grid_4node_claude

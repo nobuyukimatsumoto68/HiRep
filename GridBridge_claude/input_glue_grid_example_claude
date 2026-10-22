@@ -1,0 +1,50 @@
+// Example input for PureGauge/mk_1pt_glueballs_from_grid_claude: measures glueball 1-point
+// functions on Grid NERSC checkpoints (ckpoint_lat.<n>) listed in `configlist`.
+// Run:  mpirun -np <NP_T> PureGauge/mk_1pt_glueballs_from_grid_claude -i <this file> -o out_io
+// GLB_* must match the lattice of the checkpoints; only NP_T may be > 1 (NP_X = NP_Y = NP_Z = 1).
+// The config list file holds one checkpoint path per line and must NOT contain comments
+// (fscanf reads them as file names). The trajectory number is parsed from the ".<n>" suffix.
+// Global variables
+GLB_T = 16
+GLB_X = 8
+GLB_Y = 8
+GLB_Z = 8
+// processors
+NP_T = 2
+NP_X = 1
+NP_Y = 1
+NP_Z = 1
+
+N_REP = 1
+
+rlx_level = 1
+rlx_seed = 43215
+
+//Logger levels (default = -1)
+log:default = -1
+log:inverter = -1
+log:forcestat = 0
+
+
+// where pairs separated by a | are meant to have the same distance and will be averaged
+MG correlators = 6-8,6-9|5-8,5-9
+//number of spatial blocking level used to generate the glueballs correlators
+nblkstart = 0
+nblkend = 2
+//APE smearing parameter value
+APEsmear = 0.33
+
+WF:make = false
+// Wilson Flow time
+WF:tmax = 2.0
+//20
+WF:nmeas = 10
+//60
+WF:eps = 0.02
+WF:delta = 0.0001
+WF:anisotropy = 1.0
+
+polyakov:make = false
+
+// Run control variables
+configlist = listconfs_grid_example_claude.txt

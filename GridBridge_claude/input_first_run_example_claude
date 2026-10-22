@@ -1,0 +1,39 @@
+// First-run example (GridBridge_claude/run_example_slurm_claude.sh): SU(2), 4^3 x 8, one rank
+// (NP_T = 1 so every timeslice is printed), 50 trajectories, blocking levels 0-1, fixed GridSeed.
+// nOMP = Grid threads; match it to the cores given to the rank.
+GLB_T = 8
+GLB_X = 4
+GLB_Y = 4
+GLB_Z = 4
+NP_T = 1
+NP_X = 1
+NP_Y = 1
+NP_Z = 1
+
+N_REP = 1
+
+rlx_level = 1
+rlx_seed  = 12345
+
+betaF = 2.4
+betaA = 0.0
+nMD = 16
+trajL = 1.0
+n_traj = 50
+nOMP = 4
+ObsInterval = 1
+coldStart = 0
+NoMetropolisUntilRoutine = 10
+GridSeed = first-run-example
+
+nblkstart = 0
+nblkend = 1
+APEsmear = 0.33
+
+WF:make = false
+WF:tmax = 2.0
+WF:nmeas = 10
+WF:eps = 0.02
+WF:delta = 0.0001
+
+polyakov:make = false

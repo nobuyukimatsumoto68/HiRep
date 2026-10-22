@@ -24,8 +24,10 @@ Two observables, in order of how easy the signal is:
 
 1. **Torelon** (Polyakov loop winding around a spatial direction): light on small $L$, so a long,
    clean exponential; the mass has a parameter-free prediction (below).
-2. **Glueballs** in $A_1^{++}$ (op 4), $E^{++}$ (ops 6, 7), $T_1^{+-}$ (ops 8-10) at $\vec P = 0$,
-   and the $A_1$ operators at $|\vec P| = 1$ (ops 0-3, 11-14).
+2. **Glueballs**: originally planned in "$A_1^{++}$" (op 4), "$E^{++}$" (ops 6, 7), $T_1^{+-}$
+   (ops 8-10) at $\vec P = 0$ and $A_1$ at $|\vec P| = 1$ (ops 0-3, 11, 12, 14; op 13 is $A_2$). As found
+   below, ops 4, 6, 7 are two-glueball products and ops 8-10 vanish for SU(2); the single-glueball
+   channels at rest came only with the regenerated 38-operator set (chunks 5-6).
 
 ## Current state (what exists, what does not)
 
@@ -38,7 +40,7 @@ Two observables, in order of how easy the signal is:
 - The full Grid log is the largest output: about 160 KB per trajectory (16 MB per 100 trajectories).
 - Torelon 1-pt functions are computed (`measure_1pt_torellons`) but never printed.
 - (Fixed 2026-10-20, `GridSeed` key + `grid_hmc_seed`.) Grid RNG seeds were hard-coded
-  (`grid_hirep_hmc_claude.cpp:178,180`); `rlx_seed` only seeds HiRep, so every fresh run was the
+  (now `grid_hirep_hmc_claude.cpp:184,186`); `rlx_seed` only seeds HiRep, so every fresh run was the
   same Markov chain.
 - (Fixed 2026-10-20 in `build_hmc`.) Grid printed `Number of MD steps : 10` from an unused default in `HMCparameters::MD`
   (`Grid/qcd/hmc/HMC.h:90`). The integrator really uses `nMD` (verified: 16 kicks of
@@ -93,7 +95,7 @@ That is still a nontrivial exponent, but not the glueball mass.
   `nOMP = 4`.
 - $\beta_F = 2.4$, $\beta_A = 0$, `nMD = 16`, `trajL = 1` (acceptance about 0.9 at $8^3 \times 32$).
 - `ObsInterval = 1` (a measurement costs about 30 ms vs about 0.8 s per trajectory).
-- `nblkstart = 0`, `nblkend = 2`, `APEsmear` 0.5: three smearing/blocking levels, so 45 glueball
+- `nblkstart = 0`, `nblkend = 2`, `APEsmear` 0.33: three smearing/blocking levels, so 45 glueball
   operators per row (blocking limits on $L = 8$ to be checked in `spatial_transformations.c`).
 - `NoMetropolisUntilRoutine = 20`, about 2000 trajectories, then discard about 200 for
   thermalization. Expected output: about 2000 x 16 x 2 KB, roughly 60 MB of text, plus the Grid log
@@ -129,16 +131,21 @@ $m_\text{eff}(t) = \ln[C(t)/C(t+1)]$):
 
 | Channel (ops) | Best level | $C(1)/C(0)$ | $a\,m_\text{eff}$ at $t = 1, 2, 3$ |
 |---|---|---|---|
-| $A_1$, $\vert\vec P\vert = 1$ (0, 2, 3, 11, 12, 14) | 2 | 0.153 | 1.359(66), 1.335(244), 1.34(104) |
+| $A_1$, $\vert\vec P\vert = 1$, plaquette perpendicular to $\vec P$ (1, 2, 3, 11, 12, 14) | 2 | 0.1527(28) | 1.377(73), 1.43(26), 1.5(1.4) |
+| $A_1$, $\vec P = -\hat x$, $P_{xy}+P_{xz}$ (0) | 2 | 0.155(5) | 1.39(14), 1.22(39), - |
 | $A_2^{+}$, $\vec P = 0$ (5) | 2 | 0.054 | noise |
 | $T_1^{+-}$, $\vec P = 0$ (8-10) | - | - | identically zero for SU(2) ($C=-$, $\vert O\vert < 10^{-12}$) |
 | "$A_1^{++}$", "$E^{+}$", $\vec P = 0$ (4; 6, 7) | 2 | 0.02, 0.03 | noise |
 
-Bin-size scan (A1, $|\vec P| = 1$, level 2, error of $m_\text{eff}(1)$): 0.057 (bin 1), 0.063 (10),
-0.066 (20), 0.076 (40), 0.082 (80, only 22 bins). Mild autocorrelation; quote bin 40,
-$a\,m_\text{eff}(1) = 1.359(76)$.
+(Corrected 2026-10-22: a first version averaged op 0 with ops 2, 3, 11, 12, 14 and quoted
+1.359(66); op 0 is a different operator, see `glueball_generator_audit_claude.md` section 5.)
 
-**Operator content (important).** In `glueballs_op.c:1189-1205`, ops 4, 6, 7 are not
+Bin-size scan (perpendicular-plaquette $A_1$, $|\vec P| = 1$, level 2, error of $m_\text{eff}(1)$):
+0.061 (bin 1), 0.069 (10), 0.073 (20), 0.081 (40), 0.092 (80, only 22 bins). Mild autocorrelation;
+quote bin 40, $a\,m_\text{eff}(1) = 1.377(81)$.
+
+**Operator content (important).** In `glueballs_op.c:1189-1205` (15-operator file, commit
+`44939eac`), ops 4, 6, 7 are not
 single-trace glueball operators: each is a sum of products
 $O_{\vec P = -\hat e_i} \cdot O_{\vec P = +\hat e_i}$, i.e. **two-glueball (scattering) operators**
 projected to $A_1^{+}$ / $E^{+}$ at total $\vec P = 0$. The only single-trace $\vec P = 0$ operators
@@ -153,8 +160,9 @@ $$
 \qquad a p = \frac{2\pi}{8}
 $$
 
-For $a m_{0^{++}} = 0.94$ to $1.0$ this gives $a E \approx 1.17$ to $1.21$. The measured plateau is
-$1.34(7)$, about $2\sigma$ above. Possible reasons: excited-state contamination at $t = 1$ (no GEVP
+For $a m_{0^{++}} = 0.94$ to $1.0$ (reference value from memory, to be checked) this gives
+$a E \approx 1.17$ to $1.22$. The measured $a E = 1.377(81)$ is about $2\sigma$ above; inverted, it
+corresponds to $a m_{0^{++}} \approx 1.20(10)$. Possible reasons: excited-state contamination at $t = 1$ (no GEVP
 yet), the small box ($L\sqrt\sigma \approx 2.1$ shifts the glueball mass), or the reference value
 (to be checked). So a nontrivial, flat exponent is seen, in the right range, in this channel.
 
@@ -179,9 +187,14 @@ Recipe and risks: `glueball_generator_audit_claude.md`. Mathematica 15.0.1 at
   `TestProgram/Utils/` (they keep their names: the build references them; git keeps the
   originals), validate on NG = 3 (`check_utils_3`, `check_puregauge_5`), rebuild NG = 2, rerun
   the $8^3 \times 16$ test.
-- 5d. Analysis: read the channel table from the out file instead of the hard-coded `CHANNELS`.
+- 5d. Analysis: channel maps (`CHANNEL_MAPS` in `analyze_glueball_1pt_claude.py`, keyed by
+  `total_n_glue_op`, 15 and 38) done; reading the table from the out file is not done.
 
 ### 5c plan (decided 2026-10-22: NG = 3 validation only; NG = 2 rebuild and SU(2) rerun postponed)
+
+> **SUPERSEDED the same day:** the PI dropped the NG = 3 validation and the worktree ("No validation
+> is needed. Use NG=2"). The set was installed directly in the NG = 2 tree (commit `ed1ee388`), and
+> the check is the same-`GridSeed` rerun of chunk 6d. The text below is kept as a record only.
 
 Install and test in a **separate git worktree** so the working NG = 2 tree (`HiRep/`, with the
 Grid-linked SU(2) executables and its `build/`) is not touched.
@@ -233,8 +246,11 @@ stays untouched; the fix lives in a committed patched copy used by our generator
   definition/declaration and `c0 = cexp(I*PI*((2.)*gb_shift_unit)/GLB_X)` moved out of the one-time
   block; `su2rest` output gains only the variable (no shift phases). Fixed `su2rest` files installed.
 - 6d. Rebuild NG = 2 and run the $8^3 \times 16$ test with the new operators and the same `GridSeed`
-  (`20261020-131546`): identical configurations, so the moving-frame $A_1$ values must reproduce
-  the first run exactly.
+  (`20261020-131546`): identical configurations, so the plaquettes must reproduce exactly and the
+  moving-frame $A_1$ values must agree. Note: new ops 1 / 37 (`yz-y-z`) and old ops 1 / 14
+  (`zy-z-y`) are the same plaquette traversed in opposite orientation, so they agree only up to
+  rounding (differences of order $10^{-8}$ in the last printed digit); the other shared operators are
+  bit-identical.
 
 Not covered: a numerical test that the fixed phases are right (needs a moving operator with
 shifts in the measured set, e.g. old op 13, plus an independent evaluation); the NG = 3 rotation
@@ -242,7 +258,8 @@ test was dropped by PI decision.
 
 ## Decisions (2026-10-20)
 
-1. Analysis: the faster option, a Python Jupyter notebook (numpy; one plot per cell).
+1. Analysis: the faster option, a Python Jupyter notebook (numpy; one plot per cell). In practice
+   a script was written first, `analyze_glueball_1pt_claude.py`; no notebook yet.
 2. Lattice and statistics: $8^3 \times 16$, about 2000 trajectories, `NP_T = 1`.
 3. Grid seed: a string key built from date+time. Input key `GridSeed` (default `auto`): with
    `auto`, rank 0 formats `YYYYMMDD-HHMMSS`, broadcasts it, and it is logged; an explicit string

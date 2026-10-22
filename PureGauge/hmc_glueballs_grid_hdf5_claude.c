@@ -52,7 +52,7 @@ pg_flow_glueballs_measure flow = init_pg_flow_glueballs_measure(flow);
 
 /*
  * Copy global gauge field from Grid out[] buffer into HiRep u_gauge.
- * out[] layout: T-outermost (t,x,y,z), 4 dirs, NG×NG complex row-major.
+ * out[] layout: T-outermost (t,x,y,z), 4 dirs, NG x NG complex row-major.
  */
 static void copy_to_ugauge(const double *out)
 {

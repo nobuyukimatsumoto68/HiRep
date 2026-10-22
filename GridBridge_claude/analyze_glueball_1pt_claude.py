@@ -34,8 +34,11 @@ import numpy as np
 CHANNEL_MAPS = {
     # committed CI ("github") set, total_n_glue_op = 15
     15: {
-        "A1_P1": [0, 2, 3, 11, 12, 14],  # single-trace A1 (D4), |P| = 2 pi / L, first operator
-        "A1_P1_n2": [1],                 # second A1 operator at P = (-1,0,0)
+        # single-trace A1 (D4) at |P| = 2 pi / L. Ops 1,2,3,11,12,14: the plaquette PERPENDICULAR to P,
+        # i.e. one operator in the six directions +-e_i. Op 0: P_xy + P_xz (planes containing P),
+        # a different operator, kept separate (only at P = (-1,0,0)).
+        "A1_P1": [1, 2, 3, 11, 12, 14],
+        "A1_P1_par": [0],
         "A2_P1": [13],                   # A2 (D4), P = (0,1,0)
         "A2p_P0": [5],                   # A2+, P = 0, single trace
         # "T1pm_P0": [8, 9, 10],         # T1+-, P = 0: C = - takes Im tr, identically 0 for SU(2)
@@ -45,8 +48,9 @@ CHANNEL_MAPS = {
     # su2rest set (glueball_gen_claude), total_n_glue_op = 38; one channel per loop shape,
     # multiplet components averaged. Shapes res[k] of the generator notebook.
     38: {
-        "A1_P1": [0, 2, 3, 35, 36, 37],  # single-trace A1 (D4), |P| = 2 pi / L, plaquette
-        "A1_P1_n2": [1],                 # second plaquette orientation at P = (-1,0,0)
+        # moving frame as in the 15 map: 1,2,3,35,36,37 perpendicular plaquette; 0 = P_xy + P_xz
+        "A1_P1": [1, 2, 3, 35, 36, 37],
+        "A1_P1_par": [0],
         "A1pp_r1": [4],                  # A1++ at rest, res[1] plaquette
         "A1pp_r3": [5],                  # res[3]  6-link
         "A1pp_r5": [6],                  # res[5]  8-link

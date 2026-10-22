@@ -13,8 +13,10 @@
 
     wolframscript -file gen_glueball_ops_claude.wls <stage>/Make/Utils/Math_glueballs <mode>
 
-  <stage>/Make/Utils/Math_glueballs must contain OpProjection_claude.m (an unmodified copy of
-  OpProjection.m); its topdir="../../.." then resolves to <stage>.
+  <stage>/Make/Utils/Math_glueballs must contain OpProjection_claude.m, a copy of the PATCHED
+  generator GridBridge_claude/glueball_gen_claude/OpProjection_claude.m (shift-phase / blocking fix;
+  LibHR/Observables/glueballs.c needs the gb_shift_unit it defines, so do NOT regenerate with the
+  original Make/Utils/Math_glueballs/OpProjection.m); its topdir="../../.." resolves to <stage>.
 
   <mode>:
     github  : the committed CI set (notebook CodeControl="github", TypeControl="all"); used to check

@@ -1,4 +1,4 @@
-# Checkpointer feature — implementation plan
+# Checkpointer feature - implementation plan
 
 ## Goal
 
@@ -18,9 +18,10 @@ Uses Grid `NerscIO` (same format as `NerscHmcCheckpointer`):
 |------|--------|
 | `grid_hirep_hmc_claude.cpp` (setup dir; sync -> root, Include) | add `HmcState::last_ckpoint`; `grid_hmc_save_checkpoint`, `grid_hmc_load_checkpoint` (extern C); include NerscIO |
 | `grid_hirep_hmc_claude.h` (setup; sync -> root, Include) | declare the two new functions |
-| `HiRep/PureGauge/hmc_grid_claude.c` | read `CheckpointStart` env; load on start; save + prune per trajectory; global-traj indexing |
-| `HiRep/PureGauge/hmc_glueballs_grid_claude.c` | same |
-| `HiRep/PureGauge/hmc_glueballs_grid_hdf5_claude.c` | same |
+| `HiRep/PureGauge/hmc_glueballs_grid_claude.c` | read `CheckpointStart` env; load on start; save + prune per trajectory; global-traj indexing |
+
+(The first draft listed `hmc_grid_claude.c` and `hmc_glueballs_grid_hdf5_claude.c` too; decision 6
+below restricted the checkpointer to the glueball driver.)
 
 ## Design
 
@@ -68,4 +69,6 @@ in C++, not a shell script (the no-rm-in-scripts rule is about shell scripts).
 6. **Glueball driver only** (`hmc_glueballs_grid_claude.c`). Bridge functions are shared/new (no
    signature break), so the bare + hdf5 drivers still compile unchanged.
 
-## Status: IMPLEMENTED, bridge pre-flight-compiled OK. Pending rebuild + resume test.
+## Status: IMPLEMENTED and VERIFIED (2026-07-14; again 2026-10-19 with a fresh 100-trajectory run and a
+`CheckpointStart=100` resume, see `HANDOFF_claude.md` section 3). The paragraph below is the original
+pre-test note.

@@ -1,9 +1,18 @@
 # Glueball operator generator: audit and how to use it
 
 Audit of `Make/Utils/Math_glueballs/` (`OpProjection.m`, `generate_glueball_code.nb`, author
-A. Rago), 2026-10-20. Read-only: Mathematica is not installed on the PI's workstation, so nothing
-was run. Items marked **verified** were re-checked by hand against the source or our data; the
-rest come from a full read of the sources and are cited by line.
+A. Rago), 2026-10-20 (sections 1-4, written before Mathematica was available, from a full read of
+the sources); sections 5-6 added 2026-10-22 after running the generator (Mathematica 15.0.1).
+Items marked **verified** were re-checked by hand against the source, the generated code or our
+data; the rest are cited by line.
+
+**Current state (2026-10-22):** the 38-operator `su2rest` set (section 5) is installed in
+`LibHR/Observables/glueballs_op.c` and `Include/Observables/glueballs.h` (commit `ed1ee388`); the
+original 15-operator CI set is in commit `44939eac`. Regenerate only with the patched generator
+`GridBridge_claude/glueball_gen_claude/OpProjection_claude.m`: `LibHR/Observables/glueballs.c` uses the
+variable `gb_shift_unit` that only the patched generator defines (section 6); the original
+`OpProjection.m` or the notebook would give a link error. Line numbers of `glueballs_op.c` in sections
+1-4 and 6 refer to the 15-operator file of commit `44939eac`.
 
 ## Sources (methods the generator implements)
 
@@ -82,16 +91,22 @@ rest come from a full read of the sources and are cited by line.
    `res` 3, 4, 5, 6. A shape that does not contain the irrep projects to zero, so check that each
    generated operator is non-zero. Where an irrep appears twice in one shape, a second (rotated)
    seed path is needed for the second copy.
-5. **Format and validate.** clang-format the generated files; build an **NG = 3** tree and run
-   `TestProgram/Utils/check_utils_3` (rotations) and `TestProgram/PureGauge/check_puregauge_5`
-   (gauge invariance). Both are disabled for NG = 2 (`NOCOMPILE= NG==2`). Then rebuild the NG = 2
-   tree with `GridBridge_claude/build_grid_hirep_claude.sh`.
-6. **Update the analysis** channel map (`GridBridge_claude/analyze_glueball_1pt_claude.py`, `CHANNELS`)
-   from the new `report_gb_group_setup` table. Better: parse that table from the out file.
+5. **Format and validate.** Format with clang-format 17 and HiRep's style file:
+   `clang-format --style=file:HiRep/.clang-format -i <files>` (or `CLANG_FORMAT=... ` for the runner).
+   HiRep's generator tests `TestProgram/Utils/check_utils_3` (rotations) and
+   `TestProgram/PureGauge/check_puregauge_5` (gauge invariance) need an **NG = 3** build (both are
+   disabled for NG = 2). For the installed `su2rest` set they were **not run** (PI decision
+   2026-10-22); the check used instead is a same-`GridSeed` rerun (shared operators must reproduce).
+   Then rebuild the NG = 2 tree with `GridBridge_claude/build_grid_hirep_claude.sh`.
+6. **Update the analysis** channel map (`GridBridge_claude/analyze_glueball_1pt_claude.py`,
+   `CHANNEL_MAPS`, keyed by `total_n_glue_op`) from the new `report_gb_group_setup` table (done for
+   the 38-operator set).
 
-Cost: about 48 terms per projection; generation should take seconds. Measurement cost grows with
-the number of distinct loop paths per timeslice and blocking level (currently 0.18 s per
-measurement for 45 operators on $8^3 \times 16$).
+Cost: generation takes about 4 s per mode. Measurement cost grows with the number of distinct loop
+paths per timeslice and blocking level. On $8^3 \times 16$ with 3 blocking levels, 1 rank:
+15-operator set (17 paths) 0.18 s per measurement; 38-operator set (240 paths) 2.50 s per
+measurement (single-threaded HiRep code), i.e. about 5.6 s per trajectory with `ObsInterval = 1`, and
+about 78 KB of text output per trajectory.
 
 ## 4. Risks and bugs found
 
@@ -100,7 +115,7 @@ measurement for 45 operators on $8^3 \times 16$).
 | 1 | Committed set is the CI test set | verified | why $\vec P = 0$ has no $0^{++}$ |
 | 2 | $C=-$ operators vanish for SU(2); generator tests disabled for NG = 2 | verified | drop $C=-$; validate on NG = 3 |
 | 3 | `GenerateCcode` deletes the tracked originals and header | verified | branch/worktree first |
-| 4 | Shift phase `c0` assumes 1-site steps, but blocked links span $2^b$ sites (`spatial_transformations.c:122`) | **verified** (section 6) | wrong phases for $\vec P \ne 0$ operators with shifts at blocking level $\ge 1$ (committed op 13 only); $\vec P = 0$ unaffected |
+| 4 | Shift phase `c0` assumes 1-site steps, but blocked links span $2^b$ sites (`spatial_transformations.c:122`) | **verified and fixed** (section 6) | wrong phases for $\vec P \ne 0$ operators with shifts at blocking level $\ge 1$ (op 13 of the 15-operator set only); $\vec P = 0$ unaffected |
 | 5 | Momentum phase uses `GLB_X` for all directions | from audit | cubic lattices only |
 | 6 | `Add2trOpCorrelators` uses `irrepidx1` for the second factor (`OpProjection.m:305`) | from audit | latent; harmless while both irreps are $A_1$ |
 | 7 | Header declares `request_spatial_paths_evaluation`, code defines `request_space_paths_evaluation` | from audit | unused prototype |
@@ -115,15 +130,16 @@ Driver `glueball_gen_claude/gen_glueball_ops_claude.wls`, runner
 `glueball_gen_claude/run_gen_glueball_ops_claude.sh` (staging trees only).
 
 - `github` mode reproduces all five committed files exactly (token comparison ignoring whitespace
-  and braces). So Mathematica 15 generates the same code as the 11.3 used originally (risk 13 of the
-  subagent audit: resolved).
+  and braces), before the shift-phase fix. So Mathematica 15 generates the same code as the 11.3
+  used originally.
 - `su2rest` mode: `total_n_glue_op 38`, `total_n_tor_op 8`; 35 single-trace operator functions,
   each with 2 to 48 loop terms (none empty), all 38 slots of `eval_all_glueball_ops` written.
   Channel table (operator index -> channel):
 
 | Indices | $\vec P$ | Channel |
 |---|---|---|
-| 0, 1 / 2 / 3 / 35 / 36 / 37 | $\pm \hat e_i$ | $A_1$ ($D_4$), plaquette-type (moving frame) |
+| 1 / 2 / 3 / 35 / 36 / 37 | $-\hat x$ / $-\hat y$ / $-\hat z$ / $+\hat z$ / $+\hat y$ / $+\hat x$ | $A_1$ ($D_4$): plaquette perpendicular to $\vec P$ (one operator, six directions) |
+| 0 | $-\hat x$ | $A_1$ ($D_4$): $P_{xy} + P_{xz}$, plaquettes in planes containing $\vec P$ (a different operator) |
 | 4-11 | 0 | $A_1^{++}$, 8 loop shapes |
 | 12 | 0 | $A_1^{+}$ two-glueball product |
 | 13-16 / 18-21 | 0 | $E^{++}$ components 1 / 2, 4 shapes |
@@ -140,7 +156,7 @@ is a sum of rotated copies of a loop. The generator refers some copies to a base
 by a number of lattice *steps* and compensates with a phase. `WriteShift` (`OpProjection.m:915-927`,
 line 924) writes each such phase into the C code as a constant
 `cN = cexp(I*PI*(<number>/GLB_X))`, computed assuming **one step = one site**; it is set once, when
-`path_storage` is first allocated (committed `glueballs_op.c:1077`).
+`path_storage` is first allocated (`glueballs_op.c:1077` of the 15-operator file, commit `44939eac`).
 
 Spatial blocking (`LibHR/Utils/spatial_transformations.c:122-123`, used by `measure_1pt_glueballs`
 in `LibHR/Observables/glueballs.c`) replaces $U(x,\mu)$ by $U(x,\mu)U(x+\hat\mu,\mu)$ and doubles the
@@ -155,7 +171,7 @@ intended irrep and momentum.
 |---|---|---|
 | $\vec P = 0$ (all irreps, e.g. old op 5 $A_2^{+}$, new $A_1^{++}$/$E^{++}$/$T_2^{++}$) | no | shifts dropped for zero momentum components (`OpProjection.m:429-431`) |
 | $\vec P \ne 0$ without shifts (plaquette $A_1$ at $\vert\vec P\vert = 1$: old ops 0-3, 11, 12, 14; new 0-3, 35-37) | no | no `c` factors in their code |
-| old op 13 ($A_2$ ($D_4$) at $\vec P = (0,1,0)$, 8-link `res[8]`) | **yes, at levels $\ge 1$** | uses `c0` (`glueballs_op.c:1060-1062`) |
+| old op 13 ($A_2$ ($D_4$) at $\vec P = (0,1,0)$, 8-link `res[8]`) | **yes, at levels $\ge 1$** | uses `c0` (`glueballs_op.c:1060-1062` of commit `44939eac`) |
 | torelons | no | have 2 shift phases but are only APE-smeared, never blocked |
 | new 38-operator set | no | contains no shift phases at all |
 
