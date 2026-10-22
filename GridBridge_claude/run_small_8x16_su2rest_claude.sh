@@ -4,16 +4,19 @@
 # and the shift-phase fix. Same GridSeed as the first run (20261020-131546), hence the SAME Markov chain:
 # PHASE 4 checks that the plaquettes and the moving-frame A1 operators reproduce runs_claude/small_8x16.
 #   8^3 x 16, NP_T=1 (one rank holds all timeslices), nOMP=4, betaF=2.4, nMD=16, trajL=1,
-#   n_traj=2000, ObsInterval=1, nblkstart=0..nblkend=2 (45 glueball ops per row), GridSeed=auto.
+#   n_traj=2000, ObsInterval=1, nblkstart=0..nblkend=2 (3 x 38 = 114 glueball ops per row),
+#   GridSeed=20261020-131546 (fixed in input_hmc_glueballs_grid_small_su2rest_claude).
 #
 #   PHASE 0  environment + toolchain
 #   PHASE 1  rebuild bridge .o + HiRep PureGauge_grid (grid_hmc_seed, GridSeed key, Params.MD log fix)
 #   PHASE 1b MPI smoke test
-#   PHASE 2  production run in HiRep/runs_claude/small_8x16 (own dir: its checkpoints cannot touch
+#   PHASE 2  production run in HiRep/runs_claude/small_8x16_su2rest (own dir: its checkpoints cannot touch
 #            other runs' ckpoint_* files). Grid stdout is filtered on the fly to HMC summary lines.
+#   PHASE 3  jackknife analysis (analyze_glueball_1pt_claude.py), tables jk_*.txt in the run dir
+#   PHASE 4  same-chain check against runs_claude/small_8x16 (needs that run's output)
 #
 # Run it yourself:  bash HiRep/GridBridge_claude/run_small_8x16_su2rest_claude.sh  (paths below are for the PI machine)
-# I read back:      tmp_small_8x16_claude.log (summary)
+# I read back:      tmp_small_8x16_su2rest_claude.log (summary)
 #                   HiRep/runs_claude/small_8x16_su2rest/grid_hmc_summary_claude.log (filtered Grid log)
 #                   HiRep/runs_claude/small_8x16_su2rest/out_small_8x16_su2rest_claude_0 (HiRep output: plaq, glueball rows)
 #
@@ -118,7 +121,7 @@ echo "================ PHASE 4: same-chain check against runs_claude/small_8x16 
 python3 -I - "$OLDRUN"/out_small_8x16_claude_0 out_small_8x16_su2rest_claude_0 <<'PY' 2>&1 | tee -a "$LOG"
 import re
 import sys
-num = re.compile(r"\(\s*\S+ \+I\*\(\S+\)\)")
+num = re.compile(r"\(\s*(\S+) \+I\*\((\S+)\)\)")
 plaq = re.compile(r"Trajectory (\d+)\s+plaq = (\S+)")
 def load(path):
     p = {}
@@ -138,13 +141,25 @@ print("plaquette: %d common trajectories, %d differ" % (len(common), nbad))
 idx_old = [0, 1, 2, 3, 11, 12, 14]
 idx_new = [0, 1, 2, 3, 35, 36, 37]
 n = min(len(r_old), len(r_new))
+# old ops 1 / 14 and new ops 1 / 37 are the same plaquette traversed in opposite orientation: equal
+# only up to rounding (last printed digit, ~1e-8). Compare numerically with a tolerance.
+TOL = 1e-7
+nexact = 0
 nbad = 0
+maxd = 0.0
 for i in range(n):
     for lev in range(3):
         for a, b in zip(idx_old, idx_new):
-            if r_old[i][lev * 15 + a] != r_new[i][lev * 38 + b]:
+            x = r_old[i][lev * 15 + a]
+            y = r_new[i][lev * 38 + b]
+            if x == y:
+                nexact += 1
+            d = max(abs(float(x[0]) - float(y[0])), abs(float(x[1]) - float(y[1])))
+            maxd = max(maxd, d)
+            if d > TOL:
                 nbad += 1
-print("moving-frame A1 values: %d rows compared, %d mismatches" % (n, nbad))
+print("moving-frame A1 values: %d rows, %d values, %d bit-identical, max |diff| %.1e, %d beyond tolerance %.0e"
+      % (n, 3 * len(idx_old) * n, nexact, maxd, nbad, TOL))
 PY
 echo "PHASE 4 done" 2>&1 | tee -a "$LOG"
 echo "DONE" 2>&1 | tee -a "$LOG"

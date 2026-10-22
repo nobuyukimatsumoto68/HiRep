@@ -252,6 +252,11 @@ stays untouched; the fix lives in a committed patched copy used by our generator
   rounding (differences of order $10^{-8}$ in the last printed digit); the other shared operators are
   bit-identical.
 
+**6d done 2026-10-22.** Same-chain check passed: 2000/2000 plaquettes identical; 671860 of 672000
+shared moving-frame values bit-identical, the rest (ops 1 / 37) within $10^{-8}$. At rest, level 2,
+$a\,m_\text{eff}(t=1)$: $A_1^{++}$ 0.84-1.03, $E^{++}$ 1.47-1.51, $T_2^{++}$ 1.57-1.69 (table and caveats in
+`HANDOFF_claude.md` section 3.3). Phase 4 of the run script now compares with a $10^{-7}$ tolerance.
+
 Not covered: a numerical test that the fixed phases are right (needs a moving operator with
 shifts in the measured set, e.g. old op 13, plus an independent evaluation); the NG = 3 rotation
 test was dropped by PI decision.

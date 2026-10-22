@@ -98,12 +98,36 @@ $T_2^{++}$ operators at rest. Validation status:
   plaquette doublet); Mathematica 15 reproduces the original 15-operator files exactly;
 - HiRep's generator tests (`TestProgram/Utils/check_utils_3`, `TestProgram/PureGauge/check_puregauge_5`,
   NG = 3 only) were **not run** (PI decision);
-- **in progress (2026-10-22):** `run_small_8x16_su2rest_claude.sh` reruns the $8^3 \times 16$ test with
-  the new set and the same `GridSeed`, i.e. the same configurations. First 322 trajectories: all
-  plaquettes identical to 3.2; the shared moving-frame operators identical, except ops 1 / 37, which
-  are the same plaquette traversed in opposite orientation and agree to about $10^{-8}$. Results for
-  $A_1^{++}$, $E^{++}$, $T_2^{++}$ at rest will be added here. Cost with the new set: about 5.6 s per
-  trajectory (2.5 s of it the single-threaded measurement), about 78 KB of output per trajectory.
+- **Same-chain rerun (2026-10-22, done):** `run_small_8x16_su2rest_claude.sh` reran the
+  $8^3 \times 16$ test of 3.2 with the new set and the same `GridSeed` (2000 trajectories, 12501 s;
+  about 5.6 s per trajectory when the machine is otherwise idle, 2.5 s of it the single-threaded
+  measurement; about 78 KB of output per trajectory). All 2000 plaquettes are identical to 3.2, and
+  of the 672000 shared moving-frame operator values 671860 are bit-identical; the other 140 (ops 1 / 37,
+  the same plaquette traversed in opposite orientation) differ by at most $10^{-8}$. So the new code
+  reproduces the old measurements wherever they overlap.
+
+**Results at rest** (run dir `runs_claude/small_8x16_su2rest`, local only; 1800 configurations after
+200 for thermalization, blocking level 2, binned jackknife with bin 20, errors about 10 % larger with
+bin 40; single-operator effective masses $m_\text{eff}(t) = \ln[C(t)/C(t+1)]$, no GEVP yet):
+
+| Channel (loop shapes `res[k]`) | $C(1)/C(0)$ | $a\,m_\text{eff}(t=1)$ | $a\,m_\text{eff}(t=2)$ |
+|---|---|---|---|
+| $A_1^{++}$ (3, 5, 8) | 0.16-0.23 | 0.84-0.88 ($\pm 0.09$-$0.11$) | 0.97-1.12 ($\pm 0.29$-$0.31$) |
+| $A_1^{++}$ (1, 11, 12) | 0.14-0.28 | 1.00-1.03 ($\pm 0.10$-$0.14$) | 1.01-1.06 ($\pm 0.27$-$0.39$) |
+| $E^{++}$ (1, 2, 4) | 0.08-0.14 | 1.47-1.51 ($\pm 0.13$-$0.24$) | noisy |
+| $T_2^{++}$ (3, 4) | 0.08-0.10 | 1.57-1.69 ($\pm 0.22$-$0.23$) | noisy |
+| two-glueball products ($A_1^{+}$, $E^{+}$) | about 0.02 | noise | noise |
+| moving frame $A_1$, $\vert\vec P\vert = 2\pi/L$ (3.2) | 0.1527(28) | 1.377(73) | 1.43(26) |
+
+- $E^{++}$ and $T_2^{++}$ agree within errors, as they should: both carry the $2^{++}$ glueball.
+- $A_1^{++}$ at rest ($\approx 0.85$-$1.0$) lies below the $a m_{0^{++}} \approx 1.20(10)$ inferred from
+  the moving frame. On this small box ($L\sqrt\sigma \approx 2$) a torelon pair (estimated
+  $2 a m_T \approx 0.8$, `glueball_mass_test_impl_plan_claude.md`) can be the lowest $A_1^{++}$ state,
+  so the rest-frame number may not be the glueball. A GEVP over shapes and levels, the torelon
+  channel, and a larger $L$ are needed to separate them. Literature values to compare with are still
+  to be looked up (the $0^{++}$ value quoted in 3.2 is from memory).
+- Per-channel tables: `jk_<channel>_lev<k>.txt` in the run dir; full output in
+  `tmp_small_8x16_su2rest_claude.log` on the PI's machine.
 
 ## 4. Setup and regeneration
 

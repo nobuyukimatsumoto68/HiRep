@@ -57,6 +57,11 @@ installs into `$GRID_ROOT/build` (call it `$GRID_BUILD`). The options that matte
 | `--disable-gparity --disable-fermion-reps` | not needed for pure gauge; faster build |
 
 Check: `grep Config_Nc $GRID_BUILD/include/Grid/Config.h` must print `#define Config_Nc 2`.
+
+**Tested so far (2026-10-22):** sections 1, 4, 5 and 6 were run from a fresh clone on the PI's
+workstation (reusing its existing Grid build; first run with `MPI_LAUNCH="mpirun -np 1"`).
+`build_grid_example_claude.sh` and the SLURM lines of `run_example_slurm_claude.sh` have not been run
+anywhere yet: expect to adapt module names, prefixes and batch options.
 (`build_grid_ubuntu_claude.sh` is the PI's workstation script, kept as a reference only.)
 
 ## 4. HiRep build configuration for your machine
