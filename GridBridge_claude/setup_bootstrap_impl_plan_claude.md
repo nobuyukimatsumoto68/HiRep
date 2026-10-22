@@ -73,7 +73,8 @@ Modified: `build_grid_ubuntu_claude.sh`, `build_grid_hirep_claude.sh`, `MkFlags_
 ## Decisions (PI, 2026-10-22)
 
 1. **Toolchain: no special handling.** Assume the collaborator's machine has a compiler whose
-   libstdc++ is older than 15 (or an equivalent workaround). No autosun patch, no automatic pinning;
+   libstdc++ is older than 15 (or an equivalent workaround) [moot since 2026-10-22: upstream commit
+   2a54d8b4, merged into the fork in dd4ec8d7, fixes autosun for libstdc++ 15]. No autosun patch, no automatic pinning;
    the runbook only mentions the symptom and the PI-machine workaround in its troubleshooting table.
 2. **Target: HPC cluster with environment modules, no root.** Dependencies come from modules
    (MPI, HDF5 with C++ API, GMP, MPFR, FFTW, OpenSSL, zlib); anything missing (typically c-lime) is

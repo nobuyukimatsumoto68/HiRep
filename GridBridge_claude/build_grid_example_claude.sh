@@ -12,8 +12,8 @@
 # Next:   GRID_BUILD=$GRID_ROOT/build bash GridBridge_claude/build_grid_hirep_claude.sh
 #
 # Building on a login node is usually fine; if the cluster forbids long compiles there, run this
-# inside an interactive allocation. Compiler: its libstdc++ should be older than 15 (HiRep's
-# Make/Utils/autosun header generator does not compile with libstdc++ 15; see README_claude.md).
+# inside an interactive allocation. Compiler: any C++17 compiler; GCC 15 is fine for HiRep since
+# upstream commit 2a54d8b4 (merged into this fork in dd4ec8d7; see README_claude.md).
 #
 set -u
 set -e

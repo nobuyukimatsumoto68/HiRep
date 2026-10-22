@@ -23,8 +23,9 @@ git clone https://github.com/paboyle/Grid.git        # or let build_grid_example
 
 ## 2. Requirements
 
-- C/C++ compiler with C++17, whose libstdc++ is **older than version 15** (HiRep's header generator
-  `Make/Utils/autosun` does not compile with libstdc++ 15; see troubleshooting).
+- C/C++ compiler with C++17. GCC 15 / libstdc++ 15 is fine since upstream HiRep commit `2a54d8b4`
+  ("complex type fix for gcc 15", merged into this fork in `dd4ec8d7`); older clones need an older
+  libstdc++ (see troubleshooting).
 - MPI with C and C++ wrappers (`mpicc`, `mpicxx`).
 - HDF5 **with the C++ API** (`H5Cpp.h`, `libhdf5_cpp`): Grid's headers include it.
 - GMP, MPFR, FFTW (double and float), OpenSSL, zlib, and c-lime (built by the Grid example script if
@@ -180,7 +181,7 @@ because `LibHR/Observables/glueballs.c` uses the `gb_shift_unit` variable it def
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `Make/Utils/autosun/...: reference to 'complex' is ambiguous` | libstdc++ 15 forward-declares `std::complex`; autosun has `using namespace std` | compiler with an older libstdc++ (on the PI's machine: `OMPI_CC`/`OMPI_CXX` = `clang --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/13`) |
+| `Make/Utils/autosun/...: reference to 'complex' is ambiguous` | a clone older than `dd4ec8d7`: libstdc++ 15 forward-declares `std::complex`, which clashed with autosun's own `class complex` | pull this branch (upstream fix `2a54d8b4` renames it `complex_t`), or use a compiler with an older libstdc++ (the PI used `OMPI_CC`/`OMPI_CXX` = `clang --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/13`) |
 | build script: `FATAL: Grid Nc=... != HiRep NG=...` | Grid configured with another `--enable-Nc` | reconfigure Grid with `--enable-Nc=2` |
 | segfault in the first trajectory, or `Total H` far from about 334000 on $8^3 \times 32$ | Grid `Nc` != HiRep `NG`, or bridge `.o` and `libGrid.a` from different Grid builds | rebuild Grid cleanly, then rerun the bridge build |
 | `H5Cpp.h: No such file` compiling the bridge | HDF5 without the C++ API, or not in Grid's flags | HDF5 with C++ support; reconfigure Grid with `--with-hdf5` |
