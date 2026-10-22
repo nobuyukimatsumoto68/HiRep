@@ -10,6 +10,7 @@ extern "C" {
 int **direct_spatial_rotations();
 int **inverse_spatial_rotations();
 void request_spatial_paths_evaluation();
+extern int gb_shift_unit; /* lattice sites per loop step = 2^(spatial blocking level), set in measure_1pt_glueballs */
 void eval_all_glueball_ops(int t, hr_complex *numerical_op);
 void measure_1pt_glueballs(int nblockingstart, int nblockingend, double *smear_val, hr_complex *gb_storage);
 void eval_all_torellon_ops(int t, hr_complex *numerical_op, hr_complex **polyf);

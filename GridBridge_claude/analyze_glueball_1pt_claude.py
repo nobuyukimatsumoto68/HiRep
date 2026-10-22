@@ -28,25 +28,55 @@ import sys
 
 import numpy as np
 
-NOP = 15  # total_n_glue_op (Include/Observables/glueballs.h)
-
-# Channel -> operator indices (glueballs_op.c report_gb_group_setup / eval_all_glueball_ops).
-# Ops 4, 6, 7 are products O_{-e_i} O_{+e_i} (two-glueball operators), not single-trace.
-CHANNELS = {
-    "A1_P1": [0, 2, 3, 11, 12, 14],  # single-trace A1 (D4), |P| = 2 pi / L, first operator
-    "A1_P1_n2": [1],                 # second A1 operator at P = (-1,0,0)
-    "A2_P1": [13],                   # A2 (D4), P = (0,1,0)
-    "A2p_P0": [5],                   # A2+, P = 0, single trace
-    # "T1pm_P0": [8, 9, 10],         # T1+-, P = 0: C = - takes Im tr, identically 0 for SU(2)
-    "A1pp_2gb_P0": [4],              # A1+, P = 0, two-glueball product
-    "Epp_2gb_P0": [6, 7],            # E+, P = 0, two-glueball products
+# Channel -> operator indices (glueballs_op.c report_gb_group_setup / eval_all_glueball_ops), one map
+# per generated operator set, selected by total_n_glue_op (inferred from the row length).
+# "2gb" = products O_{-e_i} O_{+e_i} (two-glueball operators), not single-trace.
+CHANNEL_MAPS = {
+    # committed CI ("github") set, total_n_glue_op = 15
+    15: {
+        "A1_P1": [0, 2, 3, 11, 12, 14],  # single-trace A1 (D4), |P| = 2 pi / L, first operator
+        "A1_P1_n2": [1],                 # second A1 operator at P = (-1,0,0)
+        "A2_P1": [13],                   # A2 (D4), P = (0,1,0)
+        "A2p_P0": [5],                   # A2+, P = 0, single trace
+        # "T1pm_P0": [8, 9, 10],         # T1+-, P = 0: C = - takes Im tr, identically 0 for SU(2)
+        "A1pp_2gb_P0": [4],              # A1+, P = 0, two-glueball product
+        "Epp_2gb_P0": [6, 7],            # E+, P = 0, two-glueball products
+    },
+    # su2rest set (glueball_gen_claude), total_n_glue_op = 38; one channel per loop shape,
+    # multiplet components averaged. Shapes res[k] of the generator notebook.
+    38: {
+        "A1_P1": [0, 2, 3, 35, 36, 37],  # single-trace A1 (D4), |P| = 2 pi / L, plaquette
+        "A1_P1_n2": [1],                 # second plaquette orientation at P = (-1,0,0)
+        "A1pp_r1": [4],                  # A1++ at rest, res[1] plaquette
+        "A1pp_r3": [5],                  # res[3]  6-link
+        "A1pp_r5": [6],                  # res[5]  8-link
+        "A1pp_r8": [7],                  # res[8]  8-link
+        "A1pp_r11": [8],                 # res[11] 8-link
+        "A1pp_r12": [9],                 # res[12] 10-link
+        "A1pp_r16": [10],                # res[16] 10-link
+        "A1pp_r20": [11],                # res[20] 10-link
+        "A1pp_2gb_P0": [12],
+        "Epp_r1": [13, 18],              # E++ at rest, components 1, 2; res[1] plaquette
+        "Epp_r2": [14, 19],              # res[2] 2x1 rectangle
+        "Epp_r4": [15, 20],              # res[4] 6-link
+        "Epp_r5": [16, 21],              # res[5] 8-link
+        "Epp_2gb_P0": [17, 22],
+        "T2pp_r3": [23, 27, 31],         # T2++ at rest, components 1-3; res[3] 6-link
+        "T2pp_r4": [24, 28, 32],         # res[4] 6-link
+        "T2pp_r5": [25, 29, 33],         # res[5] 8-link
+        "T2pp_r6": [26, 30, 34],         # res[6] 8-link
+    },
 }
 
 NUM = re.compile(r"\(\s*(\S+) \+I\*\((\S+)\)\)")
 
 
 def read_rows(path, T, nlev):
-    """Return O[cfg, t, level, op] (complex) from the [step] rows of a HiRep out file."""
+    """Return O[cfg, t, level, op] (complex) from the [step] rows of a HiRep out file.
+
+    The number of operators per level (total_n_glue_op) is inferred from the first row.
+    """
+    nop = None
     rows = []
     tcol = []
     for line in open(path):
@@ -54,8 +84,12 @@ def read_rows(path, T, nlev):
             continue
         t = int(line[len("[step][0]"):].split()[0])
         vals = NUM.findall(line)
-        if len(vals) != nlev * NOP:
-            sys.exit("row has %d ops, expected nlev*NOP = %d (check --nlev)" % (len(vals), nlev * NOP))
+        if nop is None:
+            if len(vals) % nlev != 0:
+                sys.exit("row has %d ops, not a multiple of nlev = %d (check --nlev)" % (len(vals), nlev))
+            nop = len(vals) // nlev
+        if len(vals) != nlev * nop:
+            sys.exit("row has %d ops, expected %d (inconsistent rows)" % (len(vals), nlev * nop))
         tcol.append(t)
         rows.append([complex(float(a), float(b)) for a, b in vals])
     if len(rows) % T != 0:
@@ -63,7 +97,7 @@ def read_rows(path, T, nlev):
     tcol = np.array(tcol).reshape(-1, T)
     if not np.all(tcol == np.arange(T)[None, :]):
         sys.exit("timeslice column is not 0..T-1 per measurement (NP_T > 1 or truncated file?)")
-    return np.array(rows).reshape(-1, T, nlev, NOP)
+    return np.array(rows).reshape(-1, T, nlev, nop)
 
 
 def per_config_sums(X, tmax):
@@ -130,14 +164,18 @@ def main():
 
     O = read_rows(args.outfile, args.T, args.nlev)
     nmeas = O.shape[0]
+    nop = O.shape[3]
+    if nop not in CHANNEL_MAPS:
+        sys.exit("no channel map for total_n_glue_op = %d (add one to CHANNEL_MAPS)" % nop)
+    channels = CHANNEL_MAPS[nop]
     O = O[args.ntherm:]
-    print("file %s: %d measurements, %d after ntherm=%d; T=%d, levels=%d, bin=%d"
-          % (args.outfile, nmeas, O.shape[0], args.ntherm, args.T, args.nlev, args.bin))
+    print("file %s: %d measurements, %d after ntherm=%d; T=%d, levels=%d, ops/level=%d, bin=%d"
+          % (args.outfile, nmeas, O.shape[0], args.ntherm, args.T, args.nlev, nop, args.bin))
 
     for lev in range(args.nlev):
         print("\n==== blocking level %d ====" % lev)
         print("%-12s %5s %16s %16s" % ("channel", "t", "C(t)/C(0)", "a m_eff(t)"))
-        for name, ops in CHANNELS.items():
+        for name, ops in channels.items():
             C, dC, R, dR, meff, dm, nbin = jackknife_channel(O, lev, ops, args.bin, args.tmax)
             for t in range(args.tmax + 1):
                 label = name if t == 0 else ""
@@ -155,7 +193,7 @@ def main():
         for b in (1, 2, 5, 10, 20, 40, 80):
             if O.shape[0] // b < 10:
                 break
-            C, dC, R, dR, meff, dm, nbin = jackknife_channel(O, lev, CHANNELS["A1_P1"], b, args.tmax)
+            C, dC, R, dR, meff, dm, nbin = jackknife_channel(O, lev, channels["A1_P1"], b, args.tmax)
             print("bin %3d  nbin %4d  m_eff(1) = %s" % (b, nbin, fmt(meff[1], dm[1])))
 
 

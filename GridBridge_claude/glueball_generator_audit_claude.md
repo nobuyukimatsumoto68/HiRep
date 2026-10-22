@@ -100,7 +100,7 @@ measurement for 45 operators on $8^3 \times 16$).
 | 1 | Committed set is the CI test set | verified | why $\vec P = 0$ has no $0^{++}$ |
 | 2 | $C=-$ operators vanish for SU(2); generator tests disabled for NG = 2 | verified | drop $C=-$; validate on NG = 3 |
 | 3 | `GenerateCcode` deletes the tracked originals and header | verified | branch/worktree first |
-| 4 | Shift phase `c0` assumes 1-site steps, but blocked links span $2^b$ sites (`spatial_transformations.c:122`) | from audit | wrong phases for $\vec P \ne 0$ operators with shifts at blocking level $\ge 1$ (currently op 13); $\vec P = 0$ unaffected |
+| 4 | Shift phase `c0` assumes 1-site steps, but blocked links span $2^b$ sites (`spatial_transformations.c:122`) | **verified** (section 6) | wrong phases for $\vec P \ne 0$ operators with shifts at blocking level $\ge 1$ (committed op 13 only); $\vec P = 0$ unaffected |
 | 5 | Momentum phase uses `GLB_X` for all directions | from audit | cubic lattices only |
 | 6 | `Add2trOpCorrelators` uses `irrepidx1` for the second factor (`OpProjection.m:305`) | from audit | latent; harmless while both irreps are $A_1$ |
 | 7 | Header declares `request_spatial_paths_evaluation`, code defines `request_space_paths_evaluation` | from audit | unused prototype |
@@ -132,3 +132,37 @@ Driver `glueball_gen_claude/gen_glueball_ops_claude.wls`, runner
 
 - Spot check: the plaquette $E^{++}$ components are $8(2P_{xy} - P_{yz} - P_{zx})$ and
   $8\sqrt3\,(P_{zx} - P_{yz})$, the standard $E$ doublet.
+
+## 6. Bug: momentum shift phases are wrong at blocking levels >= 1 (verified 2026-10-22)
+
+**Mechanism.** A moving operator $O_{\vec P} = \sum_{\vec x} e^{i \vec P \cdot \vec x}\, \mathrm{tr}\,W(\vec x)$
+is a sum of rotated copies of a loop. The generator refers some copies to a base point displaced
+by a number of lattice *steps* and compensates with a phase. `WriteShift` (`OpProjection.m:915-927`,
+line 924) writes each such phase into the C code as a constant
+`cN = cexp(I*PI*(<number>/GLB_X))`, computed assuming **one step = one site**; it is set once, when
+`path_storage` is first allocated (committed `glueballs_op.c:1077`).
+
+Spatial blocking (`LibHR/Utils/spatial_transformations.c:122-123`, used by `measure_1pt_glueballs`
+in `LibHR/Observables/glueballs.c`) replaces $U(x,\mu)$ by $U(x,\mu)U(x+\hat\mu,\mu)$ and doubles the
+neighbour step, so at blocking level $b$ one step spans $2^b$ sites. The correct phase is then
+$c_N^{(b)} = \exp(i \pi\, k_N 2^b / L)$ where the code uses $\exp(i \pi\, k_N / L)$. The rotated
+copies are combined with wrong relative phases: the result is no longer a clean projection onto the
+intended irrep and momentum.
+
+**Who is affected.**
+
+| Operators | Affected? | Why |
+|---|---|---|
+| $\vec P = 0$ (all irreps, e.g. old op 5 $A_2^{+}$, new $A_1^{++}$/$E^{++}$/$T_2^{++}$) | no | shifts dropped for zero momentum components (`OpProjection.m:429-431`) |
+| $\vec P \ne 0$ without shifts (plaquette $A_1$ at $\vert\vec P\vert = 1$: old ops 0-3, 11, 12, 14; new 0-3, 35-37) | no | no `c` factors in their code |
+| old op 13 ($A_2$ ($D_4$) at $\vec P = (0,1,0)$, 8-link `res[8]`) | **yes, at levels $\ge 1$** | uses `c0` (`glueballs_op.c:1060-1062`) |
+| torelons | no | have 2 shift phases but are only APE-smeared, never blocked |
+| new 38-operator set | no | contains no shift phases at all |
+
+Level 0 (raw links) is always correct. The bug is latent for the current runs but will hit any
+future moving operator built from non-plaquette loops (e.g. a moving-frame variational basis).
+
+**Fix (applied 2026-10-22; regenerated `github` output verified to differ from HEAD only in these lines).** Make the step length explicit: the generator emits
+`cN = cexp(I*PI*(<number>*gb_shift_unit)/GLB_X)` and recomputes the `c` constants on every
+evaluation, and `measure_1pt_glueballs` sets `gb_shift_unit = 1 << level` before evaluating each
+blocking level. See `glueball_mass_test_impl_plan_claude.md`.

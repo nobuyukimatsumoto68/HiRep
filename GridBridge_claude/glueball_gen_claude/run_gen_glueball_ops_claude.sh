@@ -29,7 +29,9 @@ LOG=$GEN/gen_glueball_ops_claude.log
 # default: the PI's workstation install (Mathematica 15.0.1)
 WS=${WOLFRAMSCRIPT:-/mnt/hdd_barracuda/mathematica/15.0/Executables/wolframscript}
 WLS=$GEN/gen_glueball_ops_claude.wls
-SRC_M=$HIREP/Make/Utils/Math_glueballs/OpProjection.m
+# SRC_M=$HIREP/Make/Utils/Math_glueballs/OpProjection.m
+# patched copy with the shift-phase / blocking fix (glueball_generator_audit_claude.md section 6)
+SRC_M=$GEN/OpProjection_claude.m
 # generated files, relative to a HiRep-like root
 GENFILES="LibHR/Observables/glueballs_op.c LibHR/Observables/torellons_op.c Include/Observables/glueballs.h TestProgram/Utils/check_utils_3_gb_functions.c TestProgram/Utils/check_utils_3_tor_functions.c"
 
@@ -64,17 +66,21 @@ for MODE in github su2rest; do
     grep -E "define +total_n_(glue|tor)_op" "$STAGE"/Include/Observables/glueballs.h 2>&1 | tee -a "$LOG" || true
 done
 
-echo "================ PHASE 1 check: github stage vs committed (ignoring whitespace and braces) ================" 2>&1 | tee -a "$LOG"
+echo "================ PHASE 1 check: github stage vs committed HEAD (ignoring whitespace and braces) ================" 2>&1 | tee -a "$LOG"
+# With the patched generator, glueballs_op.c and glueballs.h are EXPECTED to differ, only in the shift-phase
+# lines (c<N> = ..., gb_shift_unit) and the extern declaration; the other files must be SAME.
 # The committed files were clang-formatted (HiRep .clang-format: InsertBraces true, BreakStringLiterals
 # false), so compare token streams with whitespace AND braces removed.
 for F in $GENFILES; do
-    A=$HIREP/$F
+    mkdir -p "$GEN"/stage_github/committed_HEAD
+    A=$GEN/stage_github/committed_HEAD/$(basename "$F")
+    git -C "$HIREP" show HEAD:"$F" > "$A"
     B=$GEN/stage_github/$F
     if cmp -s <(tr -d ' \t\n{}' < "$A") <(tr -d ' \t\n{}' < "$B"); then
         echo "  SAME    $F" 2>&1 | tee -a "$LOG"
     else
         echo "  DIFFER  $F" 2>&1 | tee -a "$LOG"
-        diff <(tr -s ' \t' ' ' < "$A" | tr ';' '\n') <(tr -s ' \t' ' ' < "$B" | tr ';' '\n') | head -20 2>&1 | tee -a "$LOG" || true
+        diff <(tr -s ' \t' ' ' < "$A" | tr ';' '\n') <(tr -s ' \t' ' ' < "$B" | tr ';' '\n') | head -60 2>&1 | tee -a "$LOG" || true
     fi
 done
 

@@ -242,6 +242,15 @@ Changing channels or adding operator shapes means regenerating it there.
     Example: `python3 analyze_glueball_1pt_claude.py out_small_8x16_claude_0 --T 16 --nlev 3 --binscan`.
     Not yet: GEVP over blocking levels, plots (planned notebook, chunk 3 of the plan).
 
+11. **Bug (verified and fixed 2026-10-22): shift phases of moving operators were wrong at
+    blocking levels >= 1.** The generator hard-codes momentum shift phases for 1-site steps, but
+    spatial blocking makes a step $2^b$ sites. Affects only $\vec P \ne 0$ operators whose code
+    uses `c` phase constants: in the committed set op 13 ($A_2$ at $\vec P = (0,1,0)$); the new
+    38-operator set has none. $\vec P = 0$ operators and torelons are never affected. Details:
+    `glueball_generator_audit_claude.md` section 6. Fix: patched generator copy
+    `glueball_gen_claude/OpProjection_claude.m` (phases scale with `gb_shift_unit`, recomputed per
+    call) plus `LibHR/Observables/glueballs.c` setting `gb_shift_unit = 1 << level` per blocking level.
+
 Suggested order: 3 (a real $0^{++}$/$2^{++}$ operator at rest), GEVP + plots on top of the analysis
 script (10), then 2
 (full time extent with `NP_T > 1`) for larger lattices and a production run.

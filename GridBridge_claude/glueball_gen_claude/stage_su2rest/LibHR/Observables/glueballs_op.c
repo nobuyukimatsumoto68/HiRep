@@ -8,6 +8,7 @@
 static hr_complex *mom_def_Cp_tr_paths = NULL;
 static hr_complex *mom_def_Cm_tr_paths = NULL;
 static hr_complex *path_storage = NULL;
+int gb_shift_unit = 1; /* lattice sites per loop step = 2^(spatial blocking level), set in measure_1pt_glueballs */
 int **direct_spatial_rotations() {
     int i;
     int **res = malloc(sizeof(int *) * 48);
@@ -11090,6 +11091,7 @@ void request_space_paths_evaluation() {
 void eval_time_momentum_glueball_paths(int t, int px, int py, int pz) {
     int nnx, nny, nnz, idx, in;
     hr_complex ce = 0.;
+    /* shift phases depend on gb_shift_unit (blocking level): recomputed on every call */
     if (path_storage == NULL) {
         path_storage = malloc(npaths * X * Y * Z * sizeof(hr_complex));
         mom_def_Cp_tr_paths = malloc(npaths * sizeof(hr_complex));

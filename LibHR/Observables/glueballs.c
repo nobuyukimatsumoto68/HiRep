@@ -27,6 +27,9 @@ void measure_1pt_glueballs(int nblockingstart, int nblockingend, double *smear_v
 
     for (i = 0; i < nblockingend - nblockingstart; i++) {
         point_gb = gb_storage + i * total_n_glue_op;
+        /* each blocking level doubles the loop step: the momentum shift phases of the generated
+         * operators (glueballs_op.c) must use 2^level sites per step */
+        gb_shift_unit = 1 << (nblockingstart + i);
         for (nt = 0; nt < n_active_slices; nt++) {
             eval_all_glueball_ops(active_slices_list[nt], point_gb);
             point_gb += total_n_glue_op * (nblockingend - nblockingstart + 1);
@@ -43,10 +46,12 @@ void measure_1pt_glueballs(int nblockingstart, int nblockingend, double *smear_v
 
     point_gb = gb_storage + (nblockingend - nblockingstart) * total_n_glue_op;
 
+    gb_shift_unit = 1 << nblockingend;
     for (nt = 0; nt < n_active_slices; nt++) {
         eval_all_glueball_ops(active_slices_list[nt], point_gb);
         point_gb += total_n_glue_op * (nblockingend - nblockingstart + 1);
     }
+    gb_shift_unit = 1;
 
     release_wrk_space(wrk2);
 }

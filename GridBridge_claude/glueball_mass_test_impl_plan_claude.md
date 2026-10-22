@@ -181,6 +181,65 @@ Recipe and risks: `glueball_generator_audit_claude.md`. Mathematica 15.0.1 at
   the $8^3 \times 16$ test.
 - 5d. Analysis: read the channel table from the out file instead of the hard-coded `CHANNELS`.
 
+### 5c plan (decided 2026-10-22: NG = 3 validation only; NG = 2 rebuild and SU(2) rerun postponed)
+
+Install and test in a **separate git worktree** so the working NG = 2 tree (`HiRep/`, with the
+Grid-linked SU(2) executables and its `build/`) is not touched.
+
+- 5c-1. Worktree `/mnt/baracuda_14/hirep_workspace/HiRep_ng3_claude` on a new branch
+  `glueball-ops-su2rest-claude` from `HiRep-CUDA` HEAD (`git worktree add`, run by the PI).
+  Copy the three formatted files from `GridBridge_claude/glueball_gen_claude/stage_su2rest/` over
+  `LibHR/Observables/glueballs_op.c`, `Include/Observables/glueballs.h`,
+  `TestProgram/Utils/check_utils_3_gb_functions.c` in the worktree. The torelon files are unchanged.
+  Files: worktree copies of those three files.
+- 5c-2. In the worktree: `Make/write_mkflags.pl -f Make/MkFlags.ini -n 3 -r FUND --mpi --no-ndebug`,
+  clang toolchain via `OMPI_CC` / `OMPI_CXX` (as for the bridge), `HWLOC_COMPONENTS=-gl`; build only
+  `TestProgram/Utils/check_utils_3` and `TestProgram/PureGauge/check_puregauge_5`; run each directly
+  with `mpirun -np 2 <test> -i <test>.in -o out_<test>_claude` (both inputs have `NP_T = 2`; HiRep's
+  `test_wrapper.pl` is avoided because it deletes old outputs). Pass = exit code 0.
+  Files: `tmp_claude.sh` (handoff), log `tmp_ng3_tests_claude.log`.
+- What the tests check: `check_utils_3` compares every operator evaluated on a rotated
+  configuration with the generated rotation table (`check_utils_3_gb_functions.c`), i.e. the
+  irrep projections; `check_puregauge_5` checks gauge invariance of the measured operators.
+
+Open: branch / worktree names OK? After the tests pass, merging into `HiRep-CUDA` and the NG = 2
+rebuild + rerun are separate later steps.
+
+## Chunk 6: fix the shift-phase / blocking bug (audit section 6; requested by PI 2026-10-22)
+
+Goal: moving operators with shifted loop copies get the phase for the actual step length,
+$c_N^{(b)} = \exp(i\pi k_N 2^b / L)$ at blocking level $b$. The original `OpProjection.m` (A. Rago)
+stays untouched; the fix lives in a committed patched copy used by our generator runner.
+
+- 6a. Patched generator `glueball_gen_claude/OpProjection_claude.m` (copy of `OpProjection.m`):
+  - `WriteShift` (`OpProjection.m:924`): for the glueball file only, emit
+    `cN = cexp(I*PI*(<number>*gb_shift_unit)/GLB_X);` (torelons are never blocked: unchanged);
+  - `eval_time_momentum_glueball_paths` (`OpProjection.m:1306-1312`): emit the `c` assignments
+    on every call, not only inside `if (path_storage == NULL)` (cheap: a few `cexp` per call);
+  - emit `int gb_shift_unit = 1;` in `glueballs_op.c` and
+    `extern int gb_shift_unit; /* lattice sites per loop step = 2^(blocking level) */` in `glueballs.h`.
+
+  Files: `glueball_gen_claude/OpProjection_claude.m`, `run_gen_glueball_ops_claude.sh` (copy the
+  patched file into the stages instead of the original).
+- 6b. Hand-written HiRep: `LibHR/Observables/glueballs.c`, `measure_1pt_glueballs`: set
+  `gb_shift_unit = 1 << level` before evaluating each blocking level (absolute level
+  `nblkstart + i`), reset to 1 afterwards. Edited in place (core file referenced by name).
+
+  Files: `LibHR/Observables/glueballs.c`.
+- 6c. Regenerate both modes, format with clang-format 17, check that the `github` output differs
+  from the committed files only in the `c` lines, `gb_shift_unit`, and the header line; install
+  the `su2rest` files (numerically unchanged: it has no shift phases).
+- **6a-6c done 2026-10-22.** Regenerated `github` output differs from HEAD only by the `gb_shift_unit`
+  definition/declaration and `c0 = cexp(I*PI*((2.)*gb_shift_unit)/GLB_X)` moved out of the one-time
+  block; `su2rest` output gains only the variable (no shift phases). Fixed `su2rest` files installed.
+- 6d. Rebuild NG = 2 and run the $8^3 \times 16$ test with the new operators and the same `GridSeed`
+  (`20261020-131546`): identical configurations, so the moving-frame $A_1$ values must reproduce
+  the first run exactly.
+
+Not covered: a numerical test that the fixed phases are right (needs a moving operator with
+shifts in the measured set, e.g. old op 13, plus an independent evaluation); the NG = 3 rotation
+test was dropped by PI decision.
+
 ## Decisions (2026-10-20)
 
 1. Analysis: the faster option, a Python Jupyter notebook (numpy; one plot per cell).
