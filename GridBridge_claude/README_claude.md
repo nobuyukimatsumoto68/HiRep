@@ -13,11 +13,12 @@ I. M. Mryglod, R. Folk, Comput. Phys. Commun. 151 (2003) 272).
 
 | Code | Repository | Notes |
 |---|---|---|
-| HiRep (with this bridge) | `git@github.com:nobuyukimatsumoto68/HiRep.git`, branch `HiRep-CUDA` | the bridge lives in `GridBridge_claude/` |
+| HiRep (with this bridge) | `https://github.com/nobuyukimatsumoto68/HiRep.git`, branch `HiRep-CUDA` (fork of `claudiopica/HiRep`) | the bridge lives in `GridBridge_claude/` |
 | Grid | `https://github.com/paboyle/Grid.git` (upstream) | no fork needed; must be configured with `--enable-Nc=2` |
 
 ```bash
-git clone -b HiRep-CUDA git@github.com:nobuyukimatsumoto68/HiRep.git
+git clone -b HiRep-CUDA https://github.com/nobuyukimatsumoto68/HiRep.git   # read-only, no account needed
+# (with push access: git clone -b HiRep-CUDA git@github.com:nobuyukimatsumoto68/HiRep.git)
 git clone https://github.com/paboyle/Grid.git        # or let build_grid_example_claude.sh clone it
 ```
 
@@ -70,7 +71,8 @@ cp GridBridge_claude/MkFlags_example_claude.ini GridBridge_claude/MkFlags_mymach
 echo "GRIDLIBS = -L$PWD/GridLibrary $($GRID_BUILD/grid-config --ldflags) $($GRID_BUILD/grid-config --libs) -fopenmp"
 ```
 
-Paste the printed `GRIDLIBS` line into your file. Keep `NG = 2`, `CXX = mpicxx`, and keep `NDEBUG`
+Paste the printed `GRIDLIBS` line into your file. The MkFlags file must not contain double quotes or
+backslashes anywhere, comments included: HiRep embeds it in a C string (`Make/Utils/cinfo.sh`). Keep `NG = 2`, `CXX = mpicxx`, and keep `NDEBUG`
 unset (no `NDEBUG` macro): the drivers `assert` every trajectory that the gauge field arrived in
 HiRep correctly.
 
@@ -186,6 +188,7 @@ because `LibHR/Observables/glueballs.c` uses the `gb_shift_unit` variable it def
 | segfault in the first trajectory, or `Total H` far from about 334000 on $8^3 \times 32$ | Grid `Nc` != HiRep `NG`, or bridge `.o` and `libGrid.a` from different Grid builds | rebuild Grid cleanly, then rerun the bridge build |
 | `H5Cpp.h: No such file` compiling the bridge | HDF5 without the C++ API, or not in Grid's flags | HDF5 with C++ support; reconfigure Grid with `--with-hdf5` |
 | ninja: `GridLibrary/grid_hirep_*.o missing` | bridge objects not built | run `build_grid_hirep_claude.sh` (it builds both) |
+| `LibHR/Utils/cinfo.c: error: expected ';' after top level declarator` | a double quote or backslash in your MkFlags file: HiRep embeds it as a C string (`Make/Utils/cinfo.sh` escapes only newlines) | remove `"` and `\` from the MkFlags file, comments included |
 | link: `cannot find -lmpi_cxx` | a `GRIDLIBS` line copied from another machine | regenerate `GRIDLIBS` from your `grid-config` (section 4) |
 | `mpirun` hangs before any output, even `mpirun -np 1 hostname` | hwloc 2.13 GL plugin probing an X/Wayland display that never answers | `export HWLOC_COMPONENTS=-gl` |
 | `assert(fabs(avr_plaquette() - grid_hmc_plaquette(S)) < 1e-6)` fails | gauge-field transfer broken (layout, Nc, ABI) | as for the segfault row |
