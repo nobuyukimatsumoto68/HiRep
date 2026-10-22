@@ -9,6 +9,12 @@
   M. Luscher, K. Symanzik, P. Weisz, Nucl. Phys. B173 (1980) 365; M. Luscher, Nucl. Phys. B180 (1981) 317.
 - Glueball and k-string spectroscopy with smeared/blocked operators (reference numbers):
   B. Lucini, M. Teper, U. Wenger, JHEP 06 (2004) 012, hep-lat/0404008.
+- Jackknife error estimate: M. H. Quenouille, Biometrika 43 (1956) 353;
+  J. W. Tukey, Ann. Math. Statist. 29 (1958) 614.
+- Binning (blocking) of autocorrelated Monte Carlo data: H. Flyvbjerg and H. G. Petersen,
+  J. Chem. Phys. 91 (1989) 461.
+
+Implemented in `GridBridge_claude/analyze_glueball_1pt_claude.py`.
 
 ## Goal
 
@@ -31,9 +37,10 @@ Two observables, in order of how easy the signal is:
 - Text size of the 1-pt data: about 650 bytes per timeslice row (15 ops x 1 blocking level).
 - The full Grid log is the largest output: about 160 KB per trajectory (16 MB per 100 trajectories).
 - Torelon 1-pt functions are computed (`measure_1pt_torellons`) but never printed.
-- Grid RNG seeds are hard-coded (`grid_hirep_hmc_claude.cpp:178,180`); `rlx_seed` only seeds
-  HiRep. Every fresh run is therefore the same Markov chain.
-- Grid prints `Number of MD steps : 10` from an unused default in `HMCparameters::MD`
+- (Fixed 2026-10-20, `GridSeed` key + `grid_hmc_seed`.) Grid RNG seeds were hard-coded
+  (`grid_hirep_hmc_claude.cpp:178,180`); `rlx_seed` only seeds HiRep, so every fresh run was the
+  same Markov chain.
+- (Fixed 2026-10-20 in `build_hmc`.) Grid printed `Number of MD steps : 10` from an unused default in `HMCparameters::MD`
   (`Grid/qcd/hmc/HMC.h:90`). The integrator really uses `nMD` (verified: 16 kicks of
   $(1-2\lambda)\epsilon$ per trajectory at `nMD = 16`). Cosmetic only.
 
@@ -117,15 +124,19 @@ shows `Number of MD steps : 16`, step 0.0625. Acceptance 1892/1980 = 0.956. HiRe
 plaquettes agree on all 2000 trajectories. Output: 62.5 MB text (32000 rows x 45 ops),
 checkpoints 2.10 MB (lat) + 0.85 MB (rng).
 
-Quick look (scratch script, 1800 configs after 200 thermalization, bins of 20, jackknife,
+Analysis (`analyze_glueball_1pt_claude.py`; 1800 configs after 200 thermalization, bins of 20, jackknife,
 $m_\text{eff}(t) = \ln[C(t)/C(t+1)]$):
 
 | Channel (ops) | Best level | $C(1)/C(0)$ | $a\,m_\text{eff}$ at $t = 1, 2, 3$ |
 |---|---|---|---|
 | $A_1$, $\vert\vec P\vert = 1$ (0, 2, 3, 11, 12, 14) | 2 | 0.153 | 1.359(66), 1.335(244), 1.34(104) |
 | $A_2^{+}$, $\vec P = 0$ (5) | 2 | 0.054 | noise |
-| $T_1^{+-}$, $\vec P = 0$ (8-10) | 2 | 0.005 | noise |
+| $T_1^{+-}$, $\vec P = 0$ (8-10) | - | - | identically zero for SU(2) ($C=-$, $\vert O\vert < 10^{-12}$) |
 | "$A_1^{++}$", "$E^{+}$", $\vec P = 0$ (4; 6, 7) | 2 | 0.02, 0.03 | noise |
+
+Bin-size scan (A1, $|\vec P| = 1$, level 2, error of $m_\text{eff}(1)$): 0.057 (bin 1), 0.063 (10),
+0.066 (20), 0.076 (40), 0.082 (80, only 22 bins). Mild autocorrelation; quote bin 40,
+$a\,m_\text{eff}(1) = 1.359(76)$.
 
 **Operator content (important).** In `glueballs_op.c:1189-1205`, ops 4, 6, 7 are not
 single-trace glueball operators: each is a sum of products
@@ -146,6 +157,29 @@ For $a m_{0^{++}} = 0.94$ to $1.0$ this gives $a E \approx 1.17$ to $1.21$. The 
 $1.34(7)$, about $2\sigma$ above. Possible reasons: excited-state contamination at $t = 1$ (no GEVP
 yet), the small box ($L\sqrt\sigma \approx 2.1$ shifts the glueball mass), or the reference value
 (to be checked). So a nontrivial, flat exponent is seen, in the right range, in this channel.
+
+## Chunk 5: regenerate the operator set (decision 2026-10-20: option (b), the Mathematica generator)
+
+Recipe and risks: `glueball_generator_audit_claude.md`. Mathematica 15.0.1 at
+`/mnt/hdd_barracuda/mathematica` (installed 2026-10-22; needs one-time activation).
+
+- 5a. Headless driver `glueball_gen_claude/gen_glueball_ops_claude.wls`, two modes, run in staging
+  trees `glueball_gen_claude/stage_<mode>/` (copy `OpProjection_claude.m`; the real `LibHR/`,
+  `Include/`, `TestProgram/` are never written).
+  - `github`: reproduce the committed CI set; compare with the committed files ignoring whitespace
+    and braces (clang-format `InsertBraces`). Tests whether Mathematica 15 matches 11.3.
+  - `su2rest`: $A_1^{++}$ (8 "run" shapes), $E^{++}$ (`res` 1, 2, 4, 5), $T_2^{++}$ (`res` 3, 4, 5, 6)
+    at rest, $C = +$ only, plus the github moving-frame $A_1$, two-trace and torelon operators.
+
+  Files: `glueball_gen_claude/gen_glueball_ops_claude.wls`, `tmp_claude.sh`.
+- 5b. Inspect the su2rest output: channel table, operator count, no operator projecting to zero.
+  **5a + 5b done 2026-10-22**: `github` reproduces the committed files exactly; `su2rest` gives 38
+  operators, none empty (channel table in `glueball_generator_audit_claude.md` section 5).
+- 5c. Install the generated files into `LibHR/Observables/`, `Include/Observables/`,
+  `TestProgram/Utils/` (they keep their names: the build references them; git keeps the
+  originals), validate on NG = 3 (`check_utils_3`, `check_puregauge_5`), rebuild NG = 2, rerun
+  the $8^3 \times 16$ test.
+- 5d. Analysis: read the channel table from the out file instead of the hard-coded `CHANNELS`.
 
 ## Decisions (2026-10-20)
 
