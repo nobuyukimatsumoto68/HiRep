@@ -2,6 +2,20 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Start here: Grid-in-HiRep glueball project (branch HiRep-CUDA)
+
+This fork drives Grid's SU(2) HMC from HiRep and measures glueball 1-point functions in the same
+process. Before anything else, read in this order:
+
+1. `GridBridge_claude/HANDOFF_claude.md` - status, results, open work, rules for agents (section 7)
+2. `GridBridge_claude/README_claude.md` - setup: repos, building and linking Grid + HiRep, first run
+3. `GridBridge_claude/glueball_generator_audit_claude.md` - glueball operator code and its generator
+
+Key rules: Grid must be configured with `--enable-Nc=2` (= `NG`); build the bridge and the Grid
+executables with `GridBridge_claude/build_grid_hirep_claude.sh` (not plain `nj`); never set `NDEBUG`;
+never call `Grid_finalize()`; files Claude creates or edits get a `_claude` suffix. The rest of this
+file is the generic HiRep guide.
+
 ## What This Is
 
 HiRep is a lattice QCD simulation code written in C99, supporting SU(N)/SO(N) gauge theories with fermions in various representations (fundamental, adjoint, symmetric, antisymmetric). It targets CPU (serial/OpenMP/MPI) and GPU (CUDA/HIP) execution.
