@@ -24,6 +24,14 @@
     su2rest : single-trace C=+ operators at rest for SU(2) (A1++, E++, T2++), plus the github
               moving-frame A1, two-trace and torelon operators. C=- operators are omitted (they
               take Im tr and vanish identically for SU(2)).
+    su4     : quenched SU(4) set (QuenchedSU4_claude/quenched_su4_glueball_impl_plan_claude.md, Q2):
+              single-trace C=+ and C=- operators, every irrep and component, on the shapes
+              res[1,2,3,4,5,6,8,11,12,16,20], at rest and in moving frames; torelons on the three
+              github paths, every irrep, C=+ and C=-, at rest and in the same moving frames; NO
+              two-trace operators. Zero projections are dropped by the generator.
+              Optional 4th argument <momset>: rep  = (0,0,1),(0,1,1),(1,1,1) (default)
+                                              half = all 13 directions, one of each +-P pair
+              (a C-eigen operator at -P is the complex conjugate of the one at +P).
 *)
 
 genArgs = $ScriptCommandLine;
@@ -33,12 +41,17 @@ If[Length[genArgs] < 3,
 ];
 genStage = genArgs[[2]];
 genMode = genArgs[[3]];
-If[Not[MemberQ[{"github", "su2rest"}, genMode]],
+genMomSet = If[Length[genArgs] >= 4, genArgs[[4]], "rep"];
+If[Not[MemberQ[{"github", "su2rest", "su4"}, genMode]],
   Print["unknown mode: ", genMode];
   Exit[1]
 ];
 Print["Wolfram version: ", $VersionNumber, "  (", $Version, ")"];
-Print["stage dir: ", genStage, "  mode: ", genMode];
+Print["stage dir: ", genStage, "  mode: ", genMode, "  momset: ", genMomSet];
+If[Not[MemberQ[{"rep", "half"}, genMomSet]],
+  Print["unknown momset: ", genMomSet];
+  Exit[1]
+];
 
 SetDirectory[genStage];
 Get["OpProjection_claude.m"];
@@ -102,20 +115,53 @@ If[genMode == "su2rest",
   Do[Add1trOpCorrelators[0, 0, 0, 5, genE, 1, res[genK]], {genK, {3, 4, 5, 6}}, {genE, 1, 3}];
 ];
 
-(* two trace, notebook cell lines 1125-1271, CodeControl = "github" (both modes) *)
-Add2trOpCorrelators[res[1], 0, 0, 1, 1, 1, res[1], 0, 0, 1, 1, 1, 0, 0, 0, 1, 1];
-Add2trOpCorrelators[res[1], 0, 0, 1, 1, 1, res[1], 0, 0, 1, 1, 1, 0, 0, 0, 3, 1];
-Add2trOpCorrelators[res[1], 0, 0, 1, 1, 1, res[1], 0, 0, 1, 1, 1, 0, 0, 0, 3, 2];
+If[genMode == "su4",
+  genSu4Shapes = {1, 2, 3, 4, 5, 6, 8, 11, 12, 16, 20};
+  genSu4TorPaths = {P[ax], P[-ay, ax, ay], P[-ay, ax, az, ay, -az]};
+  genSu4MomRep = {{0, 0, 1}, {0, 1, 1}, {1, 1, 1}};
+  genSu4MomHalf = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1},
+                   {1, 1, 0}, {1, -1, 0}, {1, 0, 1}, {1, 0, -1}, {0, 1, 1}, {0, 1, -1},
+                   {1, 1, 1}, {1, 1, -1}, {1, -1, 1}, {-1, 1, 1}};
+  genSu4Moms = Prepend[If[genMomSet == "half", genSu4MomHalf, genSu4MomRep], {0, 0, 0}];
+  Print["su4 momenta: ", genSu4Moms];
+  (* single trace: every irrep / component / charge of the little group of each momentum *)
+  Do[
+    genP = genSu4Moms[[genI]];
+    genNirr = Length[bTOrthog[genP[[1]], genP[[2]], genP[[3]]]];
+    Do[
+      genDim = Length[bTOrthog[genP[[1]], genP[[2]], genP[[3]]][[genIr]]];
+      Do[Add1trOpCorrelators[genP[[1]], genP[[2]], genP[[3]], genIr, genE, genC, res[genK]],
+        {genK, genSu4Shapes}, {genE, 1, genDim}, {genC, {1, -1}}],
+      {genIr, 1, genNirr}],
+    {genI, 1, Length[genSu4Moms]}];
+  (* torelons: same momenta, every irrep / component / charge, the three github paths *)
+  Do[
+    genP = genSu4Moms[[genI]];
+    genNirr = Length[bTOrthog[genP[[1]], genP[[2]], genP[[3]]]];
+    Do[
+      genDim = Length[bTOrthog[genP[[1]], genP[[2]], genP[[3]]][[genIr]]];
+      Do[AddTorCorrelators[genP[[1]], genP[[2]], genP[[3]], genIr, genE, genC, genTp],
+        {genTp, genSu4TorPaths}, {genE, 1, genDim}, {genC, {1, -1}}],
+      {genIr, 1, genNirr}],
+    {genI, 1, Length[genSu4Moms]}];
+];
 
-(* torelons, notebook cell lines 2014-2147, CodeControl = "github" (both modes) *)
-AddTorCorrelators[0, 0, 0, 1, 1, 1, P[ax]];
-AddTorCorrelators[0, 1, 0, 1, 1, 1, P[-ay, ax, ay]];
-AddTorCorrelators[1, 1, 1, 1, 1, 1, P[-ay, ax, ay]];
-AddTorCorrelators[0, 0, 0, 3, 1, 1, P[-ay, ax, az, ay, -az]];
-AddTorCorrelators[0, 0, 0, 3, 2, 1, P[-ay, ax, az, ay, -az]];
-AddTorCorrelators[0, 0, 0, 4, 1, 1, P[-ay, ax, az, ay, -az]];
-AddTorCorrelators[0, 0, 0, 4, 2, 1, P[-ay, ax, az, ay, -az]];
-AddTorCorrelators[0, 0, 0, 4, 3, 1, P[-ay, ax, az, ay, -az]];
+If[genMode != "su4",
+  (* two trace, notebook cell lines 1125-1271, CodeControl = "github" (github and su2rest) *)
+  Add2trOpCorrelators[res[1], 0, 0, 1, 1, 1, res[1], 0, 0, 1, 1, 1, 0, 0, 0, 1, 1];
+  Add2trOpCorrelators[res[1], 0, 0, 1, 1, 1, res[1], 0, 0, 1, 1, 1, 0, 0, 0, 3, 1];
+  Add2trOpCorrelators[res[1], 0, 0, 1, 1, 1, res[1], 0, 0, 1, 1, 1, 0, 0, 0, 3, 2];
+
+  (* torelons, notebook cell lines 2014-2147, CodeControl = "github" (github and su2rest) *)
+  AddTorCorrelators[0, 0, 0, 1, 1, 1, P[ax]];
+  AddTorCorrelators[0, 1, 0, 1, 1, 1, P[-ay, ax, ay]];
+  AddTorCorrelators[1, 1, 1, 1, 1, 1, P[-ay, ax, ay]];
+  AddTorCorrelators[0, 0, 0, 3, 1, 1, P[-ay, ax, az, ay, -az]];
+  AddTorCorrelators[0, 0, 0, 3, 2, 1, P[-ay, ax, az, ay, -az]];
+  AddTorCorrelators[0, 0, 0, 4, 1, 1, P[-ay, ax, az, ay, -az]];
+  AddTorCorrelators[0, 0, 0, 4, 2, 1, P[-ay, ax, az, ay, -az]];
+  AddTorCorrelators[0, 0, 0, 4, 3, 1, P[-ay, ax, az, ay, -az]];
+];
 
 GenerateCcode[];
 Print["GenerateCcode done"];
