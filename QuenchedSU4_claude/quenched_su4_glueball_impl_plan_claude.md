@@ -1,6 +1,6 @@
 # Quenched SU(4) glueballs: HiRep heatbath + in-process glue operators -> one h5 per stream
 
-Status: Chunk 1 DONE 2026-10-27 (half set installed); Chunk 2 (driver) next. Repo: /mnt/baracuda_14/hirep_su4 (branch su4).
+Status: Chunk 1 DONE 2026-10-27 (half set installed); Chunk 2 DONE (build + smoke run passed 2026-11-02); Chunk 3 next. Repo: /mnt/baracuda_14/hirep_su4 (branch su4).
 
 ## Algorithm sources
 
@@ -205,6 +205,49 @@ tuolumne at `NP_T=24`.
 + `ObsInterval n_update`), thermalisation, update loop, T gather, h5 create/append/backup, checkpoint
 + prune, resume + h5 shrink. NG=4 MkFlags, build rule.
 Files: `PureGauge/suN_glueballs_h5_claude.c`, `Make/MkFlags_su4_claude.ini`, `Make/build_claude.pl`.
+
+**Status 2026-10-27: code written, build + smoke run handed off (`QuenchedSU4_claude/tmp_claude.sh`,
+log `tmp_build_smoke_claude.log`).**
+- `PureGauge/suN_glueballs_h5_claude.c`: standalone (input-record types from `suN_utils.h`,
+  `suN_utils.c` untouched). Keys: `beta nhb nor` + `n_update` (additive) `ObsInterval therm h5file`
+  + glueball keys + `WF:*`. Measures at `n > therm && n % ObsInterval == 0`. Fresh start = `random_u`
+  (hot); refuses to start fresh if the h5 exists. Resume = env `CheckpointStart=<n>`. Checkpoints
+  `ckpoint_lat.<n>` (HiRep `write_gauge_field`) + `ckpoint_rng.<n>` (`write_ranlxd_state`), written
+  only at measurement points; previous pair removed after the new one is written. h5 backup via
+  `.bak.tmp` + rename; `/traj` appended last; resume shrinks every dataset to the rows with
+  traj <= n (restores from `.bak` if the file does not open). Gather over T on `GLB_COMM` placed by
+  each rank's `zerocoord[0]`. h5 layout as in the Design section; `/topo` (N, WF:nmeas+1, 4).
+- `Make/MkFlags_su4_claude.ini` (NG=4, no Grid, HDF5 in INCLUDE/LDFLAGS); copied to the tracked
+  `Make/MkFlags.ini` (was an identical copy of `MkFlags_claude.ini`, NG=2).
+- `Make/build_claude.pl`: `suN_glueballs_h5_claude` added to the PureGauge exes; copied to the tracked
+  `Make/build.pl` (was identical). Manifest generation checked (NG = 4, LINK = mpicc, -lhdf5).
+- `QuenchedSU4_claude/build_su4_claude.sh` (checks MkFlags/build.pl are the SU(4) copies, does not
+  overwrite them; clang pinned to GCC 13, openmpi_cuda), `input_su4_smoke_claude` (8^3 x 16, NP_T = 2,
+  6 updates, ObsInterval 2, levels 0-2, WF to t = 2 with 10 measurements).
+- Behaviour to note: updates after the last measurement point of a run are not checkpointed; a resume
+  redoes them from the last checkpoint (same RNG state, so the same chain).
+- **Build attempt 1 FAILED (2026-10-27)**: `torellons_op.c` malformed for every C=- torelon. Generator
+  bug in `DyPolyGenerateCcode` (reordering rule of the straight-line factor), never triggered by C=+
+  sets. FIXED in `GridBridge_claude/glueball_gen_claude/OpProjection_claude.m` (original rule kept as a
+  comment); documented in `GridBridge_claude/glueball_generator_audit_claude.md` section 7. su2rest
+  regeneration unchanged; `half` set regenerated + reinstalled (288 torelon functions, 130 C=-, all
+  well formed). `glueballs_op.c` compiled in attempt 1. Rerun the same `tmp_claude.sh`.
+- **Build attempt 2 PASSED + smoke run PASSED (2026-11-02)**, `runs_claude/smoke/` (8^3 x 16, NP_T = 2,
+  6 updates, 3 measurements): exit 0, 172 s; h5 datasets/attrs as designed, traj [2 4 6], no empty
+  timeslice (gather OK), `.bak` written, old checkpoint pairs pruned, Q along the flow stored.
+  **Independent check:** momentum-projected plaquettes at P = (1,1,1), t = 0, recomputed in Python
+  from `ckpoint_lat.6`: op 1302 = $-i\,2\sqrt3\,(M_{xy} - M_{yz})$ reproduces the h5 value
+  77.84349581 - 47.28072613 i.
+  **32 glue ops identically zero** (all rows, levels, t): indices
+  0 2 33 35 44 55 634 665 684 694 710 757 782 813 822 833 866 885 908 928 1087 1119 1129 1139 1171 1199 1219 1228 1283 1293 1304 1315.
+  All in the $|\vec P|^2 = 2, 3$ frames, shapes plaquette and res[3]. They are zero AS WRITTEN (e.g. op 0
+  = -M0 + M0 - M1 + M1 - c0 M2 + c0 M2): the generator keeps two translated copies of a loop as distinct
+  symbols when their shifts differ, but $e^{i\vec P\cdot\vec s}$ is the same for both, so the C code
+  cancels exactly. Not a measurement bug. Torelons: none zero.
+  Timings (2 ranks, 8^3 x 16, hot start): update 0.2 s, glueballs 8-10 s, torelons 0.25 s, Wilson flow
+  45-48 s, h5 backup + append < 0.02 s. Scaled to 24^3 x 48 (x81): update ~32 core-s, glueballs ~1500
+  core-s (matches the estimate), flow ~7500 core-s (3-7x above the estimate; hot configuration, to
+  re-measure on a thermalised one in Chunk 4).
 
 ### Chunk 3 -- small-lattice checks ($8^3 \times 16$, minutes)
 (a) plaquette sane; C=- operators nonzero; (b) resume test: 40 measurements straight vs 20 + resume

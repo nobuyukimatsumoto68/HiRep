@@ -6,6 +6,10 @@
 #include <string.h>
 #define ntors 63
 static hr_complex *tor_path_storage = NULL;
+static hr_complex poly0(int in) {
+    return polyleg(in, 1)->tr;
+}
+
 static hr_complex poly3(int in) {
     suNg *w1, *w2;
     suNg res, res1;
@@ -30,10 +34,6 @@ static hr_complex poly3(int in) {
     _suNg_times_suNg(res, res1, wl->p[0]);
     _suNg_trace(p, res);
     return p;
-}
-
-static hr_complex poly0(int in) {
-    return polyleg(in, 1)->tr;
 }
 
 static hr_complex poly11(int in) {
@@ -62,6 +62,10 @@ static hr_complex poly11(int in) {
     return p;
 }
 
+static hr_complex poly1(int in) {
+    return polyleg(in, 2)->tr;
+}
+
 static hr_complex poly6(int in) {
     suNg *w1, *w2;
     suNg res, res1;
@@ -85,10 +89,6 @@ static hr_complex poly6(int in) {
     _suNg_times_suNg(res, res1, wl->p[0]);
     _suNg_trace(p, res);
     return p;
-}
-
-static hr_complex poly1(int in) {
-    return polyleg(in, 2)->tr;
 }
 
 static hr_complex poly12(int in) {
@@ -117,6 +117,10 @@ static hr_complex poly12(int in) {
     return p;
 }
 
+static hr_complex poly2(int in) {
+    return polyleg(in, 3)->tr;
+}
+
 static hr_complex poly7(int in) {
     suNg *w1, *w2;
     suNg res, res1;
@@ -140,10 +144,6 @@ static hr_complex poly7(int in) {
     _suNg_times_suNg(res, res1, wl->p[0]);
     _suNg_trace(p, res);
     return p;
-}
-
-static hr_complex poly2(int in) {
-    return polyleg(in, 3)->tr;
 }
 
 static hr_complex poly8(int in) {
@@ -176,7 +176,30 @@ static hr_complex c0;
 static inline hr_complex diPoly_p_m1_1_1_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) -
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) -
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) -
+           c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) -
+           c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]);
 }
 
 static hr_complex poly15(int in) {
@@ -386,7 +409,30 @@ static hr_complex poly29(int in) {
 static inline hr_complex diPoly_p_m1_1_1_Ir_1_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) -
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) -
+           c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) -
+           c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_m1_1_1_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -467,13 +513,59 @@ static inline hr_complex diPoly_p_m1_1_1_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_m1_1_1_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])-c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) -
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) -
+           c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) +
+           c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) -
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) -
+           c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]);
 }
 
 static inline hr_complex diPoly_p_m1_1_1_Ir_2_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])-c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) -
+           c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) -
+           c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) -
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_m1_1_1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -537,25 +629,117 @@ static inline hr_complex diPoly_p_m1_1_1_Ir_2_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_m1_1_1_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.73205080756887729)*c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.73205080756887729)*c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.73205080756887729)*c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.73205080756887729)*c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(+I*1.73205080756887729)*c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(+I*1.73205080756887729)*c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx]);
+    return +(-I * 1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (+I * 1.73205080756887729) * c0 *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (-I * 1.73205080756887729) * c0 *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (-I * 1.73205080756887729) * c0 *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           (-I * 1.73205080756887729) * c0 *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (+I * 1.73205080756887729) * c0 *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (+I * 1.73205080756887729) * c0 *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]);
 }
 
 static inline hr_complex diPoly_p_m1_1_1_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(2.)*c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(-2.)*c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) -
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) -
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (2.) * c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) -
+           c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (-2.) * c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]);
 }
 
 static inline hr_complex diPoly_p_m1_1_1_Ir_3_C_m1_n_3(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.73205080756887729)*c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.73205080756887729)*c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.73205080756887729)*c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.73205080756887729)*c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(+I*1.73205080756887729)*c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-I*1.73205080756887729)*c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return +(-I * 1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-I * 1.73205080756887729) * c0 *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (+I * 1.73205080756887729) * c0 *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (-I * 1.73205080756887729) * c0 *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (+I * 1.73205080756887729) * c0 *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (+I * 1.73205080756887729) * c0 *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-I * 1.73205080756887729) * c0 *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_m1_1_1_Ir_3_C_m1_n_4(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*c0*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-2.)*c0*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+c0*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) -
+           c0 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) -
+           c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (2.) * c0 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-2.) * c0 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           c0 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_m1_1_1_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -2115,7 +2299,198 @@ static hr_complex poly46(int in) {
 static inline hr_complex diPoly_p_0_0_0_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -2540,7 +2915,198 @@ static inline hr_complex diPoly_p_0_0_0_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_0_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -2796,13 +3362,363 @@ static inline hr_complex diPoly_p_0_0_0_Ir_2_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_0_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -3302,37 +4218,720 @@ static inline hr_complex diPoly_p_0_0_0_Ir_3_C_1_n_6(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_0_Ir_4_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])+(+I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])+(-4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx])+(+I*4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+(4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx])+(-I*4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])+(-4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +(-I * 4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (-4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) +
+           (-I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) +
+           (4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           (-4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) +
+           (+I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) +
+           (-4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]) +
+           (+I * 4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           (4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) +
+           (-4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_4_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(5.6568542494923802)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(-5.6568542494923802)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(-5.6568542494923802)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(5.6568542494923802)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx]);
+    return +(5.6568542494923802) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-5.6568542494923802) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (-5.6568542494923802) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (5.6568542494923802) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (5.6568542494923802) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (-5.6568542494923802) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (-5.6568542494923802) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (5.6568542494923802) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_4_C_m1_n_3(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])+(+I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])+(4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(-4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx])+(+I*4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+(-4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx])+(-I*4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])+(4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +(-I * 4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (-4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) +
+           (-I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) +
+           (-4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           (4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) +
+           (+I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) +
+           (4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (-4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]) +
+           (+I * 4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           (-4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) +
+           (4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_4_C_m1_n_4(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_4_C_m1_n_5(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_4_C_m1_n_6(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_4_C_1_n_1(int x1, int y1, int z1) {
@@ -3961,37 +5560,720 @@ static inline hr_complex diPoly_p_0_0_0_Ir_4_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_0_Ir_5_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])+(-I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])+(4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(-4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx])+(+I*4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+(4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx])+(-I*4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])+(-4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +(-I * 4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (-4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (-I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) +
+           (-4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           (4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) +
+           (+I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) +
+           (4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (-4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]) +
+           (+I * 4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           (4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) +
+           (-4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_5_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-5.6568542494923802)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(5.6568542494923802)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(-5.6568542494923802)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(5.6568542494923802)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx]);
+    return +(5.6568542494923802) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-5.6568542494923802) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (5.6568542494923802) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (-5.6568542494923802) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (-5.6568542494923802) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (5.6568542494923802) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (-5.6568542494923802) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (5.6568542494923802) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_5_C_m1_n_3(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])+(+I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])+(4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(-4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx])+(-I*4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+(4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx])+(+I*4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])+(-4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +(+I * 4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (-I * 4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (-4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) +
+           (-I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) +
+           (-4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           (4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) +
+           (+I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) +
+           (4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (-4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           (4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]) +
+           (+I * 4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) +
+           (-4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_5_C_m1_n_4(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_5_C_m1_n_5(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_5_C_m1_n_6(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_5_C_1_n_1(int x1, int y1, int z1) {
@@ -4620,7 +6902,198 @@ static inline hr_complex diPoly_p_0_0_0_Ir_5_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_0_Ir_6_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_6_C_1_n_1(int x1, int y1, int z1) {
@@ -4823,7 +7296,198 @@ static inline hr_complex diPoly_p_0_0_0_Ir_6_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_0_Ir_7_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_7_C_1_n_1(int x1, int y1, int z1) {
@@ -5026,13 +7690,364 @@ static inline hr_complex diPoly_p_0_0_0_Ir_7_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_0_Ir_8_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(-2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (-2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_8_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(-1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(-1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (1.73205080756887729) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (-1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (1.73205080756887729) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (-1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_8_C_1_n_1(int x1, int y1, int z1) {
@@ -5401,37 +8416,719 @@ static inline hr_complex diPoly_p_0_0_0_Ir_8_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_0_Ir_9_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(-I*4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])+(4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+(-I*4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx])+(4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])+(-I*4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +(-4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (-4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (-4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) +
+           (4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]) +
+           (4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_9_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(5.6568542494923802)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-5.6568542494923802)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])+(-5.6568542494923802)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])+(-5.6568542494923802)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(-5.6568542494923802)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx]);
+    return +(5.6568542494923802) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) +
+           (5.6568542494923802) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) +
+           (5.6568542494923802) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           (5.6568542494923802) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) +
+           (-5.6568542494923802) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) +
+           (-5.6568542494923802) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) +
+           (-5.6568542494923802) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (-5.6568542494923802) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_9_C_m1_n_3(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(4.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(-I*4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(-4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])+(-4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+(-I*4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx])+(-4.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])+(-I*4.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +(4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (4.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (+I * 4.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (-4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) +
+           (-4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]) +
+           (-4.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) +
+           (-I * 4.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_9_C_m1_n_4(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_9_C_m1_n_5(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_9_C_m1_n_6(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(-1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(-1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(-1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (-1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (-1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_9_C_1_n_1(int x1, int y1, int z1) {
@@ -6155,37 +9852,848 @@ static inline hr_complex diPoly_p_0_0_0_Ir_9_C_1_n_6(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_0_Ir_10_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(-2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])+(2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+(-2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx])+(2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])+(-2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +(2.8284271247461901 - I * 2.8284271247461901) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (2.8284271247461901 - I * 2.8284271247461901) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (-2.8284271247461901 + I * 2.8284271247461901) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (-2.8284271247461901 + I * 2.8284271247461901) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (-2.8284271247461901 - I * 2.8284271247461901) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (-2.8284271247461901 - I * 2.8284271247461901) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (2.8284271247461901 + I * 2.8284271247461901) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (2.8284271247461901 + I * 2.8284271247461901) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (2.8284271247461901 + I * 2.8284271247461901) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (2.8284271247461901 + I * 2.8284271247461901) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (-2.8284271247461901 + I * 2.8284271247461901) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-2.8284271247461901 + I * 2.8284271247461901) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) +
+           (2.8284271247461901 - I * 2.8284271247461901) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           (-2.8284271247461901 - I * 2.8284271247461901) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]) +
+           (2.8284271247461901 - I * 2.8284271247461901) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) +
+           (-2.8284271247461901 - I * 2.8284271247461901) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_10_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-4.+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-4.+I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(4.-I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(4.-I*4.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(4.-I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])+(4.-I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])+(-4.+I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(-4.+I*4.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx]);
+    return +(-4. + I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) +
+           (-4. + I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) +
+           (4. - I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           (4. - I * 4.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) +
+           (4. - I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) +
+           (4. - I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) +
+           (-4. + I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (-4. + I * 4.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_10_C_m1_n_3(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(-2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(-2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])+(2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+(2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx])+(2.8284271247461901-I*2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])+(2.8284271247461901+I*2.8284271247461901)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +(2.8284271247461901 - I * 2.8284271247461901) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (2.8284271247461901 - I * 2.8284271247461901) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (-2.8284271247461901 + I * 2.8284271247461901) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (-2.8284271247461901 + I * 2.8284271247461901) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (2.8284271247461901 + I * 2.8284271247461901) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (2.8284271247461901 + I * 2.8284271247461901) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (-2.8284271247461901 - I * 2.8284271247461901) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (-2.8284271247461901 - I * 2.8284271247461901) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (-2.8284271247461901 - I * 2.8284271247461901) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (-2.8284271247461901 - I * 2.8284271247461901) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (-2.8284271247461901 + I * 2.8284271247461901) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-2.8284271247461901 + I * 2.8284271247461901) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) +
+           (2.8284271247461901 - I * 2.8284271247461901) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           (2.8284271247461901 + I * 2.8284271247461901) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]) +
+           (2.8284271247461901 - I * 2.8284271247461901) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) +
+           (2.8284271247461901 + I * 2.8284271247461901) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_10_C_m1_n_4(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_10_C_m1_n_5(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.-I*1.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(1.-I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(-1.+I*1.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(1.-I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(-1.+I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(-1.+I*1.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(1.-I*1.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (-1. + I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (1. - I * 1.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (-1. + I * 1.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (1. - I * 1.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_10_C_m1_n_6(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[51+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[59+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[22+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[44+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[26+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[52+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[31+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[28+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[47+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(-1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[21+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[29+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])+(1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[45+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[56+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[16+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[53+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[39+idx])+(-1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx])+(1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[62+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(-I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[47 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[56 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[39 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[51 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[59 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[26 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[52 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[16 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[53 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[62 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[22 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[44 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[31 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[28 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[21 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[29 + idx]) +
+           (-1.41421356237309505) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[45 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[51 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[59 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[22 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[44 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[26 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[52 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[31 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[28 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[47 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (-1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[21 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[29 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[45 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[56 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[16 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[53 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[39 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[62 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_0_Ir_10_C_1_n_1(int x1, int y1, int z1) {
@@ -7037,7 +11545,38 @@ static inline hr_complex diPoly_p_0_0_0_Ir_10_C_1_n_6(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_1_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_1_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -7114,13 +11653,59 @@ static inline hr_complex diPoly_p_0_0_1_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_1_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(2.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(-2.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx]);
+    return +(2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (-2.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (2.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (2.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (-2.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_1_Ir_2_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -7163,25 +11748,86 @@ static inline hr_complex diPoly_p_0_0_1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_1_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(+I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*2.8284271247461901)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(-I*2.8284271247461901)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx]);
+    return +(+I * 2.8284271247461901) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (+I * 2.8284271247461901) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (-I * 2.8284271247461901) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (-I * 2.8284271247461901) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_1_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx]);
+    return +(2.8284271247461901) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (2.8284271247461901) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (-2.8284271247461901) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-2.8284271247461901) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_1_Ir_3_C_m1_n_3(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return +(+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_1_Ir_3_C_m1_n_4(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +(1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_1_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -7242,7 +11888,38 @@ static inline hr_complex diPoly_p_0_0_1_Ir_3_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_1_Ir_4_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_1_Ir_4_C_1_n_1(int x1, int y1, int z1) {
@@ -7319,13 +11996,59 @@ static inline hr_complex diPoly_p_0_0_1_Ir_4_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_0_1_Ir_5_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(2.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx]);
+    return +(2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (2.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (-2.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (-2.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (2.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_1_Ir_5_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[27+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[17+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[40+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[40 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[27 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[17 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[27 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[17 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[40 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_0_1_Ir_5_C_1_n_1(int x1, int y1, int z1) {
@@ -7368,7 +12091,22 @@ static inline hr_complex diPoly_p_0_0_1_Ir_5_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_m1_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_m1_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -7417,13 +12155,35 @@ static inline hr_complex diPoly_p_0_1_m1_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_m1_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx]);
+    return +(-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_m1_Ir_2_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_m1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -7450,7 +12210,22 @@ static inline hr_complex diPoly_p_0_1_m1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_m1_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_m1_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -7490,13 +12265,35 @@ static inline hr_complex diPoly_p_0_1_m1_Ir_3_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_m1_Ir_4_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx]);
+    return +(2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_m1_Ir_4_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[55+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[55 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[55 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_m1_Ir_4_C_1_n_1(int x1, int y1, int z1) {
@@ -7523,7 +12320,38 @@ static inline hr_complex diPoly_p_0_1_m1_Ir_4_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_0_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_0_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -7592,7 +12420,38 @@ static inline hr_complex diPoly_p_0_1_0_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_0_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_0_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -7635,13 +12494,55 @@ static inline hr_complex diPoly_p_0_1_0_Ir_2_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_0_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx]);
+    return +(+I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_0_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return +(-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_0_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -7701,7 +12602,38 @@ static inline hr_complex diPoly_p_0_1_0_Ir_3_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_0_Ir_4_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_0_Ir_4_C_1_n_1(int x1, int y1, int z1) {
@@ -7770,7 +12702,38 @@ static inline hr_complex diPoly_p_0_1_0_Ir_4_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_0_Ir_5_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[36+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[37+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[32+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[32 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[36 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[37 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[36 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[37 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[32 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_0_Ir_5_C_1_n_1(int x1, int y1, int z1) {
@@ -7813,7 +12776,22 @@ static inline hr_complex diPoly_p_0_1_0_Ir_5_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_1_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_1_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -7862,13 +12840,35 @@ static inline hr_complex diPoly_p_0_1_1_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_1_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx]);
+    return +(-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_1_Ir_2_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -7895,7 +12895,22 @@ static inline hr_complex diPoly_p_0_1_1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_1_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_1_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -7935,13 +12950,35 @@ static inline hr_complex diPoly_p_0_1_1_Ir_3_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_0_1_1_Ir_4_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx]);
+    return +(2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_1_Ir_4_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[48+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[33+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[48 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[33 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[48 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[33 + idx]);
 }
 
 static inline hr_complex diPoly_p_0_1_1_Ir_4_C_1_n_1(int x1, int y1, int z1) {
@@ -7969,13 +13006,35 @@ static hr_complex c1;
 static inline hr_complex diPoly_p_1_m1_0_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(2.)*c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx]);
+    return +(2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-2.) * c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (2.) * c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_0_Ir_1_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_0_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -8028,7 +13087,22 @@ static inline hr_complex diPoly_p_1_m1_0_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_m1_0_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_0_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -8055,13 +13129,35 @@ static inline hr_complex diPoly_p_1_m1_0_Ir_2_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_m1_0_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(2.)*c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx]);
+    return +(-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-2.) * c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (2.) * c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_0_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_0_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -8114,7 +13210,22 @@ static inline hr_complex diPoly_p_1_m1_0_Ir_3_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_m1_0_Ir_4_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[24+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[24 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[24 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_0_Ir_4_C_1_n_1(int x1, int y1, int z1) {
@@ -8141,13 +13252,59 @@ static inline hr_complex diPoly_p_1_m1_0_Ir_4_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_m1_1_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_1_Ir_1_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_1_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -8228,13 +13385,59 @@ static inline hr_complex diPoly_p_1_m1_1_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_m1_1_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) -
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_1_Ir_2_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -8298,25 +13501,117 @@ static inline hr_complex diPoly_p_1_m1_1_Ir_2_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_m1_1_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.73205080756887729)*c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.73205080756887729)*c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(-I*1.73205080756887729)*c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(+I*1.73205080756887729)*c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +(-I * 1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (+I * 1.73205080756887729) * c1 *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) +
+           (-I * 1.73205080756887729) * c1 *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (+I * 1.73205080756887729) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           (-I * 1.73205080756887729) * c1 *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-I * 1.73205080756887729) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (+I * 1.73205080756887729) * c1 *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_1_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[6+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[7+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[6 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[7 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[6 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[7 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_1_Ir_3_C_m1_n_3(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.73205080756887729)*c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.73205080756887729)*c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.73205080756887729)*c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(-I*1.73205080756887729)*c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return +(-I * 1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-I * 1.73205080756887729) * c1 *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) +
+           (+I * 1.73205080756887729) * c1 *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (+I * 1.73205080756887729) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (+I * 1.73205080756887729) * c1 *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-I * 1.73205080756887729) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (-I * 1.73205080756887729) * c1 *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_1_Ir_3_C_m1_n_4(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[60+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[30+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+c1*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[25+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[60 + idx]) -
+           c1 * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[25 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[30 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[60 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[30 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           c1 * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[25 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_m1_1_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -8472,13 +13767,43 @@ static inline hr_complex diPoly_p_1_m1_1_Ir_3_C_1_n_6(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_m1_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_m1_Ir_1_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_m1_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -8539,13 +13864,43 @@ static inline hr_complex diPoly_p_1_0_m1_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_m1_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])-c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) -
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_m1_Ir_2_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])-c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) -
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_m1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -8593,13 +13948,43 @@ static inline hr_complex diPoly_p_1_0_m1_Ir_2_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_m1_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_m1_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_m1_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -8660,13 +14045,43 @@ static inline hr_complex diPoly_p_1_0_m1_Ir_3_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_m1_Ir_4_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])-c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) -
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_m1_Ir_4_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])-c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[43+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[43 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) -
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[43 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_m1_Ir_4_C_1_n_1(int x1, int y1, int z1) {
@@ -8714,13 +14129,59 @@ static inline hr_complex diPoly_p_1_0_m1_Ir_4_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_0_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx]);
+    return +(2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_0_Ir_1_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_0_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -8793,7 +14254,38 @@ static inline hr_complex diPoly_p_1_0_0_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_0_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_0_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -8836,25 +14328,86 @@ static inline hr_complex diPoly_p_1_0_0_Ir_2_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_0_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(+I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+(+I*2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx]);
+    return +(+I * 2.8284271247461901) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (-I * 2.8284271247461901) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (-I * 2.8284271247461901) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           (+I * 2.8284271247461901) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_0_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.8284271247461901)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(2.8284271247461901)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx]);
+    return +(2.8284271247461901) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-2.8284271247461901) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (-2.8284271247461901) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (2.8284271247461901) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_0_Ir_3_C_m1_n_3(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+(-I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+(+I*1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx]);
+    return +(+I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           (+I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           (-I * 1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           (-I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           (+I * 1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_0_Ir_3_C_m1_n_4(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+(-1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+(1.41421356237309505)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx]);
+    return +(1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           (1.41421356237309505) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           (-1.41421356237309505) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           (-1.41421356237309505) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           (1.41421356237309505) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_0_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -8945,13 +14498,59 @@ static inline hr_complex diPoly_p_1_0_0_Ir_3_C_1_n_4(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_0_Ir_4_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx]);
+    return +(2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_0_Ir_4_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_0_Ir_4_C_1_n_1(int x1, int y1, int z1) {
@@ -9015,7 +14614,38 @@ static inline hr_complex diPoly_p_1_0_0_Ir_4_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_0_Ir_5_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[41+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[49+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[58+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[41 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[49 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[58 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[41 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[49 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[58 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_0_Ir_5_C_1_n_1(int x1, int y1, int z1) {
@@ -9058,13 +14688,43 @@ static inline hr_complex diPoly_p_1_0_0_Ir_5_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_1_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_1_Ir_1_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_1_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -9125,13 +14785,43 @@ static inline hr_complex diPoly_p_1_0_1_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_1_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_1_Ir_2_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -9179,13 +14869,43 @@ static inline hr_complex diPoly_p_1_0_1_Ir_2_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_1_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_1_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_1_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -9246,13 +14966,43 @@ static inline hr_complex diPoly_p_1_0_1_Ir_3_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_0_1_Ir_4_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[9+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[10+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[9 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[10 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[9 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[10 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_1_Ir_4_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[42+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[46+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[42 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[46 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[42 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[46 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_0_1_Ir_4_C_1_n_1(int x1, int y1, int z1) {
@@ -9300,13 +15050,59 @@ static inline hr_complex diPoly_p_1_0_1_Ir_4_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_1_m1_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_m1_Ir_1_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_m1_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -9387,13 +15183,59 @@ static inline hr_complex diPoly_p_1_1_m1_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_1_m1_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])-c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) +
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) -
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_m1_Ir_2_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) -
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_m1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -9457,25 +15299,117 @@ static inline hr_complex diPoly_p_1_1_m1_Ir_2_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_1_m1_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.73205080756887729)*c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(+I*1.73205080756887729)*c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +(-I * 1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-I * 1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (+I * 1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (-I * 1.73205080756887729) * c1 *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (+I * 1.73205080756887729) * c1 *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (-I * 1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_m1_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(2.)*c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(-2.)*c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[13+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[14+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[13 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[14 + idx]) +
+           (2.) * c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (-2.) * c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[13 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[14 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_m1_Ir_3_C_m1_n_3(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-I*1.73205080756887729)*c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.73205080756887729)*c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx]);
+    return +(-I * 1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-I * 1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (+I * 1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) +
+           (-I * 1.73205080756887729) * c1 *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (+I * 1.73205080756887729) * c1 *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-I * 1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_m1_Ir_3_C_m1_n_4(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(2.)*c1*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[35+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(-2.)*c1*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[20+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[57+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[61+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[57 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[61 + idx]) -
+           c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[35 + idx]) +
+           (2.) * c1 * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[20 + idx]) +
+           c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[35 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (-2.) * c1 * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[20 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[57 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[61 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_m1_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -9631,13 +15565,35 @@ static inline hr_complex diPoly_p_1_1_m1_Ir_3_C_1_n_6(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_1_0_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(-2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx]);
+    return +(2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (2.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (-2.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (-2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_0_Ir_1_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_0_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -9690,7 +15646,22 @@ static inline hr_complex diPoly_p_1_1_0_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_1_0_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_0_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -9717,13 +15688,35 @@ static inline hr_complex diPoly_p_1_1_0_Ir_2_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_1_0_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(2.)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx]);
+    return +(-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (2.) * creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (-2.) * cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_0_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_0_Ir_3_C_1_n_1(int x1, int y1, int z1) {
@@ -9776,7 +15769,22 @@ static inline hr_complex diPoly_p_1_1_0_Ir_3_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_1_0_Ir_4_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return -cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[18+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[34+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx]);
+    return -creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[34 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[18 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[18 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[34 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_0_Ir_4_C_1_n_1(int x1, int y1, int z1) {
@@ -9803,13 +15811,59 @@ static inline hr_complex diPoly_p_1_1_0_Ir_4_C_1_n_1(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_1_1_Ir_1_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_1_Ir_1_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_1_Ir_1_C_1_n_1(int x1, int y1, int z1) {
@@ -9890,13 +15944,59 @@ static inline hr_complex diPoly_p_1_1_1_Ir_1_C_1_n_3(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_1_1_Ir_2_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_1_Ir_2_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[0+idx])-cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) -
+           creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) -
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) -
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_1_Ir_2_C_1_n_1(int x1, int y1, int z1) {
@@ -9960,25 +16060,117 @@ static inline hr_complex diPoly_p_1_1_1_Ir_2_C_1_n_2(int x1, int y1, int z1) {
 static inline hr_complex diPoly_p_1_1_1_Ir_3_C_m1_n_1(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx]);
+    return +(-I * 1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-I * 1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           (+I * 1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (+I * 1.73205080756887729) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) +
+           (-I * 1.73205080756887729) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (-I * 1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_1_Ir_3_C_m1_n_2(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[4+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[5+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[3+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[8+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[11+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[12+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[3 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[11 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[4 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[12 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[5 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[8 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[4 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[5 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[3 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[8 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[11 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[12 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_1_Ir_3_C_m1_n_3(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(+I*1.73205080756887729)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(-I*1.73205080756887729)*cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx]);
+    return +(-I * 1.73205080756887729) *
+               creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-I * 1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           (+I * 1.73205080756887729) *
+               creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (+I * 1.73205080756887729) *
+               creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (+I * 1.73205080756887729) *
+               cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) +
+           (-I * 1.73205080756887729) *
+               cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (-I * 1.73205080756887729) *
+               cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_1_Ir_3_C_m1_n_4(int x1, int y1, int z1) {
     int idx = ntors * (x1 + X * (y1 + Y * z1));
 
-return +cimag(tor_path_storage[creal(tor_path_storage[0+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[0+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+cimag(tor_path_storage[creal(tor_path_storage[1+idx])+(-2.)*cimag(tor_path_storage[creal(tor_path_storage[2+idx])+cimag(tor_path_storage[creal(tor_path_storage[2+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[19+idx])+(2.)*cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[23+idx])-cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[15+idx])-cimag(tor_path_storage[2+ntors * ((x1+X/2)%X + X * ((y1+Y/2)%Y + Y * z1))])*creal(tor_path_storage[38+idx])+(2.)*cimag(tor_path_storage[0+ntors * (x1 + X * ((y1+Y/2)%Y + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[50+idx])-cimag(tor_path_storage[1+ntors * ((x1+X/2)%X + X * (y1 + Y *((z1+Z/2)%Z)))])*creal(tor_path_storage[54+idx]);
+    return +creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[15 + idx]) +
+           (-2.) * creal(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[50 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[19 + idx]) +
+           creal(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               cimag(tor_path_storage[54 + idx]) +
+           (-2.) * creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[23 + idx]) +
+           creal(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               cimag(tor_path_storage[38 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[19 + idx]) +
+           (2.) * cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[23 + idx]) -
+           cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[15 + idx]) -
+           cimag(tor_path_storage[2 + ntors * ((x1 + X / 2) % X + X * ((y1 + Y / 2) % Y + Y * z1))]) *
+               creal(tor_path_storage[38 + idx]) +
+           (2.) * cimag(tor_path_storage[0 + ntors * (x1 + X * ((y1 + Y / 2) % Y + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[50 + idx]) -
+           cimag(tor_path_storage[1 + ntors * ((x1 + X / 2) % X + X * (y1 + Y * ((z1 + Z / 2) % Z)))]) *
+               creal(tor_path_storage[54 + idx]);
 }
 
 static inline hr_complex diPoly_p_1_1_1_Ir_3_C_1_n_1(int x1, int y1, int z1) {

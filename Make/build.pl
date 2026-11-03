@@ -123,6 +123,8 @@ my @libs = ("libhrobservables.a", "libhr.a", "libhrobservables.a"); #order is im
     "suN_multilevel_measure" => [ "suN_multilevel_measure.c", "suN_utils_multilevel.c", ],
     "suN_multilevel_measure_tune" => [ "suN_multilevel_measure_tune.c", "suN_utils_multilevel.c", ],
     "mk_glueballs" => [ "mk_1pt_glueballs.c", "suN_utils.c", ],
+    # quenched SU(N) HB+OR + glueballs/torelons/Wilson flow -> one h5 per stream (QuenchedSU4_claude)
+    "suN_glueballs_h5_claude" => [ "suN_glueballs_h5_claude.c", ],
   );
 
   add_exes($topdir, \%exes, \@libs);

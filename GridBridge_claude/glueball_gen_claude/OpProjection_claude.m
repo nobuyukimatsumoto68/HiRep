@@ -1257,7 +1257,12 @@ TorUniqueIndex[ain_]:=TorUniqueIdentifier[ain][[2]];
    paths=paths //.{A___,d_.  C1_[a1__][a2__]^2,B___}:> {A, {C1[a1],C1[a1],exp[a2]},B}/; Or[SameQ[C1,Pre],SameQ[C1,Pim]] ;
    paths=paths//. {{A___,Pre[b__],C___} :> {A,P[b],0,C}, {A___, Pim[b__],C___}:> {A,P[b],1,C}};
    paths=paths //.exp[nx_,ny_,nz_] -> Exp[I 2 Pi / L (px nx+py ny +pz nz)];
-   paths=paths //. {P[a1_],a2_,P[L[a3_]],a4_,a5_}:> {P[L[a3]],a2,P[a1],a4,a5}/;FreeQ[a1, L[_]];
+   (* original rule: matched single-step paths only, its FreeQ guard rejected every winding path
+      (they end in "+ L[..]"), and it swapped the paths without their Re/Im flags. Harmless for C=+
+      (L-line already first, equal flags); broke every C=- torelon (Im(path) Re(L-line) terms).
+      QuenchedSU4_claude/quenched_su4_glueball_impl_plan_claude.md, Chunk 2 bug.
+   paths=paths //. {P[a1_],a2_,P[L[a3_]],a4_,a5_}:> {P[L[a3]],a2,P[a1],a4,a5}/;FreeQ[a1, L[_]]; *)
+   paths=paths //. {P[a1__],a2_,P[L[a3_]],a4_,a5_}:> {P[L[a3]],a4,P[a1],a2,a5}/;Not[MatchQ[{a1}, {L[_]}]];
    paths=paths//.{P[L[a1_]]-> P[a1],P[a1__,b_+L[a_]]-> P[a1]};
     If[Not[AllTrue[paths[[All,1]], Not[FreeQ[#, P[__]]] &]],Print["1 The request operator has a non P based structure:",tor];Abort[]];
     If[Not[AllTrue[coeff, NumberQ[N[#]] &]],Print["2 The request operator has a non P based structure:",tor];Abort[]];

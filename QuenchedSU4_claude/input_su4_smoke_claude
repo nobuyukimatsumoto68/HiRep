@@ -1,0 +1,42 @@
+// Smoke test of PureGauge/suN_glueballs_h5_claude (Chunk 2): SU(4), 8^3 x 16, NP_T = 2,
+// 6 updates, measurement every 2 (glueballs + torelons + Wilson flow), h5 + checkpoints.
+GLB_T = 16
+GLB_X = 8
+GLB_Y = 8
+GLB_Z = 8
+NP_T = 2
+NP_X = 1
+NP_Y = 1
+NP_Z = 1
+
+N_REP = 1
+
+rlx_level = 1
+rlx_seed = 20261027
+
+// Wilson action, 1 heatbath + 4 overrelaxation sweeps per update
+beta = 11.045
+anisotropy = 1.0
+nhb = 1
+nor = 4
+
+// run control (n_update is additive on resume)
+n_update = 6
+ObsInterval = 2
+therm = 0
+h5file = glue_smoke_claude.h5
+
+// glueballs / torelons
+nblkstart = 0
+nblkend = 2
+APEsmear = 0.33
+
+// Wilson flow (topological charge): 2 = adaptive RK3
+WF:make = true
+WF:integrator = 2
+WF:tmax = 2.0
+WF:nmeas = 10
+WF:eps = 0.01
+WF:delta = 0.00001
+
+polyakov:make = false

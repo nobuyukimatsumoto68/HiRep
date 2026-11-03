@@ -182,3 +182,30 @@ future moving operator built from non-plaquette loops (e.g. a moving-frame varia
 `cN = cexp(I*PI*(<number>*gb_shift_unit)/GLB_X)` and recomputes the `c` constants on every
 evaluation, and `measure_1pt_glueballs` sets `gb_shift_unit = 1 << level` before evaluating each
 blocking level. See `glueball_mass_test_impl_plan_claude.md`.
+
+## 7. Bug: every C = - torelon operator generated malformed C code (verified + fixed 2026-10-27)
+
+**Symptom.** With C = - torelons (SU(4) set, `QuenchedSU4_claude/`), `torellons_op.c` failed to compile:
+`unterminated function-like macro invocation` in `diPoly_p_m1_1_1_Ir_1_C_m1_n_1`; the body read
+`cimag(tor_path_storage[creal(tor_path_storage[0+idx]) ...`, i.e. the first factor's index was missing.
+
+**Mechanism.** A torelon term is a product of a straight winding line `P[L[d]]` (written at the
+half-lattice-shifted site, index 0/1/2) and a winding path (written at the site). `DyPolyGenerateCcode`
+(`OpProjection.m`, line 1260 of the patched copy before the fix) moves the straight line to the
+first slot with
+
+    paths //. {P[a1_],a2_,P[L[a3_]],a4_,a5_} :> {P[L[a3]],a2,P[a1],a4,a5} /; FreeQ[a1, L[_]]
+
+which (i) matches only one-step paths (`a1_`), (ii) has a guard that rejects every winding path (they
+end in `+ L[d]`), and (iii) would swap the paths without their Re/Im flags. For C = + the terms are
+`Re Re` or `Im Im` and Mathematica already orders the straight line first, so the rule never had to
+fire. For C = - the terms are `Im(path) Re(line)` with the path first: the rule did not fire and the
+writer, which only knows indices 0/1/2 for the first factor, wrote nothing for it.
+
+**Fix** (`glueball_gen_claude/OpProjection_claude.m`, original rule kept as a comment):
+
+    paths //. {P[a1__],a2_,P[L[a3_]],a4_,a5_} :> {P[L[a3]],a4,P[a1],a2,a5} /; Not[MatchQ[{a1}, {L[_]}]]
+
+Checks: regenerated `su2rest` output identical (token stream) to the committed stage; regenerated SU(4)
+`half` set: all 288 torelon functions (130 with C = -) have balanced brackets and an index for both
+factors; the first previously broken function matches its Mathematica expression term by term.
