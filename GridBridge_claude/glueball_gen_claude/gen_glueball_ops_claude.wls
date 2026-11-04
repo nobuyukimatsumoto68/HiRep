@@ -123,6 +123,46 @@ If[genMode == "su4",
                    {1, 1, 0}, {1, -1, 0}, {1, 0, 1}, {1, 0, -1}, {0, 1, 1}, {0, 1, -1},
                    {1, 1, 1}, {1, 1, -1}, {1, -1, 1}, {-1, 1, 1}};
   genSu4Moms = Prepend[If[genMomSet == "half", genSu4MomHalf, genSu4MomRep], {0, 0, 0}];
+  (* Commented out: 32 single-trace operators of the half set that are IDENTICALLY ZERO as generated
+     (verified 2026-11-03: symbolically, every coefficient cancels in the C code, and numerically 0 on
+     every configuration/level/timeslice of the smoke run). The generator keeps two translated copies
+     of a loop as distinct symbols when their shifts differ, but e^{i P.s} is the same for both, so
+     the C code cancels (e.g. -M0 + M0 - M1 + M1 - c0 M2 + c0 M2). Only |P|^2 = 2, 3; shapes res[1],
+     res[3]; each is a complete multiplet. Slot numbers refer to the 1324-operator set.
+      Add1trOpCorrelators[-1, 1, 1, 1, 1, -1, res[1]];   slot 0
+      Add1trOpCorrelators[-1, 1, 1, 1, 1, -1, res[3]];   slot 2
+      Add1trOpCorrelators[-1, 1, 1, 2, 1, 1, res[1]];   slot 33
+      Add1trOpCorrelators[-1, 1, 1, 2, 1, 1, res[3]];   slot 35
+      Add1trOpCorrelators[-1, 1, 1, 3, 1, -1, res[1]];   slot 44
+      Add1trOpCorrelators[-1, 1, 1, 3, 2, -1, res[1]];   slot 55
+      Add1trOpCorrelators[0, 1, 1, 1, 1, -1, res[3]];   slot 634
+      Add1trOpCorrelators[0, 1, 1, 2, 1, 1, res[3]];   slot 665
+      Add1trOpCorrelators[0, 1, 1, 3, 1, 1, res[3]];   slot 684
+      Add1trOpCorrelators[0, 1, 1, 4, 1, -1, res[3]];   slot 694
+      Add1trOpCorrelators[1, -1, 0, 1, 1, -1, res[1]];   slot 710
+      Add1trOpCorrelators[1, -1, 0, 3, 1, 1, res[1]];   slot 757
+      Add1trOpCorrelators[1, -1, 1, 1, 1, -1, res[1]];   slot 782
+      Add1trOpCorrelators[1, -1, 1, 2, 1, 1, res[1]];   slot 813
+      Add1trOpCorrelators[1, -1, 1, 3, 1, -1, res[1]];   slot 822
+      Add1trOpCorrelators[1, -1, 1, 3, 2, -1, res[1]];   slot 833
+      Add1trOpCorrelators[1, 0, -1, 1, 1, -1, res[3]];   slot 866
+      Add1trOpCorrelators[1, 0, -1, 2, 1, -1, res[3]];   slot 885
+      Add1trOpCorrelators[1, 0, -1, 3, 1, 1, res[3]];   slot 908
+      Add1trOpCorrelators[1, 0, -1, 4, 1, 1, res[3]];   slot 928
+      Add1trOpCorrelators[1, 1, -1, 1, 1, -1, res[3]];   slot 1087
+      Add1trOpCorrelators[1, 1, -1, 2, 1, 1, res[3]];   slot 1119
+      Add1trOpCorrelators[1, 1, -1, 3, 1, -1, res[3]];   slot 1129
+      Add1trOpCorrelators[1, 1, -1, 3, 2, -1, res[3]];   slot 1139
+      Add1trOpCorrelators[1, 1, 0, 1, 1, -1, res[3]];   slot 1171
+      Add1trOpCorrelators[1, 1, 0, 2, 1, 1, res[3]];   slot 1199
+      Add1trOpCorrelators[1, 1, 0, 3, 1, 1, res[3]];   slot 1219
+      Add1trOpCorrelators[1, 1, 0, 4, 1, -1, res[3]];   slot 1228
+      Add1trOpCorrelators[1, 1, 1, 3, 1, -1, res[3]];   slot 1283
+      Add1trOpCorrelators[1, 1, 1, 3, 2, -1, res[3]];   slot 1293
+      Add1trOpCorrelators[1, 1, 1, 3, 1, 1, res[3]];   slot 1304
+      Add1trOpCorrelators[1, 1, 1, 3, 2, 1, res[3]];   slot 1315
+  *)
+  genSu4Skip = {{-1, 1, 1, 1, 1, -1, 1}, {-1, 1, 1, 1, 1, -1, 3}, {-1, 1, 1, 2, 1, 1, 1}, {-1, 1, 1, 2, 1, 1, 3}, {-1, 1, 1, 3, 1, -1, 1}, {-1, 1, 1, 3, 2, -1, 1}, {0, 1, 1, 1, 1, -1, 3}, {0, 1, 1, 2, 1, 1, 3}, {0, 1, 1, 3, 1, 1, 3}, {0, 1, 1, 4, 1, -1, 3}, {1, -1, 0, 1, 1, -1, 1}, {1, -1, 0, 3, 1, 1, 1}, {1, -1, 1, 1, 1, -1, 1}, {1, -1, 1, 2, 1, 1, 1}, {1, -1, 1, 3, 1, -1, 1}, {1, -1, 1, 3, 2, -1, 1}, {1, 0, -1, 1, 1, -1, 3}, {1, 0, -1, 2, 1, -1, 3}, {1, 0, -1, 3, 1, 1, 3}, {1, 0, -1, 4, 1, 1, 3}, {1, 1, -1, 1, 1, -1, 3}, {1, 1, -1, 2, 1, 1, 3}, {1, 1, -1, 3, 1, -1, 3}, {1, 1, -1, 3, 2, -1, 3}, {1, 1, 0, 1, 1, -1, 3}, {1, 1, 0, 2, 1, 1, 3}, {1, 1, 0, 3, 1, 1, 3}, {1, 1, 0, 4, 1, -1, 3}, {1, 1, 1, 3, 1, -1, 3}, {1, 1, 1, 3, 2, -1, 3}, {1, 1, 1, 3, 1, 1, 3}, {1, 1, 1, 3, 2, 1, 3}};
   Print["su4 momenta: ", genSu4Moms];
   (* single trace: every irrep / component / charge of the little group of each momentum *)
   Do[
@@ -130,7 +170,8 @@ If[genMode == "su4",
     genNirr = Length[bTOrthog[genP[[1]], genP[[2]], genP[[3]]]];
     Do[
       genDim = Length[bTOrthog[genP[[1]], genP[[2]], genP[[3]]][[genIr]]];
-      Do[Add1trOpCorrelators[genP[[1]], genP[[2]], genP[[3]], genIr, genE, genC, res[genK]],
+      Do[If[Not[MemberQ[genSu4Skip, {genP[[1]], genP[[2]], genP[[3]], genIr, genE, genC, genK}]],
+          Add1trOpCorrelators[genP[[1]], genP[[2]], genP[[3]], genIr, genE, genC, res[genK]]],
         {genK, genSu4Shapes}, {genE, 1, genDim}, {genC, {1, -1}}],
       {genIr, 1, genNirr}],
     {genI, 1, Length[genSu4Moms]}];

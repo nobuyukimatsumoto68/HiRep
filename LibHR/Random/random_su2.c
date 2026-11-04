@@ -24,6 +24,8 @@
 static int *i_vec = NULL, *i_y, *i_v;
 static double **vec1, **vec2, **vec3;
 static double **r, **u, **v, **y;
+/* number of per-thread buffer sets allocated by init_su2_rand (used by reset_su2_rand) */
+static int su2_rand_ntd = 0;
 
 static void init_su2_rand() {
     int ntd = 1;
@@ -34,6 +36,7 @@ static void init_su2_rand() {
     }
 #endif
     _OMP_PRAGMA(single) {
+        su2_rand_ntd = ntd;
         i_vec = malloc(sizeof(int) * ntd);
         i_y = malloc(sizeof(int) * ntd);
         i_v = malloc(sizeof(int) * ntd);
@@ -62,6 +65,22 @@ static void init_su2_rand() {
     }
     _OMP_BARRIER
 }
+
+/* Mark all pre-drawn random-number buffers as empty, so the next random_su2() call refills them from
+ * the current ranlxd state. Call it right before write_ranlxd_state(): the saved ranlxd state then
+ * fully determines the subsequent random_su2() stream, and a run resumed from that state (whose buffers
+ * start empty) reproduces the uninterrupted run bit for bit. Discards at most NRAN unused numbers per
+ * buffer, which does not bias anything. (QuenchedSU4_claude, Chunk 3.) Must be called outside a
+ * parallel region. */
+void reset_su2_rand(void) {
+    if (i_vec == NULL) { return; }
+    for (int i = 0; i < su2_rand_ntd; i++) {
+        i_vec[i] = NVEC;
+        i_y[i] = NRAN;
+        i_v[i] = NRAN;
+    }
+}
+
 static void update_vec(int tid) {
     int i;
 

@@ -248,11 +248,72 @@ log `tmp_build_smoke_claude.log`).**
   45-48 s, h5 backup + append < 0.02 s. Scaled to 24^3 x 48 (x81): update ~32 core-s, glueballs ~1500
   core-s (matches the estimate), flow ~7500 core-s (3-7x above the estimate; hot configuration, to
   re-measure on a thermalised one in Chunk 4).
+- **2026-11-03 (user: "check that they are zero, and comment out")**: all 32 verified SYMBOLICALLY zero
+  (every coefficient cancels in the generated C; they are exactly the symbolically-zero functions of the
+  set) in addition to numerically zero; each is a complete multiplet. Commented out at the source:
+  `gen_glueball_ops_claude.wls` su4 block lists the 32 `Add1trOpCorrelators[...]` calls in a comment and
+  skips them via `genSu4Skip`. Regenerated + installed: `total_n_glue_op 1292` (torelons 288 unchanged),
+  no symbolically zero op left. Rebuild + smoke rerun handed off (`tmp_claude.sh`, run dir
+  `runs_claude/smoke2`). The analysis channel map comes from the run log, so slot numbers of the 1324 set
+  (smoke run 1) do not apply to new runs.
+- **smoke2 PASSED (2026-11-03)**, `runs_claude/smoke2`: 1292 glue / 288 tor ops, no zero op, no empty
+  timeslice; same seed as smoke 1 -> plaquette, Q, torelons, topo bit-identical, and the 1292 kept glue
+  ops bit-identical to smoke 1 with its 32 zero slots removed. Chunk 2 closed.
+- TestProgram `check_utils_3_{gb,tor}_functions.c` (generator test tables, NG=3 tests only): user "no need to
+  commit if it can be easily reproduced" -> do not add; reproduced by `run_gen_su4_ops_claude.sh`. (Already
+  in commit 1d6601d5.)
 
 ### Chunk 3 -- small-lattice checks ($8^3 \times 16$, minutes)
 (a) plaquette sane; C=- operators nonzero; (b) resume test: 40 measurements straight vs 20 + resume
 20 -> h5 bit-identical; (c) crash-recovery test: h5 one row ahead of the checkpoint -> shrunk on resume.
 Files: `input_su4_small_claude`, `run_su4_small_claude.sh` (handed off via `tmp_claude.sh`).
+
+**Status 2026-11-03: handed off** (`tmp_claude.sh`, log `tmp_chunk3_claude.log`, dirs
+`runs_claude/chunk3/{A,C,S,D,E}`; input `input_su4_chunk3_claude`: ObsInterval 4, WF tmax 0.5 for speed).
+A = straight 12; C = 8 + resume 4 (test a: C == A); D = ckpt 8 + C's 3-row h5 (test b: shrink to 2
+rows, D == C); E = ckpt 8 + truncated h5 + 2-row .bak (test c: restore, E == C). Crash states built by
+copies into new dirs only. Possible outcome to watch: `LibHR/Random/random_su2.c` keeps buffered random
+numbers (NVEC) outside the ranlxd state, so (a) may differ beyond the first resumed update while (b)
+and (c) (same resume path as C) stay identical.
+
+**Run 1 result (2026-11-03, `runs_claude/chunk3`)**: (b) and (c) PASSED (shrink 3 -> 2 rows on all 5
+datasets / restore from .bak, then bit-identical to C; one checkpoint pair left per dir). (a) FAILED:
+identical through update 8 (plaq, Q at the checkpoint), diverged from update 9 (first resumed update).
+Cause: `random_su2.c` pre-draws random numbers into per-thread buffers (vec1-3, y/u, v; refilled NVEC/NRAN
+at a time) that are not part of the ranlxd state; HiRep's own heatbath programs have the same property
+(the other generators in LibHR/Random keep no such buffers).
+**Fix (user: "It should be exactly reproducible")**: new `reset_su2_rand()` in `LibHR/Random/random_su2.c`
+(core file, edited in place; declared in `Include/Random/random_utils.h`) marks all buffers empty; the
+driver calls it right before `write_ranlxd_state` in every checkpoint. Second condition, enforced at
+startup: `ObsInterval * (nhb + nor)` must be a multiple of 10 (`update_all` re-projects every
+PROJECT_INTERVAL = 10 sweeps, `update_hb.c:14`, with a counter that restarts on resume). Production
+20 x 5 and the test 4 x 5 satisfy it. Rerun: rebuild + same tests in `runs_claude/chunk3_fix`.
+
+**Run 2 result (2026-11-03, `runs_claude/chunk3_fix`)**: gauge field now exact (`ckpoint_lat.12`
+IDENTICAL A/C/D/E); plaq, glue, tor bit-identical in all comparisons; (b), (c) fully identical. Only
+`/topo` differed A vs C, and only its flow-time t = 0 row. **Bug found (our driver):** the t = 0 flow
+measurement (E, Esym, Q) reads neighbour links of the copy `Vwf` before any flow step, and
+`E_cpu`/`Esym_cpu`/`topo_cpu` (`LibHR/Update/gauge_observables.c`) do no halo exchange: the t = 0 row
+used stale halo links (A: halo of the previous flowed field; resumed run: fresh field). Verified with
+the exact identity $E(t=0) = 12 N_c (1 - \langle P \rangle)$: stored E(t=0) was 5-8 % too high in every
+row of every run so far (smoke, smoke2, chunk3*); t > 0 rows were correct (each flow step exchanges
+first). HiRep's own `suN.c` uses the same copy + `WF_update_and_measure` pattern (not tested).
+**Fix:** `start_sendrecv_suNg_field(Vwf); complete_sendrecv_suNg_field(Vwf);` right after the copy in
+the driver. Rerun: rebuild + tests in `runs_claude/chunk3_fix2`, with an added check
+$\max |E(t=0) - 12 N_c (1 - \langle P \rangle)|$. Data of the earlier test runs: t = 0 row of `/topo` invalid.
+
+**Central fix (user: "better fix it", 2026-11-03).** `copy_suNg_field` copies local sites only
+(`LibHR/Inverters/TMPL/linear_algebra_base.c.tmpl:26`), so EVERY PureGauge program that flows a copy
+(`suN.c`, `suN_multilevel*.c`, `mk_1pt_glueballs*.c`, our `hmc_glueballs_grid*_claude.c`,
+`mk_1pt_glueballs_from_grid_claude.c`) has the stale-halo t = 0 bug with > 1 MPI rank, in all checkouts
+(`hirep_su4` su4, `hirep_workspace/HiRep` HiRep-CUDA, `HiRep2`). Not affected: `WilsonFlow/WF_measure.c` and
+`TestProgram/StoredConfs` (they flow `u_gauge` right after `read_gauge_field`, which exchanges). No SU(2)
+result is affected (all hirep_workspace run inputs have `WF:make = false`). Fixed in
+`LibHR/Utils/wilsonflow.c` `WF_update_and_measure`: `start_sendrecv_suNg_field(V);
+complete_sendrecv_suNg_field(V);` before the t = 0 measurement (start_sendrecv completes any pending
+exchange first, so safe for every caller), in BOTH `hirep_su4` (su4) and `hirep_workspace/HiRep`
+(HiRep-CUDA, uncommitted; user commits). The driver-local exchange is commented out (kept in place).
+`HiRep2` NOT touched (separate tree). Upstream claudiopica/HiRep has the same code: issue/PR = user's call.
 
 ### Chunk 4 -- benchmark on $24^3 \times 48$
 Few updates + 2 measurements with `NP_T = 8` and `16`; memory high-water mark. Replace the estimate

@@ -29,6 +29,7 @@ void gaussian_suNg_vector(suNg_vector *v);
 
 // random_su2.c
 void random_su2(double rho, double s[]);
+void reset_su2_rand(void); /* empty the pre-drawn buffers; call before write_ranlxd_state for exact resume */
 
 // random_fields.c
 void random_u(suNg_field *gf);

@@ -495,6 +495,14 @@ data_storage_array *WF_update_and_measure(WF_integrator_type wft, suNg_field *V,
     double epsilon_new = *eps;
     double epsilon_meas = 0;
 
+    /* The t = 0 measurement (E, Esym, topo do no communication) reads neighbour links of V before
+     * any flow step: exchange the halo first. Callers that flow a copy made with copy_suNg_field
+     * (local sites only, e.g. all PureGauge programs) otherwise measure t = 0 with stale halo links
+     * when running on more than one MPI rank. start_sendrecv completes any pending exchange first.
+     * (Found 2026-11-03, QuenchedSU4_claude Chunk 3: E(t=0) was 5-8 % off 12 NG (1 - plaq).) */
+    start_sendrecv_suNg_field(V);
+    complete_sendrecv_suNg_field(V);
+
     WF_measure_and_store(V, swc, &ret, nmeas, k, &t);
 
     while (t < *tmax) {

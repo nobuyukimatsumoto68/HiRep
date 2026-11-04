@@ -26,7 +26,9 @@
  *
  * Resume: environment CheckpointStart=<n> loads ckpoint_{lat,rng}.<n>. The h5 is opened (restored
  *   from <h5>.bak if it cannot be opened) and shrunk to the rows with traj <= n. The ranlxd state
- *   is per rank: resume with the same NP_T.
+ *   is per rank: resume with the same NP_T. The resume is bit-identical to an uninterrupted run:
+ *   random_su2 buffers are emptied before each RNG save (reset_su2_rand) and ObsInterval * (nhb+nor)
+ *   must be a multiple of 10 (re-projection counter phase, checked at startup).
  * n_update is ADDITIVE: a run performs updates start+1 .. start+n_update.
  *
  * h5 layout (datasets extendable along axis 0, one row per measurement):
@@ -328,6 +330,9 @@ static void save_checkpoint(int n, int prev) {
     char rng[64];
     ckpt_names(n, lat, rng);
     write_gauge_field(lat);
+    /* random_su2 keeps pre-drawn numbers outside the ranlxd state: empty them first, so the saved
+     * state alone fixes the continuation and a resume is bit-identical to the uninterrupted run */
+    reset_su2_rand();
     write_ranlxd_state(rng);
     lprintf("CKPT", 0, "saved %s %s\n", lat, rng);
     if (prev >= 0 && PID == 0) {
@@ -364,6 +369,11 @@ int main(int argc, char *argv[]) {
     error(NP_X != 1 || NP_Y != 1 || NP_Z != 1, 1, "main", "only NP_T > 1 is supported");
     error(GLB_T % NP_T != 0, 1, "main", "GLB_T must be divisible by NP_T");
     error(run_var.ObsInterval < 1, 1, "main", "ObsInterval must be >= 1");
+    /* exact resume: update_all() re-projects the links every PROJECT_INTERVAL = 10 sweeps
+     * (LibHR/Update/update_hb.c:14) with a counter that restarts on resume; it is in phase at every
+     * checkpoint only if the sweeps between checkpoints are a multiple of 10 */
+    error((run_var.ObsInterval * (pg_var.nhb + pg_var.nor)) % 10 != 0, 1, "main",
+          "exact resume needs ObsInterval * (nhb + nor) to be a multiple of 10 (update_hb.c PROJECT_INTERVAL)");
 
     lprintf("MAIN", 0, "beta=%lf nhb=%d nor=%d\n", pg_var.beta, pg_var.nhb, pg_var.nor);
     lprintf("MAIN", 0, "n_update=%d ObsInterval=%d therm=%d h5file=%s\n", run_var.n_update, run_var.ObsInterval,
@@ -481,6 +491,12 @@ int main(int argc, char *argv[]) {
         /* 1c. Wilson flow on a copy: (t, E, Esym, Q) at nflow flow times */
         gettimeofday(&start, 0);
         copy_suNg_field(Vwf, u_gauge);
+        /* the t = 0 measurement (E, Esym, Q) reads neighbour links of Vwf before any flow step, and
+         * E/Esym/topo do no communication themselves: the halo must be exchanged first (without it the
+         * t = 0 row used stale halo links: E 5-8 % off 12 NG (1 - plaq), not reproducible on resume).
+         * Now done centrally at the start of WF_update_and_measure (LibHR/Utils/wilsonflow.c).
+        start_sendrecv_suNg_field(Vwf);
+        complete_sendrecv_suNg_field(Vwf); */
         data_storage_array *wf = WF_update_and_measure(WF_var.ittype, Vwf, &(WF_var.tmax), &(WF_var.eps),
                                                        &(WF_var.delta), WF_var.nmeas, STORE);
         for (int k = 0; k < nflow; k++) {

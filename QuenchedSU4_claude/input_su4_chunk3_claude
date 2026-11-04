@@ -1,0 +1,39 @@
+// Chunk 3 tests (resume / crash recovery) of PureGauge/suN_glueballs_h5_claude: SU(4), 8^3 x 16,
+// NP_T = 2, measurement every 4 updates, short Wilson flow (t = 0.5) to keep the tests fast.
+// NUPDATE is replaced by the test script (n_update is additive on resume).
+GLB_T = 16
+GLB_X = 8
+GLB_Y = 8
+GLB_Z = 8
+NP_T = 2
+NP_X = 1
+NP_Y = 1
+NP_Z = 1
+
+N_REP = 1
+
+rlx_level = 1
+rlx_seed = 20261103
+
+beta = 11.045
+anisotropy = 1.0
+nhb = 1
+nor = 4
+
+n_update = NUPDATE
+ObsInterval = 4
+therm = 0
+h5file = glue_c3_claude.h5
+
+nblkstart = 0
+nblkend = 2
+APEsmear = 0.33
+
+WF:make = true
+WF:integrator = 2
+WF:tmax = 0.5
+WF:nmeas = 5
+WF:eps = 0.01
+WF:delta = 0.00001
+
+polyakov:make = false
