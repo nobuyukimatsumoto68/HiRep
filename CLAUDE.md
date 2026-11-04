@@ -2,7 +2,26 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Start here: Grid-in-HiRep glueball project (branch HiRep-CUDA)
+## Start here on branch su4: quenched SU(4) glueball study (this clone, /mnt/baracuda_14/hirep_su4)
+
+Quenched SU(4) Wilson action, 24^3 x 48, beta = 11.045, HiRep heatbath + overrelaxation, with in-process
+glueball (1292 ops) / torelon (288 ops) / Wilson-flow topology measurements appended to ONE h5 per stream;
+only the latest checkpoint pair is kept. Read first:
+
+1. `QuenchedSU4_claude/quenched_su4_glueball_impl_plan_claude.md` - plan, all decisions, chunk results, costs
+2. `GridBridge_claude/glueball_generator_audit_claude.md` sections 6-7 - generator bugs fixed (shift phase,
+   C=- torelons); operator set = generator mode `su4 half` minus 32 identically-zero ops (`genSu4Skip`)
+
+Key facts: NG = 4 build (`Make/MkFlags.ini` = `Make/MkFlags_su4_claude.ini`, no Grid); build with
+`QuenchedSU4_claude/build_su4_claude.sh`; driver `PureGauge/suN_glueballs_h5_claude.c` (resume via env
+`CheckpointStart=<n>`, `n_update` additive, resume bit-exact: needs `reset_su2_rand` before each RNG save
+and `ObsInterval * (nhb + nor)` a multiple of 10; `FlowInterval` sets the flow cadence). Core HiRep fixes on
+this branch: `LibHR/Random/random_su2.c` (`reset_su2_rand`), `LibHR/Utils/wilsonflow.c` (halo exchange
+before the t = 0 flow measurement). Runs go in `QuenchedSU4_claude/runs_claude/<name>/`; stream 1 =
+`runs_claude/stream1_24c_b11p045/`. Compiling and MPI runs are handed off via `QuenchedSU4_claude/tmp_claude.sh`
+(user runs it); local runs use at most 4 cores. The user commits; give a `git add` list.
+
+## Grid-in-HiRep glueball project (branch HiRep-CUDA; SU(2), not this branch's build)
 
 This fork drives Grid's SU(2) HMC from HiRep and measures glueball 1-point functions in the same
 process. Before anything else, read in this order:

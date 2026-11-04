@@ -1,0 +1,47 @@
+// Quenched SU(4) production stream 1: 24^3 x 48, Wilson action beta = 11.045 (bare beta of the
+// dynamical m0.4 ensemble), HiRep heatbath + overrelaxation, in-process glueballs / torelons /
+// Wilson-flow topology -> one h5 per stream. Plan: QuenchedSU4_claude/quenched_su4_glueball_impl_plan_claude.md.
+// Segment 2 (resume CheckpointStart=540): n_update = 2000 -> measurements 560..2540 (100), flow every 100 (20).
+// Continue: CheckpointStart=<last> with n_update = <more> (additive; resume is bit-exact).
+GLB_T = 48
+GLB_X = 24
+GLB_Y = 24
+GLB_Z = 24
+NP_T = 4
+NP_X = 1
+NP_Y = 1
+NP_Z = 1
+
+N_REP = 1
+
+rlx_level = 1
+rlx_seed = 20261103
+
+// Wilson action, 1 heatbath + 4 overrelaxation sweeps per update
+beta = 11.045
+anisotropy = 1.0
+nhb = 1
+nor = 4
+
+// run control: measurements at n > therm with n % ObsInterval == 0
+// (ObsInterval * (nhb + nor) must be a multiple of 10 for exact resume)
+n_update = 2000
+ObsInterval = 20
+therm = 500
+FlowInterval = 100
+h5file = glue_su4_24c_b11p045_s1_claude.h5
+
+// glueballs / torelons: blocking levels 0-3 (24 -> 12 -> 6 -> 3), APE 0.33
+nblkstart = 0
+nblkend = 3
+APEsmear = 0.33
+
+// Wilson flow to t/a^2 = 2 (topological charge), adaptive RK3, 10 measurements along the flow
+WF:make = true
+WF:integrator = 2
+WF:tmax = 2.0
+WF:nmeas = 10
+WF:eps = 0.01
+WF:delta = 0.00001
+
+polyakov:make = false

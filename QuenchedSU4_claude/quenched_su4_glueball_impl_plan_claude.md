@@ -1,6 +1,6 @@
 # Quenched SU(4) glueballs: HiRep heatbath + in-process glue operators -> one h5 per stream
 
-Status: Chunk 1 DONE 2026-10-27 (half set installed); Chunk 2 DONE (build + smoke run passed 2026-11-02); Chunk 3 next. Repo: /mnt/baracuda_14/hirep_su4 (branch su4).
+Status: Chunks 1-4 DONE; stream 1 segment 2 RUNNING since 2026-11-04 17:15 (100 measurements, flow every 5th; machine load ~26 -> ETA ~60 h). Next: h5 analysis script. Repo: /mnt/baracuda_14/hirep_su4 (branch su4).
 
 ## Algorithm sources
 
@@ -315,10 +315,55 @@ exchange first, so safe for every caller), in BOTH `hirep_su4` (su4) and `hirep_
 (HiRep-CUDA, uncommitted; user commits). The driver-local exchange is commented out (kept in place).
 `HiRep2` NOT touched (separate tree). Upstream claudiopica/HiRep has the same code: issue/PR = user's call.
 
+**Run 3 (driver-local halo fix) PASSED 2026-11-03 13:05, `runs_claude/chunk3_fix2`:** `ckpoint_lat.12`
+IDENTICAL A/C/D/E; traj, plaq, glue, tor, topo bit-identical in all comparisons (a), (b), (c);
+$\max |E(t=0) - 12 N_c (1-\langle P\rangle)| = 8.9 \times 10^{-14}$ in all runs. Run 4 (central fix only)
+handed off: `runs_claude/chunk3_fix3`.
+**Run 4 (central fix only) PASSED 2026-11-03 20:11:** same all-identical result, E(t=0) identity 8.9e-14,
+and every dataset + `ckpoint_lat.12` bit-identical to run 3. **CHUNK 3 DONE**: resume is exact.
+
 ### Chunk 4 -- benchmark on $24^3 \times 48$
 Few updates + 2 measurements with `NP_T = 8` and `16`; memory high-water mark. Replace the estimate
 table above; choose `NP_T`, `ObsInterval`, thermalisation length.
 Files: `input_su4_24c_bench_claude`, `run_su4_24c_bench_claude.sh`.
+
+**Status 2026-11-03: handed off as the FIRST SEGMENT OF PRODUCTION STREAM 1** (resume is exact):
+`QuenchedSU4_claude/tmp_claude.sh` -> log `tmp_bench24c_claude.log`, run dir
+`runs_claude/stream1_24c_b11p045/`, input `input_su4_24c_claude` (24^3 x 48, NP_T = 4, beta 11.045,
+1 HB + 4 OR, therm 500, ObsInterval 20, n_update 540 -> measurements at 520, 540; levels 0-3, APE 0.33;
+WF adaptive RK3 to t = 2, nmeas 10; rlx_seed 20261103; h5 `glue_su4_24c_b11p045_s1_claude.h5`).
+Memory sampler (RSS per rank every 60 s). Machine load average ~10 at hand-off: timings pessimistic.
+Continue the stream with `CheckpointStart=540` and a new `n_update`.
+
+**Chunk 4 RESULT (2026-11-03 20:20-23:00, stream 1 segment 1 DONE, 9605 s wall, exit 0)**, NP_T = 4,
+machine load average 7-10 from other jobs:
+
+| step | wall (4 ranks) | core-s | estimate was |
+|---|---|---|---|
+| update (1 HB + 4 OR) | 9-11 s | ~38 | 45-90 (smoke scaling 32) |
+| glueballs (1292 ops, levels 0-3) | 616-622 s | ~2470 | ~1500 |
+| torelons (288 ops) | 10 s | 40 | -- |
+| Wilson flow to t = 2 (adaptive RK3, delta 1e-5) | 1367-1563 s | ~5900 | ~7500 (hot) |
+| h5 backup + append | < 0.01 s | -- | -- |
+
+- Cycle (20 updates + 1 measurement) ~ 2290 s -> about 38 measurements/day locally; the flow is 64 % of it.
+- Memory 1.55 GB per rank (6.2 GB total). Disk: checkpoint 0.68 GB, h5 4.2 MB per measurement.
+- Thermalisation of the plaquette: 0.5799-0.5801 from update ~50 on (hot start). Q needs a longer history.
+- Flow at t = 2: $t^2 E$ = 0.270, 0.272; Q = -2.69, 0.96 (not near-integer at t = 2).
+- Checks: E(t=0) identity 7.5e-14; no zero op; no empty timeslice.
+- Constraint for changes: `/topo` row shape is fixed at creation (WF:nmeas + 1), and WF/level attributes are
+  written once; flow or blocking settings must be settled before the stream continues (or start a new h5).
+
+**Decisions 2026-11-04 (after Chunk 4):** stay LOCAL for the first look (HiRep has no GPU heatbath /
+flow / glueball code; tuolumne CPU deferred). First look = 100 measurements; Wilson flow every 5th
+measurement. Driver: new input key `FlowInterval` (updates; multiple of ObsInterval; default =
+ObsInterval), new dataset `/topo_traj` (update index of each `/topo` row); `/topo`, `/topo_traj` resume
+by `topo_traj <= ckpt`; a legacy h5 (no `/topo_traj`) gets `/topo_traj = /traj` on resume (legal only
+when the lengths agree). Segment 2 handed off (`tmp_claude.sh`, log `tmp_seg2_claude.log`): rebuild,
+8^3 tests in `runs_claude/flowint_test` (fresh vs resume with FlowInterval 8, legacy upgrade), then
+stream 1 resume from 540 with `input_su4_24c_seg2_claude` (n_update 2000 -> measurements 560..2540,
+flows 600..2500); estimate ~31 h (100 x 820 s + 20 x 1470 s). Safeguard copy
+`glue_su4_24c_b11p045_s1_seg1end_claude.h5` made first.
 
 ### Chunk 5 -- production stream(s) + reader
 Run script (resumable, one directory per stream, own `rlx_seed`), h5 reader in the analysis script.

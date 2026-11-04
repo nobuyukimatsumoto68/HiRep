@@ -18,14 +18,16 @@
  *   WF_update_and_measure, (t, E, Esym, Q) at WF:nmeas+1 flow times.
  *
  * Cycle at a measurement point n (n > therm and n % ObsInterval == 0):
- *   1. measure glueballs, torelons, flow (on a copy of the links); gather all timeslices on PID 0
+ *   1. measure glueballs, torelons, and (if n % FlowInterval == 0) the Wilson flow on a copy of the
+ *      links; gather all timeslices on PID 0
  *   2. PID 0: copy <h5> -> <h5>.bak (via <h5>.bak.tmp + rename), then append one row
  *   3. write ckpoint_lat.<n> + ckpoint_rng.<n> (HiRep gauge format + ranlxd state)
  *   4. remove the previous checkpoint pair (only after 3 succeeded)
  * So the h5 never lags the newest checkpoint; at most it is one row ahead (crash between 2 and 3).
  *
  * Resume: environment CheckpointStart=<n> loads ckpoint_{lat,rng}.<n>. The h5 is opened (restored
- *   from <h5>.bak if it cannot be opened) and shrunk to the rows with traj <= n. The ranlxd state
+ *   from <h5>.bak if it cannot be opened) and shrunk to the rows with traj <= n (/topo, /topo_traj:
+ *   topo_traj <= n). The ranlxd state
  *   is per rank: resume with the same NP_T. The resume is bit-identical to an uninterrupted run:
  *   random_su2 buffers are emptied before each RNG save (reset_su2_rand) and ObsInterval * (nhb+nor)
  *   must be a multiple of 10 (re-projection counter phase, checked at startup).
@@ -34,7 +36,10 @@
  * h5 layout (datasets extendable along axis 0, one row per measurement):
  *   /traj (N) int, /plaq (N) double,
  *   /glue (N, nlev, total_n_glue_op, GLB_T, 2), /tor (N, total_n_tor_op, GLB_T, 2) (re, im),
- *   /topo (N, WF:nmeas+1, 4) = (t, E, Esym, Q).
+ *   /topo (Nflow, WF:nmeas+1, 4) = (t, E, Esym, Q), /topo_traj (Nflow) int: update index of each flow
+ *   row. FlowInterval (input, multiple of ObsInterval, default ObsInterval) sets the flow cadence.
+ *   An h5 written before /topo_traj existed (flow at every measurement) gets /topo_traj = /traj on
+ *   resume.
  *   The operator/channel table is the [INIT Measure ML] block of the run log (report_*_group_setup).
  */
 
@@ -53,8 +58,9 @@ typedef struct input_qsu4 {
     int n_update;
     int ObsInterval;
     int therm;
+    int FlowInterval;
     char h5name[256];
-    input_record_t read[5];
+    input_record_t read[6];
 } input_qsu4;
 
 #define init_input_qsu4(varname)                                                         \
@@ -63,6 +69,7 @@ typedef struct input_qsu4 {
             { "number of updates", "n_update = %d", INT_T, &(varname).n_update },        \
             { "updates per measurement", "ObsInterval = %d", INT_T, &(varname).ObsInterval }, \
             { "thermalisation updates", "therm = %d", INT_T, &(varname).therm },         \
+            { "updates per Wilson flow", "FlowInterval = %d", INT_T, &(varname).FlowInterval }, \
             { "h5 output file", "h5file = %s", STRING_T, &((varname).h5name[0]) },       \
             { NULL, NULL, INT_T, NULL }                                                  \
         }                                                                                \
@@ -199,7 +206,9 @@ static void h5_set_nrows(hid_t fid, const char *name, hsize_t nrows) {
     H5Dclose(ds);
 }
 
-static const char *h5_dsets[5] = { "/traj", "/plaq", "/glue", "/tor", "/topo" };
+/* datasets indexed by /traj (one row per measurement) and by /topo_traj (one row per flow) */
+static const char *h5_dsets[4] = { "/traj", "/plaq", "/glue", "/tor" };
+static const char *h5_dsets_topo[2] = { "/topo_traj", "/topo" };
 
 static void h5_create_file(const char *h5name, int nlev, int nflow) {
     hid_t fid = H5Fcreate(h5name, H5F_ACC_EXCL, H5P_DEFAULT, H5P_DEFAULT);
@@ -212,6 +221,7 @@ static void h5_create_file(const char *h5name, int nlev, int nflow) {
     h5_create_dset(fid, "/glue", H5T_NATIVE_DOUBLE, 5, rest_glue);
     h5_create_dset(fid, "/tor", H5T_NATIVE_DOUBLE, 4, rest_tor);
     h5_create_dset(fid, "/topo", H5T_NATIVE_DOUBLE, 3, rest_topo);
+    h5_create_dset(fid, "/topo_traj", H5T_NATIVE_INT, 1, NULL);
     h5_attr_int(fid, "NG", NG);
     h5_attr_int(fid, "GLB_T", GLB_T);
     h5_attr_int(fid, "GLB_X", GLB_X);
@@ -222,6 +232,7 @@ static void h5_create_file(const char *h5name, int nlev, int nflow) {
     h5_attr_int(fid, "nor", pg_var.nor);
     h5_attr_int(fid, "ObsInterval", run_var.ObsInterval);
     h5_attr_int(fid, "therm", run_var.therm);
+    h5_attr_int(fid, "FlowInterval", run_var.FlowInterval);
     h5_attr_int(fid, "nblkstart", gb_var.nblkstart);
     h5_attr_int(fid, "nblkend", gb_var.nblkend);
     h5_attr_double(fid, "APEsmear", gb_var.APEsmear);
@@ -235,7 +246,37 @@ static void h5_create_file(const char *h5name, int nlev, int nflow) {
     H5Fclose(fid);
 }
 
-/* resume: open (restore from .bak if needed), keep only rows with traj <= ckpt */
+/* number of leading entries <= ckpt in the int dataset idxname */
+static hsize_t h5_count_le(hid_t fid, const char *idxname, int ckpt) {
+    hsize_t n = h5_nrows(fid, idxname);
+    int *v = malloc(sizeof(int) * (n + 1));
+    if (n > 0) {
+        hid_t ds = H5Dopen2(fid, idxname, H5P_DEFAULT);
+        H5Dread(ds, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, v);
+        H5Dclose(ds);
+    }
+    hsize_t nkeep = 0;
+    while (nkeep < n && v[nkeep] <= ckpt) {
+        nkeep++;
+    }
+    free(v);
+    return nkeep;
+}
+
+/* shrink the datasets of one group to nkeep rows */
+static void h5_shrink_group(hid_t fid, const char **names, int nnames, hsize_t nkeep) {
+    for (int i = 0; i < nnames; i++) {
+        hsize_t nr = h5_nrows(fid, names[i]);
+        error(nr < nkeep, 1, "h5_resume", "dataset shorter than its index: inconsistent h5, use the .bak");
+        if (nr != nkeep) {
+            lprintf("H5", 0, "shrinking %s from %llu to %llu rows\n", names[i], (unsigned long long)nr,
+                    (unsigned long long)nkeep);
+            h5_set_nrows(fid, names[i], nkeep);
+        }
+    }
+}
+
+/* resume: open (restore from .bak if needed), keep only rows with traj <= ckpt (topo: topo_traj <= ckpt) */
 static void h5_resume(const char *h5name, int ckpt) {
     char bak[300];
     snprintf(bak, sizeof(bak), "%s.bak", h5name);
@@ -249,40 +290,47 @@ static void h5_resume(const char *h5name, int ckpt) {
         fid = H5Fopen(h5name, H5F_ACC_RDWR, H5P_DEFAULT);
         error(fid < 0, 1, "h5_resume", "restored h5 file unreadable");
     }
-    hsize_t ntraj = h5_nrows(fid, "/traj");
-    int *traj = malloc(sizeof(int) * (ntraj + 1));
-    if (ntraj > 0) {
-        hid_t ds = H5Dopen2(fid, "/traj", H5P_DEFAULT);
-        H5Dread(ds, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, traj);
-        H5Dclose(ds);
-    }
-    hsize_t nkeep = 0;
-    while (nkeep < ntraj && traj[nkeep] <= ckpt) {
-        nkeep++;
-    }
-    free(traj);
-    for (int i = 0; i < 5; i++) {
-        hsize_t nr = h5_nrows(fid, h5_dsets[i]);
-        error(nr < nkeep, 1, "h5_resume", "dataset shorter than /traj: inconsistent h5, use the .bak");
-        if (nr != nkeep) {
-            lprintf("H5", 0, "shrinking %s from %llu to %llu rows\n", h5_dsets[i], (unsigned long long)nr,
-                    (unsigned long long)nkeep);
-            h5_set_nrows(fid, h5_dsets[i], nkeep);
+    /* legacy file (flow at every measurement, no /topo_traj): /topo_traj = /traj */
+    if (H5Lexists(fid, "/topo_traj", H5P_DEFAULT) <= 0) {
+        hsize_t ntraj = h5_nrows(fid, "/traj");
+        hsize_t ntopo = h5_nrows(fid, "/topo");
+        error(ntopo != ntraj, 1, "h5_resume", "no /topo_traj and /topo, /traj differ in length");
+        h5_create_dset(fid, "/topo_traj", H5T_NATIVE_INT, 1, NULL);
+        int *v = malloc(sizeof(int) * (ntraj + 1));
+        if (ntraj > 0) {
+            hid_t ds = H5Dopen2(fid, "/traj", H5P_DEFAULT);
+            H5Dread(ds, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, v);
+            H5Dclose(ds);
         }
+        for (hsize_t i = 0; i < ntraj; i++) {
+            h5_append_row(fid, "/topo_traj", H5T_NATIVE_INT, &v[i]);
+        }
+        free(v);
+        lprintf("H5", 0, "legacy h5: created /topo_traj = /traj (%llu rows)\n", (unsigned long long)ntraj);
     }
-    lprintf("H5", 0, "resume: %s has %llu measurements with traj <= %d\n", h5name, (unsigned long long)nkeep, ckpt);
+    if (H5Aexists(fid, "FlowInterval") <= 0) { h5_attr_int(fid, "FlowInterval", run_var.FlowInterval); }
+    hsize_t nkeep = h5_count_le(fid, "/traj", ckpt);
+    h5_shrink_group(fid, h5_dsets, 4, nkeep);
+    hsize_t nkeep_topo = h5_count_le(fid, "/topo_traj", ckpt);
+    h5_shrink_group(fid, h5_dsets_topo, 2, nkeep_topo);
+    lprintf("H5", 0, "resume: %s has %llu measurements and %llu flows with traj <= %d\n", h5name,
+            (unsigned long long)nkeep, (unsigned long long)nkeep_topo, ckpt);
     H5Fclose(fid);
     H5Eset_auto2(H5E_DEFAULT, (H5E_auto2_t)H5Eprint2, stderr);
 }
 
-/* append one measurement; /traj is written LAST */
+/* append one measurement (and one flow row if topo != NULL); each index (/topo_traj, /traj) is
+ * written after its data, /traj LAST */
 static void h5_append(const char *h5name, int traj, double plaq, const double *glue, const double *tor, const double *topo) {
     hid_t fid = H5Fopen(h5name, H5F_ACC_RDWR, H5P_DEFAULT);
     error(fid < 0, 1, "h5_append", "cannot open h5 file");
     h5_append_row(fid, "/plaq", H5T_NATIVE_DOUBLE, &plaq);
     h5_append_row(fid, "/glue", H5T_NATIVE_DOUBLE, glue);
     h5_append_row(fid, "/tor", H5T_NATIVE_DOUBLE, tor);
-    h5_append_row(fid, "/topo", H5T_NATIVE_DOUBLE, topo);
+    if (topo != NULL) {
+        h5_append_row(fid, "/topo", H5T_NATIVE_DOUBLE, topo);
+        h5_append_row(fid, "/topo_traj", H5T_NATIVE_INT, &traj);
+    }
     h5_append_row(fid, "/traj", H5T_NATIVE_INT, &traj);
     H5Fflush(fid, H5F_SCOPE_GLOBAL);
     H5Fclose(fid);
@@ -359,8 +407,11 @@ int main(int argc, char *argv[]) {
     run_var.n_update = 0;
     run_var.ObsInterval = 20;
     run_var.therm = 0;
+    run_var.FlowInterval = 0;
     strcpy(run_var.h5name, "glue_claude.h5");
     read_input(run_var.read, get_input_filename());
+    /* default: flow at every measurement (behaviour before FlowInterval existed) */
+    if (run_var.FlowInterval == 0) { run_var.FlowInterval = run_var.ObsInterval; }
     read_input(pg_var.read, get_input_filename());
     read_input(gb_var.read, get_input_filename());
     WF_var.anisotropy = 1.0;
@@ -369,6 +420,8 @@ int main(int argc, char *argv[]) {
     error(NP_X != 1 || NP_Y != 1 || NP_Z != 1, 1, "main", "only NP_T > 1 is supported");
     error(GLB_T % NP_T != 0, 1, "main", "GLB_T must be divisible by NP_T");
     error(run_var.ObsInterval < 1, 1, "main", "ObsInterval must be >= 1");
+    error(run_var.FlowInterval < 1 || run_var.FlowInterval % run_var.ObsInterval != 0, 1, "main",
+          "FlowInterval must be a positive multiple of ObsInterval");
     /* exact resume: update_all() re-projects the links every PROJECT_INTERVAL = 10 sweeps
      * (LibHR/Update/update_hb.c:14) with a counter that restarts on resume; it is in phase at every
      * checkpoint only if the sweeps between checkpoints are a multiple of 10 */
@@ -376,8 +429,8 @@ int main(int argc, char *argv[]) {
           "exact resume needs ObsInterval * (nhb + nor) to be a multiple of 10 (update_hb.c PROJECT_INTERVAL)");
 
     lprintf("MAIN", 0, "beta=%lf nhb=%d nor=%d\n", pg_var.beta, pg_var.nhb, pg_var.nor);
-    lprintf("MAIN", 0, "n_update=%d ObsInterval=%d therm=%d h5file=%s\n", run_var.n_update, run_var.ObsInterval,
-            run_var.therm, run_var.h5name);
+    lprintf("MAIN", 0, "n_update=%d ObsInterval=%d FlowInterval=%d therm=%d h5file=%s\n", run_var.n_update,
+            run_var.ObsInterval, run_var.FlowInterval, run_var.therm, run_var.h5name);
     lprintf("MAIN", 0, "glueballs: nblkstart=%d nblkend=%d APEsmear=%lf, total_n_glue_op=%d total_n_tor_op=%d\n",
             gb_var.nblkstart, gb_var.nblkend, gb_var.APEsmear, total_n_glue_op, total_n_tor_op);
     lprintf("MAIN", 0, "WF: integrator=%d tmax=%lf nmeas=%d eps=%lf delta=%lf\n", (int)WF_var.ittype, WF_var.tmax,
@@ -488,28 +541,31 @@ int main(int argc, char *argv[]) {
         timeval_subtract(&etime, &end, &start);
         lprintf("MAIN", 0, "update %d torelons [%ld sec %ld usec]\n", n, etime.tv_sec, etime.tv_usec);
 
-        /* 1c. Wilson flow on a copy: (t, E, Esym, Q) at nflow flow times */
-        gettimeofday(&start, 0);
-        copy_suNg_field(Vwf, u_gauge);
-        /* the t = 0 measurement (E, Esym, Q) reads neighbour links of Vwf before any flow step, and
-         * E/Esym/topo do no communication themselves: the halo must be exchanged first (without it the
-         * t = 0 row used stale halo links: E 5-8 % off 12 NG (1 - plaq), not reproducible on resume).
-         * Now done centrally at the start of WF_update_and_measure (LibHR/Utils/wilsonflow.c).
-        start_sendrecv_suNg_field(Vwf);
-        complete_sendrecv_suNg_field(Vwf); */
-        data_storage_array *wf = WF_update_and_measure(WF_var.ittype, Vwf, &(WF_var.tmax), &(WF_var.eps),
-                                                       &(WF_var.delta), WF_var.nmeas, STORE);
-        for (int k = 0; k < nflow; k++) {
-            for (int c = 0; c < 4; c++) {
-                int idx[2] = { k, c };
-                topo_row[4 * k + c] = *data_storage_element(wf, 0, idx);
+        /* 1c. Wilson flow on a copy: (t, E, Esym, Q) at nflow flow times, every FlowInterval updates */
+        int do_flow = (n % run_var.FlowInterval == 0);
+        if (do_flow) {
+            gettimeofday(&start, 0);
+            copy_suNg_field(Vwf, u_gauge);
+            /* the t = 0 measurement (E, Esym, Q) reads neighbour links of Vwf before any flow step, and
+             * E/Esym/topo do no communication themselves: the halo must be exchanged first (without it the
+             * t = 0 row used stale halo links: E 5-8 % off 12 NG (1 - plaq), not reproducible on resume).
+             * Now done centrally at the start of WF_update_and_measure (LibHR/Utils/wilsonflow.c).
+            start_sendrecv_suNg_field(Vwf);
+            complete_sendrecv_suNg_field(Vwf); */
+            data_storage_array *wf = WF_update_and_measure(WF_var.ittype, Vwf, &(WF_var.tmax), &(WF_var.eps),
+                                                           &(WF_var.delta), WF_var.nmeas, STORE);
+            for (int k = 0; k < nflow; k++) {
+                for (int c = 0; c < 4; c++) {
+                    int idx[2] = { k, c };
+                    topo_row[4 * k + c] = *data_storage_element(wf, 0, idx);
+                }
             }
+            free_data_storage(wf);
+            gettimeofday(&end, 0);
+            timeval_subtract(&etime, &end, &start);
+            lprintf("MAIN", 0, "update %d Wilson flow t=%lf Q=%1.10e [%ld sec %ld usec]\n", n, topo_row[4 * (nflow - 1)],
+                    topo_row[4 * (nflow - 1) + 3], etime.tv_sec, etime.tv_usec);
         }
-        free_data_storage(wf);
-        gettimeofday(&end, 0);
-        timeval_subtract(&etime, &end, &start);
-        lprintf("MAIN", 0, "update %d Wilson flow t=%lf Q=%1.10e [%ld sec %ld usec]\n", n, topo_row[4 * (nflow - 1)],
-                topo_row[4 * (nflow - 1) + 3], etime.tv_sec, etime.tv_usec);
 
         double plaq = avr_plaquette();
 
@@ -537,7 +593,7 @@ int main(int argc, char *argv[]) {
                 }
             }
             backup_h5(run_var.h5name);
-            h5_append(run_var.h5name, n, plaq, glue_row, tor_row, topo_row);
+            h5_append(run_var.h5name, n, plaq, glue_row, tor_row, do_flow ? topo_row : NULL);
             gettimeofday(&end, 0);
             timeval_subtract(&etime, &end, &start);
             lprintf("MAIN", 0, "update %d h5 backup + append [%ld sec %ld usec]\n", n, etime.tv_sec, etime.tv_usec);
