@@ -7,6 +7,21 @@
 #include "observables.h"
 #include "global.h"
 
+/* APE smearing iterations per blocking level in measure_1pt_glueballs (default 1 = original behaviour).
+ * Set by the caller for a smearing-depth scan (QuenchedSU4_claude, Chunk 6). */
+int gb_ape_iter = 1;
+
+/* gb_ape_iter APE steps starting from workspace wrk_in; returns the final workspace (inputs released) */
+static int ape_steps(double *smear_val, int wrk_in) {
+    int wrk = wrk_in;
+    for (int a = 0; a < gb_ape_iter; a++) {
+        int wrk_new = spatial_APE_smear_wrkspace(smear_val, wrk);
+        release_wrk_space(wrk);
+        wrk = wrk_new;
+    }
+    return wrk;
+}
+
 void measure_1pt_glueballs(int nblockingstart, int nblockingend, double *smear_val, hr_complex *gb_storage) {
     int i, nt;
     int wrk1, wrk2 = -1;
@@ -16,9 +31,12 @@ void measure_1pt_glueballs(int nblockingstart, int nblockingend, double *smear_v
     point_gb = gb_storage;
 
     for (i = 0; i < nblockingstart; i++) {
+        /* original: one APE step
         wrk1 = spatial_APE_smear_wrkspace(smear_val, wrk2);
 
         release_wrk_space(wrk2);
+        */
+        wrk1 = ape_steps(smear_val, wrk2);
 
         wrk2 = single_level_spatial_blocking_wrkspace(wrk1);
 
@@ -35,9 +53,12 @@ void measure_1pt_glueballs(int nblockingstart, int nblockingend, double *smear_v
             point_gb += total_n_glue_op * (nblockingend - nblockingstart + 1);
         }
 
+        /* original: one APE step
         wrk1 = spatial_APE_smear_wrkspace(smear_val, wrk2);
 
         release_wrk_space(wrk2);
+        */
+        wrk1 = ape_steps(smear_val, wrk2);
 
         wrk2 = single_level_spatial_blocking_wrkspace(wrk1);
 

@@ -33,9 +33,16 @@
  *   must be a multiple of 10 (re-projection counter phase, checked at startup).
  * n_update is ADDITIVE: a run performs updates start+1 .. start+n_update.
  *
+ * Measure-only mode (input configlist = <file>, one Grid NERSC path per line; Chunk 7): no updates, no
+ *   checkpoints; each listed configuration is read (nersc_io_claude.c: checksum + header plaquette checked
+ *   against avr_plaquette()), measured as above, and appended with traj = the number after the last '.' of
+ *   its file name. Configurations already in the h5 are skipped, so a restart is a rerun with the same list.
+ *
  * h5 layout (datasets extendable along axis 0, one row per measurement):
  *   /traj (N) int, /plaq (N) double,
  *   /glue (N, nlev, total_n_glue_op, GLB_T, 2), /tor (N, total_n_tor_op, GLB_T, 2) (re, im),
+ *   or, with input APEscan = d1,d2,... (APE iterations per blocking level), /glue_ape<d> per depth
+ *   (same layout, same configuration) instead of /glue,
  *   /topo (Nflow, WF:nmeas+1, 4) = (t, E, Esym, Q), /topo_traj (Nflow) int: update index of each flow
  *   row. FlowInterval (input, multiple of ObsInterval, default ObsInterval) sets the flow cadence.
  *   An h5 written before /topo_traj existed (flow at every measurement) gets /topo_traj = /traj on
@@ -44,6 +51,8 @@
  */
 
 #include "suN_utils.h"
+#include "nersc_io_claude.h"
+#include <limits.h>
 #include "libhr.h"
 #include <hdf5.h>
 #include <math.h>
@@ -60,7 +69,9 @@ typedef struct input_qsu4 {
     int therm;
     int FlowInterval;
     char h5name[256];
-    input_record_t read[6];
+    char APEscan[256];
+    char configlist[256];
+    input_record_t read[8];
 } input_qsu4;
 
 #define init_input_qsu4(varname)                                                         \
@@ -70,6 +81,8 @@ typedef struct input_qsu4 {
             { "updates per measurement", "ObsInterval = %d", INT_T, &(varname).ObsInterval }, \
             { "thermalisation updates", "therm = %d", INT_T, &(varname).therm },         \
             { "updates per Wilson flow", "FlowInterval = %d", INT_T, &(varname).FlowInterval }, \
+            { "APE depths to scan", "APEscan = %s", STRING_T, &((varname).APEscan[0]) },   \
+            { "configuration list (measure-only mode)", "configlist = %s", STRING_T, &((varname).configlist[0]) }, \
             { "h5 output file", "h5file = %s", STRING_T, &((varname).h5name[0]) },       \
             { NULL, NULL, INT_T, NULL }                                                  \
         }                                                                                \
@@ -206,9 +219,46 @@ static void h5_set_nrows(hid_t fid, const char *name, hsize_t nrows) {
     H5Dclose(ds);
 }
 
-/* datasets indexed by /traj (one row per measurement) and by /topo_traj (one row per flow) */
-static const char *h5_dsets[4] = { "/traj", "/plaq", "/glue", "/tor" };
+/* APE smearing iterations per blocking level, defined in LibHR/Observables/glueballs.c */
+extern int gb_ape_iter;
+
+/* glueball datasets: "/glue" (default) or "/glue_ape<d>" per scanned APE depth d */
+#define MAX_APE_DEPTHS 8
+static int n_glue_dsets = 1;
+static int ape_depths[MAX_APE_DEPTHS] = { 1 };
+static char glue_dset_names[MAX_APE_DEPTHS][32] = { "/glue" };
+
+/* datasets indexed by /traj (one row per measurement; filled by set_glue_dsets) and by /topo_traj */
+static const char *h5_dsets[MAX_APE_DEPTHS + 3];
+static int n_h5_dsets = 0;
 static const char *h5_dsets_topo[2] = { "/topo_traj", "/topo" };
+
+/* parse APEscan ("1,2,4,8"; empty = off) and fill the dataset name lists */
+static void set_glue_dsets(const char *scan) {
+    if (scan[0] != '\0') {
+        char buf[256];
+        strncpy(buf, scan, sizeof(buf) - 1);
+        buf[sizeof(buf) - 1] = '\0';
+        n_glue_dsets = 0;
+        char *tok = strtok(buf, ",");
+        while (tok != NULL) {
+            error(n_glue_dsets >= MAX_APE_DEPTHS, 1, "set_glue_dsets", "too many APE depths");
+            ape_depths[n_glue_dsets] = atoi(tok);
+            error(ape_depths[n_glue_dsets] < 0, 1, "set_glue_dsets", "APE depth must be >= 0");
+            snprintf(glue_dset_names[n_glue_dsets], 32, "/glue_ape%d", ape_depths[n_glue_dsets]);
+            n_glue_dsets++;
+            tok = strtok(NULL, ",");
+        }
+        error(n_glue_dsets == 0, 1, "set_glue_dsets", "empty APEscan list");
+    }
+    n_h5_dsets = 0;
+    h5_dsets[n_h5_dsets++] = "/traj";
+    h5_dsets[n_h5_dsets++] = "/plaq";
+    for (int k = 0; k < n_glue_dsets; k++) {
+        h5_dsets[n_h5_dsets++] = glue_dset_names[k];
+    }
+    h5_dsets[n_h5_dsets++] = "/tor";
+}
 
 static void h5_create_file(const char *h5name, int nlev, int nflow) {
     hid_t fid = H5Fcreate(h5name, H5F_ACC_EXCL, H5P_DEFAULT, H5P_DEFAULT);
@@ -218,7 +268,9 @@ static void h5_create_file(const char *h5name, int nlev, int nflow) {
     hsize_t rest_topo[2] = { (hsize_t)nflow, 4 };
     h5_create_dset(fid, "/traj", H5T_NATIVE_INT, 1, NULL);
     h5_create_dset(fid, "/plaq", H5T_NATIVE_DOUBLE, 1, NULL);
-    h5_create_dset(fid, "/glue", H5T_NATIVE_DOUBLE, 5, rest_glue);
+    for (int k = 0; k < n_glue_dsets; k++) {
+        h5_create_dset(fid, glue_dset_names[k], H5T_NATIVE_DOUBLE, 5, rest_glue);
+    }
     h5_create_dset(fid, "/tor", H5T_NATIVE_DOUBLE, 4, rest_tor);
     h5_create_dset(fid, "/topo", H5T_NATIVE_DOUBLE, 3, rest_topo);
     h5_create_dset(fid, "/topo_traj", H5T_NATIVE_INT, 1, NULL);
@@ -236,6 +288,12 @@ static void h5_create_file(const char *h5name, int nlev, int nflow) {
     h5_attr_int(fid, "nblkstart", gb_var.nblkstart);
     h5_attr_int(fid, "nblkend", gb_var.nblkend);
     h5_attr_double(fid, "APEsmear", gb_var.APEsmear);
+    h5_attr_int(fid, "n_APE_depths", n_glue_dsets);
+    for (int k = 0; k < n_glue_dsets; k++) {
+        char an[32];
+        snprintf(an, sizeof(an), "APE_depth_%d", k);
+        h5_attr_int(fid, an, ape_depths[k]);
+    }
     h5_attr_int(fid, "total_n_glue_op", total_n_glue_op);
     h5_attr_int(fid, "total_n_tor_op", total_n_tor_op);
     h5_attr_double(fid, "WF_tmax", WF_var.tmax);
@@ -310,7 +368,7 @@ static void h5_resume(const char *h5name, int ckpt) {
     }
     if (H5Aexists(fid, "FlowInterval") <= 0) { h5_attr_int(fid, "FlowInterval", run_var.FlowInterval); }
     hsize_t nkeep = h5_count_le(fid, "/traj", ckpt);
-    h5_shrink_group(fid, h5_dsets, 4, nkeep);
+    h5_shrink_group(fid, h5_dsets, n_h5_dsets, nkeep);
     hsize_t nkeep_topo = h5_count_le(fid, "/topo_traj", ckpt);
     h5_shrink_group(fid, h5_dsets_topo, 2, nkeep_topo);
     lprintf("H5", 0, "resume: %s has %llu measurements and %llu flows with traj <= %d\n", h5name,
@@ -319,13 +377,61 @@ static void h5_resume(const char *h5name, int ckpt) {
     H5Eset_auto2(H5E_DEFAULT, (H5E_auto2_t)H5Eprint2, stderr);
 }
 
+/* /traj of an existing h5 (PID 0); returns the number of rows, *out malloc'ed */
+static int h5_read_traj(const char *h5name, int **out) {
+    hid_t fid = H5Fopen(h5name, H5F_ACC_RDONLY, H5P_DEFAULT);
+    error(fid < 0, 1, "h5_read_traj", "cannot open h5 file");
+    hsize_t n = h5_nrows(fid, "/traj");
+    *out = malloc(sizeof(int) * (n + 1));
+    if (n > 0) {
+        hid_t ds = H5Dopen2(fid, "/traj", H5P_DEFAULT);
+        H5Dread(ds, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, *out);
+        H5Dclose(ds);
+    }
+    H5Fclose(fid);
+    return (int)n;
+}
+
+/* configuration list: one path per line; traj = number after the last '.' */
+static int read_config_list(const char *listname, char ***paths, int **trajs) {
+    FILE *fp = fopen(listname, "r");
+    error(fp == NULL, 1, "read_config_list", "cannot open configlist");
+    int cap = 64;
+    int n = 0;
+    *paths = malloc(sizeof(char *) * cap);
+    *trajs = malloc(sizeof(int) * cap);
+    char line[1024];
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        char *e = line + strlen(line);
+        while (e > line && (e[-1] == '\n' || e[-1] == '\r' || e[-1] == ' ')) {
+            e--;
+        }
+        *e = '\0';
+        if (line[0] == '\0') { continue; }
+        char *dot = strrchr(line, '.');
+        error(dot == NULL, 1, "read_config_list", "configuration name without .<number>");
+        if (n == cap) {
+            cap = 2 * cap;
+            *paths = realloc(*paths, sizeof(char *) * cap);
+            *trajs = realloc(*trajs, sizeof(int) * cap);
+        }
+        (*paths)[n] = strdup(line);
+        (*trajs)[n] = atoi(dot + 1);
+        n++;
+    }
+    fclose(fp);
+    return n;
+}
+
 /* append one measurement (and one flow row if topo != NULL); each index (/topo_traj, /traj) is
  * written after its data, /traj LAST */
-static void h5_append(const char *h5name, int traj, double plaq, const double *glue, const double *tor, const double *topo) {
+static void h5_append(const char *h5name, int traj, double plaq, double **glue, const double *tor, const double *topo) {
     hid_t fid = H5Fopen(h5name, H5F_ACC_RDWR, H5P_DEFAULT);
     error(fid < 0, 1, "h5_append", "cannot open h5 file");
     h5_append_row(fid, "/plaq", H5T_NATIVE_DOUBLE, &plaq);
-    h5_append_row(fid, "/glue", H5T_NATIVE_DOUBLE, glue);
+    for (int k = 0; k < n_glue_dsets; k++) {
+        h5_append_row(fid, glue_dset_names[k], H5T_NATIVE_DOUBLE, glue[k]);
+    }
     h5_append_row(fid, "/tor", H5T_NATIVE_DOUBLE, tor);
     if (topo != NULL) {
         h5_append_row(fid, "/topo", H5T_NATIVE_DOUBLE, topo);
@@ -409,6 +515,8 @@ int main(int argc, char *argv[]) {
     run_var.therm = 0;
     run_var.FlowInterval = 0;
     strcpy(run_var.h5name, "glue_claude.h5");
+    run_var.APEscan[0] = '\0';
+    run_var.configlist[0] = '\0';
     read_input(run_var.read, get_input_filename());
     /* default: flow at every measurement (behaviour before FlowInterval existed) */
     if (run_var.FlowInterval == 0) { run_var.FlowInterval = run_var.ObsInterval; }
@@ -425,10 +533,19 @@ int main(int argc, char *argv[]) {
     /* exact resume: update_all() re-projects the links every PROJECT_INTERVAL = 10 sweeps
      * (LibHR/Update/update_hb.c:14) with a counter that restarts on resume; it is in phase at every
      * checkpoint only if the sweeps between checkpoints are a multiple of 10 */
-    error((run_var.ObsInterval * (pg_var.nhb + pg_var.nor)) % 10 != 0, 1, "main",
-          "exact resume needs ObsInterval * (nhb + nor) to be a multiple of 10 (update_hb.c PROJECT_INTERVAL)");
+    int measure_mode = (run_var.configlist[0] != '\0');
+    if (!measure_mode) {
+        error((run_var.ObsInterval * (pg_var.nhb + pg_var.nor)) % 10 != 0, 1, "main",
+              "exact resume needs ObsInterval * (nhb + nor) to be a multiple of 10 (update_hb.c PROJECT_INTERVAL)");
+    }
 
     lprintf("MAIN", 0, "beta=%lf nhb=%d nor=%d\n", pg_var.beta, pg_var.nhb, pg_var.nor);
+    /* glueball datasets: APEscan = d1,d2,... (no spaces) -> /glue_ape<d>; absent -> /glue with 1 APE step */
+    set_glue_dsets(run_var.APEscan);
+    for (int k = 0; k < n_glue_dsets; k++) {
+        lprintf("MAIN", 0, "glueball dataset %s: %d APE iterations per blocking level\n", glue_dset_names[k],
+                ape_depths[k]);
+    }
     lprintf("MAIN", 0, "n_update=%d ObsInterval=%d FlowInterval=%d therm=%d h5file=%s\n", run_var.n_update,
             run_var.ObsInterval, run_var.FlowInterval, run_var.therm, run_var.h5name);
     lprintf("MAIN", 0, "glueballs: nblkstart=%d nblkend=%d APEsmear=%lf, total_n_glue_op=%d total_n_tor_op=%d\n",
@@ -452,11 +569,45 @@ int main(int argc, char *argv[]) {
     int nflow = WF_var.nmeas + 1;
     int nper_glue = nlev * total_n_glue_op;
 
-    /* start: fresh (hot) or from checkpoint */
+    /* start: measure-only (configuration list), fresh (hot), or from checkpoint */
     int start_n = 0;
     int prev_ckpt = -1;
+    int ncfg = 0;
+    char **cfg_path = NULL;
+    int *cfg_traj = NULL;
+    int *cfg_done = NULL;
     const char *cks = getenv("CheckpointStart");
-    if (cks != NULL && cks[0] != '\0') {
+    if (measure_mode) {
+        ncfg = read_config_list(run_var.configlist, &cfg_path, &cfg_traj);
+        cfg_done = calloc(ncfg + 1, sizeof(int));
+        lprintf("MAIN", 0, "measure-only mode: %d configurations in %s\n", ncfg, run_var.configlist);
+        if (PID == 0) {
+            char bak[300];
+            snprintf(bak, sizeof(bak), "%s.bak", run_var.h5name);
+            if (!file_exists(run_var.h5name) && !file_exists(bak)) {
+                h5_create_file(run_var.h5name, nlev, nflow);
+            } else {
+                /* drop any partial row of an interrupted run (all rows with a complete /traj kept) */
+                h5_resume(run_var.h5name, INT_MAX);
+            }
+            int *have = NULL;
+            int nhave = h5_read_traj(run_var.h5name, &have);
+            for (int c = 0; c < ncfg; c++) {
+                for (int j = 0; j < nhave; j++) {
+                    if (have[j] == cfg_traj[c]) { cfg_done[c] = 1; }
+                }
+            }
+            free(have);
+        }
+#ifdef WITH_MPI
+        MPI_Bcast(cfg_done, ncfg, MPI_INT, 0, GLB_COMM);
+#endif
+        int ndone = 0;
+        for (int c = 0; c < ncfg; c++) {
+            ndone += cfg_done[c];
+        }
+        lprintf("MAIN", 0, "measure-only mode: %d already in %s, %d to measure\n", ndone, run_var.h5name, ncfg - ndone);
+    } else if (cks != NULL && cks[0] != '\0') {
         start_n = atoi(cks);
         char lat[64];
         char rng[64];
@@ -466,16 +617,29 @@ int main(int argc, char *argv[]) {
         read_gauge_field(lat);
         read_ranlxd_state(rng);
         prev_ckpt = start_n;
-        if (PID == 0) { h5_resume(run_var.h5name, start_n); }
+        if (PID == 0) {
+            char bak[300];
+            snprintf(bak, sizeof(bak), "%s.bak", run_var.h5name);
+            if (!file_exists(run_var.h5name) && !file_exists(bak)) {
+                /* checkpoint taken over from another run (e.g. an APEscan branch of a stream): new h5 */
+                lprintf("MAIN", 0, "no %s and no .bak: new h5 for this run (resumed from checkpoint %d)\n",
+                        run_var.h5name, start_n);
+                h5_create_file(run_var.h5name, nlev, nflow);
+            } else {
+                h5_resume(run_var.h5name, start_n);
+            }
+        }
     } else {
         error(PID == 0 && file_exists(run_var.h5name), 1, "main", "h5 file exists: set CheckpointStart to resume");
         lprintf("MAIN", 0, "fresh start from a random (hot) configuration\n");
         random_u(u_gauge);
         if (PID == 0) { h5_create_file(run_var.h5name, nlev, nflow); }
     }
-    apply_BCs_on_fundamental_gauge_field();
-    represent_gauge_field();
-    lprintf("MAIN", 0, "initial plaquette %1.16e\n", avr_plaquette());
+    if (!measure_mode) {
+        apply_BCs_on_fundamental_gauge_field();
+        represent_gauge_field();
+        lprintf("MAIN", 0, "initial plaquette %1.16e\n", avr_plaquette());
+    }
 
     /* buffers */
     hr_complex *gb_loc = amalloc(sizeof(hr_complex) * nper_glue * T, ALIGN);
@@ -488,39 +652,82 @@ int main(int argc, char *argv[]) {
           "cannot allocate measurement buffers");
     hr_complex *gb_glb = NULL;
     hr_complex *tor_glb = NULL;
-    double *glue_row = NULL;
+    double *glue_rows[MAX_APE_DEPTHS];
     double *tor_row = NULL;
     double *topo_row = malloc(sizeof(double) * nflow * 4);
     if (PID == 0) {
         gb_glb = malloc(sizeof(hr_complex) * nper_glue * GLB_T);
         tor_glb = malloc(sizeof(hr_complex) * total_n_tor_op * GLB_T);
-        glue_row = malloc(sizeof(double) * 2 * nper_glue * GLB_T);
+        for (int k = 0; k < n_glue_dsets; k++) {
+            glue_rows[k] = malloc(sizeof(double) * 2 * nper_glue * GLB_T);
+            error(glue_rows[k] == NULL, 1, "main", "cannot allocate glue rows");
+        }
         tor_row = malloc(sizeof(double) * 2 * total_n_tor_op * GLB_T);
-        error(gb_glb == NULL || tor_glb == NULL || glue_row == NULL || tor_row == NULL, 1, "main",
+        error(gb_glb == NULL || tor_glb == NULL || tor_row == NULL, 1, "main",
               "cannot allocate gather buffers");
     }
     suNg_field *Vwf = alloc_suNg_field(&glattice);
 
     int end_n = start_n + run_var.n_update;
-    for (int n = start_n + 1; n <= end_n; n++) {
-        gettimeofday(&start, 0);
-        update(&(pg_var.beta), pg_var.nhb, pg_var.nor);
-        gettimeofday(&end, 0);
-        timeval_subtract(&etime, &end, &start);
-        lprintf("MAIN", 0, "update %d plaquette %1.16e [%ld sec %ld usec]\n", n, avr_plaquette(), etime.tv_sec,
-                etime.tv_usec);
+    int nsteps = measure_mode ? ncfg : run_var.n_update;
+    for (int step = 0; step < nsteps; step++) {
+        int n;
+        if (measure_mode) {
+            if (cfg_done[step]) {
+                lprintf("MAIN", 0, "config %d already in the h5: skipped\n", cfg_traj[step]);
+                continue;
+            }
+            n = cfg_traj[step];
+            gettimeofday(&start, 0);
+            double plaq_hdr = read_nersc_gauge_claude(cfg_path[step]);
+            double plaq_hr = avr_plaquette();
+            gettimeofday(&end, 0);
+            timeval_subtract(&etime, &end, &start);
+            lprintf("MAIN", 0, "config %d read: plaquette %1.16e (header %.10f) [%ld sec %ld usec]\n", n, plaq_hr,
+                    plaq_hdr, etime.tv_sec, etime.tv_usec);
+            /* the header plaquette is printed with 10 digits */
+            error(fabs(plaq_hr - plaq_hdr) > 1e-9, 1, "main", "plaquette differs from the NERSC header");
+            full_plaquette();
+        } else {
+            n = start_n + 1 + step;
+            gettimeofday(&start, 0);
+            update(&(pg_var.beta), pg_var.nhb, pg_var.nor);
+            gettimeofday(&end, 0);
+            timeval_subtract(&etime, &end, &start);
+            lprintf("MAIN", 0, "update %d plaquette %1.16e [%ld sec %ld usec]\n", n, avr_plaquette(), etime.tv_sec,
+                    etime.tv_usec);
 
-        if (n <= run_var.therm || n % run_var.ObsInterval != 0) { continue; }
-
-        /* 1a. glueballs: layout [t][level][op] */
-        gettimeofday(&start, 0);
-        for (int i = 0; i < nper_glue * T; i++) {
-            gb_loc[i] = 0.;
+            if (n <= run_var.therm || n % run_var.ObsInterval != 0) { continue; }
         }
-        measure_1pt_glueballs(gb_var.nblkstart, gb_var.nblkend, &(gb_var.APEsmear), gb_loc);
-        gettimeofday(&end, 0);
-        timeval_subtract(&etime, &end, &start);
-        lprintf("MAIN", 0, "update %d glueballs [%ld sec %ld usec]\n", n, etime.tv_sec, etime.tv_usec);
+
+        /* 1a. glueballs: layout [t][level][op], once per APE depth (default: one depth, gb_ape_iter 1);
+         * gathered on PID 0 and reordered to the h5 layout [level][op][t][re,im] */
+        for (int k = 0; k < n_glue_dsets; k++) {
+            gettimeofday(&start, 0);
+            gb_ape_iter = ape_depths[k];
+            for (int i = 0; i < nper_glue * T; i++) {
+                gb_loc[i] = 0.;
+            }
+            measure_1pt_glueballs(gb_var.nblkstart, gb_var.nblkend, &(gb_var.APEsmear), gb_loc);
+            gather_T(gb_loc, nper_glue, gb_glb);
+            if (PID == 0) {
+                for (int t = 0; t < GLB_T; t++) {
+                    for (int l = 0; l < nlev; l++) {
+                        for (int op = 0; op < total_n_glue_op; op++) {
+                            hr_complex v = gb_glb[((size_t)t * nlev + l) * total_n_glue_op + op];
+                            size_t o = (((size_t)l * total_n_glue_op + op) * GLB_T + t) * 2;
+                            glue_rows[k][o] = creal(v);
+                            glue_rows[k][o + 1] = cimag(v);
+                        }
+                    }
+                }
+            }
+            gettimeofday(&end, 0);
+            timeval_subtract(&etime, &end, &start);
+            lprintf("MAIN", 0, "update %d glueballs (APE depth %d) [%ld sec %ld usec]\n", n, ape_depths[k],
+                    etime.tv_sec, etime.tv_usec);
+        }
+        gb_ape_iter = 1;
 
         /* 1b. torelons: layout [t][op] */
         gettimeofday(&start, 0);
@@ -569,22 +776,13 @@ int main(int argc, char *argv[]) {
 
         double plaq = avr_plaquette();
 
-        /* 1d. gather all timeslices on PID 0 */
-        gather_T(gb_loc, nper_glue, gb_glb);
+        /* 1d. gather all timeslices on PID 0 (glueballs already gathered per depth in 1a) */
         gather_T(tor_loc, total_n_tor_op, tor_glb);
 
         /* 2. PID 0: reorder to the h5 layout, backup, append */
         if (PID == 0) {
             gettimeofday(&start, 0);
             for (int t = 0; t < GLB_T; t++) {
-                for (int l = 0; l < nlev; l++) {
-                    for (int op = 0; op < total_n_glue_op; op++) {
-                        hr_complex v = gb_glb[((size_t)t * nlev + l) * total_n_glue_op + op];
-                        size_t o = (((size_t)l * total_n_glue_op + op) * GLB_T + t) * 2;
-                        glue_row[o] = creal(v);
-                        glue_row[o + 1] = cimag(v);
-                    }
-                }
                 for (int op = 0; op < total_n_tor_op; op++) {
                     hr_complex v = tor_glb[(size_t)t * total_n_tor_op + op];
                     size_t o = ((size_t)op * GLB_T + t) * 2;
@@ -593,18 +791,24 @@ int main(int argc, char *argv[]) {
                 }
             }
             backup_h5(run_var.h5name);
-            h5_append(run_var.h5name, n, plaq, glue_row, tor_row, do_flow ? topo_row : NULL);
+            h5_append(run_var.h5name, n, plaq, glue_rows, tor_row, do_flow ? topo_row : NULL);
             gettimeofday(&end, 0);
             timeval_subtract(&etime, &end, &start);
             lprintf("MAIN", 0, "update %d h5 backup + append [%ld sec %ld usec]\n", n, etime.tv_sec, etime.tv_usec);
         }
 
-        /* 3.+4. checkpoint, then prune the previous one */
-        save_checkpoint(n, prev_ckpt);
-        prev_ckpt = n;
+        /* 3.+4. checkpoint, then prune the previous one (generation mode only) */
+        if (!measure_mode) {
+            save_checkpoint(n, prev_ckpt);
+            prev_ckpt = n;
+        }
     }
 
-    lprintf("MAIN", 0, "done: last update %d, last checkpoint %d\n", end_n, prev_ckpt);
+    if (measure_mode) {
+        lprintf("MAIN", 0, "done: %d configurations in the list\n", ncfg);
+    } else {
+        lprintf("MAIN", 0, "done: last update %d, last checkpoint %d\n", end_n, prev_ckpt);
+    }
 
     free_suNg_field(Vwf);
     afree(gb_loc);
@@ -617,7 +821,9 @@ int main(int argc, char *argv[]) {
     if (PID == 0) {
         free(gb_glb);
         free(tor_glb);
-        free(glue_row);
+        for (int k = 0; k < n_glue_dsets; k++) {
+            free(glue_rows[k]);
+        }
         free(tor_row);
     }
     finalize_process();
